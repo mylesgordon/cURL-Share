@@ -1,0 +1,29 @@
+@startuml
+title Home Page
+
+actor User
+participant Website 
+participant Backend
+database Database
+
+alt User has used search bar
+    User -> Website: Project title
+    Website -> Backend: Get all projects like title
+else
+    Website -> Backend: Get all projects
+end
+
+alt User logged in
+    Backend -> Database: Get all projects that user has access to
+else User not logged in
+    Backend -> Database: Get all public projects
+end
+
+Database --> Backend: Projects with respective creators
+Backend --> Website: Projects with respective creators
+Website --> User: Projects with respective creators
+
+User -> Website: Clicked on project
+Website --> User: Redirect to project page
+
+@enduml
