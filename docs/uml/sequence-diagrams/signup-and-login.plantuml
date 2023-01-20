@@ -2,33 +2,33 @@
 title Log In, Log Out & Sign Up Flow
 
 actor User
-participant Website 
+participant Frontend 
 participant Backend
 database Database
 
-User -> Website: Username and password entered
+User -> Frontend: Username and password entered
 opt Password is insufficiently secure (sign up)
-    Website --> User: Display "password is insufficient" message
+    Frontend --> User: Display "password is insufficient" message
 end
 
-Website -> Backend: Username and password
+Frontend -> Backend: Username and password
 Backend -> Database: User entity with hashed password
 
 alt Succesful sign up/login
     Database --> Backend: User ID
-    Backend --> Website: Session cookie
-    Website --> User: Redirect to last viewed page
+    Backend --> Frontend: Session cookie
+    Frontend --> User: Redirect to last viewed page
 else Username is not unique (sign up)
     Database --> Backend: Username field unique violation
-    Backend --> Website: 422 status code
-    Website --> User: Display "username has already been taken" message
+    Backend --> Frontend: 422 status code
+    Frontend --> User: Display "username has already been taken" message
 else Username or password incorrect (sign in)
     Database --> Backend: User w/ specified username and password not found
-    Backend --> Website: 401 status code
-    Website --> User: Display "username or password incorrect" message
+    Backend --> Frontend: 401 status code
+    Frontend --> User: Display "username or password incorrect" message
 end
 
-User -> Website: "Log Out" button clicked
-Website --> User: User is logged out
+User -> Frontend: "Log Out" button clicked
+Frontend --> User: User is logged out
 
 @enduml
