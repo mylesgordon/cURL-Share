@@ -11,6 +11,7 @@
 ## Enable a user to manage a project
 
 - As a logged in user, I should be able to create a project with a title, a visibility level of public or private and be appointed automatically as a project administrator.
+- As a logged in user, I should not be able to create a project with a non-unique title.
 - As a person who has just created a project, I should be automatically redirected to the project I have just created.
 - As a project administrator, I should be able to appoint fellow project administrators who are able to change the title and visibility of a project.
 - As a project administrator of a private project, I should be able to invite "allowed users" to a project by specifying their username so that users are able to view and contribute to a private project.

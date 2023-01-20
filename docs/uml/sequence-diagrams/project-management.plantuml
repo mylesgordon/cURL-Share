@@ -1,0 +1,56 @@
+@startuml
+title Project Management
+
+actor Admin as "Project admin"
+actor User as "Logged-in User"
+participant Website 
+participant Backend
+database Database
+
+User -> Website: Project title and visibility level entered
+Website -> Backend: Title & visiblity level
+Backend -> Database: Title & visibility level
+alt Project title is unique
+Database --> Backend: Project ID
+Backend -> Database: Make user admin
+Backend --> Website: Project ID
+Website --> Admin: Redirect to newly created project
+else Project title is not unique
+Database --> Backend: Project name unique violation
+Backend --> Website: 422 status code
+Website --> User: Display "project title already taken" message
+end
+
+Admin -> Website: Add project adminstrator/viewer by username
+Website -> Backend: New admin/viewer username
+alt User found
+    Database --> Backend: Success
+    Backend --> Website: 201 status code
+    Website --> Admin: New user shown in list of project admins/viewers
+else User not found
+    Database --> Backend: Specified user not found
+    Backend --> Website: 404 status code
+    Website --> Admin: Display "username not found" message
+end
+
+Admin -> Website: Add new environment
+alt Environment is unique
+    Website -> Backend: Project ID & environment
+    Backend -> Database: Project ID & environment
+    Backend --> Website: 201 status code
+    Website --> Admin: New environment shown in list of environments
+else Environment already exists
+    Website --> Admin: Display "environment already exists" message
+end
+
+
+Admin -> Website: Delete project button clicked
+Website --> Admin: "Are you sure?" prompt shown
+opt "Yes" clicked
+    Website -> Backend: Delete request w/ project ID
+    Backend -> Database: Delete project
+    Backend --> Website: 200 status code
+    Website --> Admin: Redirect to home page
+end
+
+@enduml
