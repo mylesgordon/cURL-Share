@@ -1,0 +1,28 @@
+@startuml
+title cURL Group
+
+actor User
+participant Frontend 
+participant Backend
+database Database
+
+User -> Frontend: Access cURL group
+Frontend -> Backend: cURL Group ID, user ID
+Backend -> Database: Is user permitted to view project?
+
+alt User is permitted to view project
+Database --> Backend: Yes!
+Backend -> Database: Get title, description, entries, environments of cURL group
+Database --> Backend: cURL group information
+Backend --> Frontend: cURL group information
+Frontend --> User: cURL group metadata & "pretty" view of each entry
+else User is not permitted to view project
+Database --> Backend: No!
+Backend --> Frontend: 403 status code
+Frontend --> User: Display "You do not have access"
+end
+
+User -> Frontend: Change environment
+Frontend --> User: Each entry's URLs changed to new environment
+
+@enduml
