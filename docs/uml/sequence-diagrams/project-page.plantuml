@@ -1,0 +1,34 @@
+@startuml
+title Project Page
+
+actor User
+participant Frontend 
+participant Backend
+database Database
+
+User -> Frontend: User accesses project page
+Frontend -> Backend: Project ID and user ID
+Backend -> Database: Does user have access to the project?
+alt User has access to the project
+    Database --> Backend: Yes they do!
+    Backend -> Database: Get all cURL groups
+    Database --> Backend: cURL groups for project
+    Backend --> Frontend: cURL groups for project
+    Frontend --> User: cURL groups for project
+else User doesn't have access to the project
+    Database --> Backend: No they don't!
+    Backend --> Frontend: 403 status code
+    Frontend --> User: Display "You do not have access"
+end
+
+User -> Frontend: Search project title/filter label
+Frontend -> Backend: Get updated list of cURL groups
+Backend -> Database: Get cURL groups like title and/or given labels
+Database --> Backend: Filtered cURL groups
+Backend --> Frontend: Filtered cURL groups
+Frontend --> User: Filtered cURL groups
+
+User -> Frontend: Click on cURL group
+Frontend --> User: Redirect to cURL group
+
+@enduml
