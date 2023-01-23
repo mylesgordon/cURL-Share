@@ -1,0 +1,21 @@
+@startuml
+title Edit cURL group
+
+actor User as "Logged-in User"
+participant Frontend 
+participant Backend
+database Database
+
+User -> Frontend: Go to cURL group page
+Frontend --> User: cURL group page w/ "Edit" button
+note right: Typical view cURL group flow implied
+User -> Frontend: Edit button clicked
+Frontend --> User: Edit page with same title, description and entry edit perms as cURL group creation
+User -> Frontend: Save changes to cURL group
+Frontend -> Backend: Modified cURL group (PUT)
+Backend -> Database: Modified cURL group
+Database --> Backend: OK!
+Backend --> Frontend: 200 status code
+Frontend --> User: Redirect to newly modified cURL group page
+
+@enduml
