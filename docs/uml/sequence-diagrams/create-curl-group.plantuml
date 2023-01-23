@@ -1,0 +1,36 @@
+@startuml
+title Create cURL group
+
+actor User as "Logged-in User"
+participant Frontend 
+participant Backend
+database Database
+
+User -> Frontend: Access project page
+Frontend --> User: Display "Create cURL Group" button
+User -> Frontend: Click button
+Frontend --> User: Redirect to cURL group creation page
+User -> Frontend: Give cURL group a title, description and label
+User -> Frontend: Add entry by pasting raw cURL query and giving description
+opt cURL Query has "Authorization" header
+    Frontend --> User: Display "Do you wish to remove Auth header?" message
+    opt Yes
+    Frontend --> User: Auth header contents replaced with "REDACTED"
+    end
+end
+
+User -> Frontend: Rearrange entries
+Frontend --> User: Specified entry order respected
+User -> Frontend: Attempts to close browser window/tab
+Frontend --> User: Browser prompt appears informing work will be lost if not saved
+User -> Frontend: Save cURL group
+Frontend -> Backend: New cURL group title, description and entries
+Backend -> Database: New cURL group info
+Database --> Backend: New cURL group ID
+Backend --> Frontend: New cURL group ID
+Frontend --> User: Redirect to new cURL group page
+User -> Frontend: Go to project page
+note right: Typical project page flow implied
+Frontend --> User: New cURL group visible
+
+@enduml
