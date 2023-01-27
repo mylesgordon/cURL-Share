@@ -11,6 +11,6 @@ assignees: ''
 ENTER HERE!
 
 ## Definition of Done
-[] Unit tested
-[] End to End tested (if applicable) 
-[] Code formatted
+- [ ] Unit tested
+- [ ] End to End tested (if applicable) 
+- [ ] Code formatted
