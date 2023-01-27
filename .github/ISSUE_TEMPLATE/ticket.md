@@ -2,7 +2,7 @@
 name: Ticket
 about: User story-style ticket
 title: ''
-labels: replace me!
+labels: ''
 assignees: ''
 
 ---
