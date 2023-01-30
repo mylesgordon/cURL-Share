@@ -1,11 +1,25 @@
 package main
 
-import "testing"
+import (
+	"io/ioutil"
+	"net/http"
+	"net/http/httptest"
+	"testing"
+)
 
-func TestDummy(t *testing.T) {
-	test1 := 1
-	test2 := 2
-	if test1 == test2 {
-		t.Errorf("Uhh?")
+func TestHelloWorld(t *testing.T) {
+	w := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodGet, "/", nil)
+
+	helloWorld(w, req)
+
+	result := w.Result()
+	defer result.Body.Close()
+	data, err := ioutil.ReadAll(result.Body)
+	if err != nil {
+		t.Errorf("Error while reading request body: %v", err)
+	}
+	if string(data) != "hello world" {
+		t.Errorf("expected hello world got %v", string(data))
 	}
 }
