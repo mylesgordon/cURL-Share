@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   backend:
-    name: backend-lint-and-test 
+    name: backend
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -30,7 +30,7 @@ jobs:
         run: go test -v
   
   frontend:
-    name: frontend-lint-and-test 
+    name: frontend
     runs-on: ubuntu-latest
     defaults:
       run:
