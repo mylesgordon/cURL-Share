@@ -47,16 +47,16 @@ jobs:
         uses: borales/actions-yarn@v4
         with:
           cmd: install 
-          working-directory: ${{ env.working-directory }}
+          dir: ${{ env.working-directory }}
 
       - name: Unit test
         uses: borales/actions-yarn@v4
         with:
           cmd: test:unit 
-          working-directory: ${{ env.working-directory }}
+          dir: ${{ env.working-directory }}
 
       - name: Lint
         uses: borales/actions-yarn@v4
         with:
           cmd: lint 
-          working-directory: ${{ env.working-directory }}
+          dir: ${{ env.working-directory }}
