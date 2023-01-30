@@ -7,11 +7,11 @@ describe('Meta component', () => {
 
 	it('should default to Unknown without an argument', () => {
 		render(Meta);
-		expect(document.title).toBe("Unknown | cURL Share");
-	} )
+		expect(document.title).toBe('Unknown | cURL Share');
+	});
 
 	it('should use the title argument', () => {
-		render(Meta, { title: "Wow, what a page!"});
-		expect(document.title).toBe("Wow, what a page! | cURL Share");
-	} )
+		render(Meta, { title: 'Wow, what a page!' });
+		expect(document.title).toBe('Wow, what a page! | cURL Share');
+	});
 });
