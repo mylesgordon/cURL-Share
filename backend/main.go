@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -15,9 +16,12 @@ func main() {
 
 	r.Get("/", helloWorld)
 
-	http.ListenAndServe(":3333", r)
+	log.Fatal(http.ListenAndServe(":3333", r))
 }
 
 func helloWorld(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("hello world"))
+	_, err := w.Write([]byte("hello world"))
+	if err != nil {
+		w.WriteHeader(500)
+	}
 }

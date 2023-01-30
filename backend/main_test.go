@@ -1,7 +1,7 @@
 package main
 
 import (
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -15,7 +15,7 @@ func TestHelloWorld(t *testing.T) {
 
 	result := w.Result()
 	defer result.Body.Close()
-	data, err := ioutil.ReadAll(result.Body)
+	data, err := io.ReadAll(result.Body)
 	if err != nil {
 		t.Errorf("Error while reading request body: %v", err)
 	}
