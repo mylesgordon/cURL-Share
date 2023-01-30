@@ -1,0 +1,9 @@
+// Vitest Snapshot v1
+
+exports[`Meta component > should match snapshot 1`] = `
+<body>
+  <div>
+    <!--&lt;Meta&gt;-->
+  </div>
+</body>
+`;

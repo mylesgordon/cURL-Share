@@ -4,12 +4,9 @@ import type { UserConfig } from 'vite';
 const config: UserConfig = {
 	plugins: [sveltekit()],
 	test: {
-		coverage: {
-			provider: 'istanbul'
-		},
 		environment: 'jsdom',
 		globals: true,
-		include: ['src/**/*.{test,spec}.{js,ts}'],
+		include: ['src/**/*.{test,spec}.{js,ts}']
 	}
 };
 
