@@ -48,15 +48,15 @@ jobs:
         with:
           cmd: install 
           dir: ${{ env.working-directory }}
+      
+      - name: Lint
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: lint 
+          dir: ${{ env.working-directory }}
 
       - name: Unit test
         uses: borales/actions-yarn@v4
         with:
           cmd: test:unit 
-          dir: ${{ env.working-directory }}
-
-      - name: Lint
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: lint 
           dir: ${{ env.working-directory }}
