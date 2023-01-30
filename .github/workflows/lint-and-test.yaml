@@ -28,7 +28,7 @@ jobs:
     
       - name: Test
         working-directory: ${{ env.working-directory }}
-        run: go test -v
+        run: go test -v ./...
   
   frontend:
     name: frontend
