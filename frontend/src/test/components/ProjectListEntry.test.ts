@@ -5,21 +5,25 @@ import { testMatchingSnapshot } from '../common';
 import type { ComponentProps } from 'svelte';
 
 describe('ProjectListEntry component', () => {
-    const props: ComponentProps<ProjectListEntry> = { description: "Test description", link: "https://google.com", projectId: 1, title: "Project title" }
+	const props: ComponentProps<ProjectListEntry> = {
+		description: 'Test description',
+		link: 'https://google.com',
+		projectId: 1,
+		title: 'Project title'
+	};
 	testMatchingSnapshot(ProjectListEntry, props);
 
 	it('should render title and description correctly', () => {
 		render(ProjectListEntry, props);
-        const description = screen.getByTestId("project-list-entry-1-description");
-        const title = screen.getByTestId("project-list-entry-1-title");
-        expect(description.textContent).toBe('Test description');
-        expect(title.textContent).toBe('Project title');
+		const description = screen.getByTestId('project-list-entry-1-description');
+		const title = screen.getByTestId('project-list-entry-1-title');
+		expect(description.textContent).toBe('Test description');
+		expect(title.textContent).toBe('Project title');
 	});
 
 	it('should link to the correct place', () => {
 		render(ProjectListEntry, props);
-        const title = screen.getByTestId("project-list-entry-1-title");
-        expect(title.getAttribute('href')).toBe('https://google.com');
+		const title = screen.getByTestId('project-list-entry-1-title');
+		expect(title.getAttribute('href')).toBe('https://google.com');
 	});
 });
-
