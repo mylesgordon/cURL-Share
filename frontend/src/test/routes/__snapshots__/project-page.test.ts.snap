@@ -1,0 +1,149 @@
+// Vitest Snapshot v1
+
+exports[`Project page > should match snapshot 1`] = `
+<body>
+  <div>
+    <!--&lt;Meta&gt;-->
+     
+    <h1>
+      Cool project
+    </h1>
+     
+    
+    <div
+      class="card card-shadow card-rounded card-border mt-4 s-CTyDWs24qi3Z"
+    >
+      <a
+        class="p-4 flex-grow full truncate text-center project-title s-kSbj4w364X09"
+        data-testid="curl-group-list-entry-1-title"
+        href="/project/1/group/1"
+      >
+        Login Journey
+      </a>
+       
+      <p
+        class="p-4 flex-grow project-description s-kSbj4w364X09"
+        data-testid="curl-group-list-entry-1-description"
+      >
+        cURL group defining a user journey!
+      </p>
+       
+      <div
+        aria-label="Project labels"
+        class="flex flex-grow flex-wrap justify-center project-label-container s-kSbj4w364X09"
+      >
+        <span
+          class="s-kSbj4w364X09"
+          data-testid="curl-group-list-entry-1-label-Feature"
+        >
+          <span
+            class="tag tag-pill s-1BpX-UQ-3FT-"
+          >
+            Feature
+          </span>
+          <!--&lt;Tag&gt;-->
+           
+        </span>
+        <span
+          class="s-kSbj4w364X09"
+          data-testid="curl-group-list-entry-1-label-User Journey"
+        >
+          <span
+            class="tag tag-pill s-1BpX-UQ-3FT-"
+          >
+            User Journey
+          </span>
+          <!--&lt;Tag&gt;-->
+           
+        </span>
+      </div>
+    </div>
+    <!--&lt;Card&gt;-->
+    <!--&lt;CurlGroupListEntry&gt;-->
+    
+    <div
+      class="card card-shadow card-rounded card-border mt-4 s-CTyDWs24qi3Z"
+    >
+      <a
+        class="p-4 flex-grow full truncate text-center project-title s-kSbj4w364X09"
+        data-testid="curl-group-list-entry-2-title"
+        href="/project/1/group/2"
+      >
+        IPB-1293
+      </a>
+       
+      <p
+        class="p-4 flex-grow project-description s-kSbj4w364X09"
+        data-testid="curl-group-list-entry-2-description"
+      >
+        Lorem ipsum this is long text Lorem ipsum this is long text Lorem ipsum this is long text Lorem ipsum this is long text Lorem ipsum this is long text Lorem ipsum this is long text 
+      </p>
+       
+      <div
+        aria-label="Project labels"
+        class="flex flex-grow flex-wrap justify-center project-label-container s-kSbj4w364X09"
+      >
+        <span
+          class="s-kSbj4w364X09"
+          data-testid="curl-group-list-entry-2-label-IPB-xxxx"
+        >
+          <span
+            class="tag tag-pill s-1BpX-UQ-3FT-"
+          >
+            IPB-xxxx
+          </span>
+          <!--&lt;Tag&gt;-->
+           
+        </span>
+        <span
+          class="s-kSbj4w364X09"
+          data-testid="curl-group-list-entry-2-label-Feature"
+        >
+          <span
+            class="tag tag-pill s-1BpX-UQ-3FT-"
+          >
+            Feature
+          </span>
+          <!--&lt;Tag&gt;-->
+           
+        </span>
+        <span
+          class="s-kSbj4w364X09"
+          data-testid="curl-group-list-entry-2-label-User Journey"
+        >
+          <span
+            class="tag tag-pill s-1BpX-UQ-3FT-"
+          >
+            User Journey
+          </span>
+          <!--&lt;Tag&gt;-->
+           
+        </span>
+      </div>
+    </div>
+    <!--&lt;Card&gt;-->
+    <!--&lt;CurlGroupListEntry&gt;-->
+    
+    
+    <!--&lt;+page&gt;-->
+  </div>
+</body>
+`;
+
+exports[`Project page > should match snapshot 2`] = `
+<body>
+  <div>
+    <!--&lt;Meta&gt;-->
+     
+    <h1>
+      Cool project
+    </h1>
+     
+    <p>
+      No groups available
+    </p>
+    
+    <!--&lt;+page&gt;-->
+  </div>
+</body>
+`;
