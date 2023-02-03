@@ -1,0 +1,28 @@
+// Vitest Snapshot v1
+
+exports[`ProjectListEntry component > should match snapshot 1`] = `
+<body>
+  <div>
+    <div
+      class="card card-shadow card-rounded card-border mt-4 s-CTyDWs24qi3Z"
+    >
+      <a
+        class="p-4 w-48 truncate"
+        data-testid="project-list-entry-1-title"
+        href="https://google.com"
+      >
+        Project title
+      </a>
+       
+      <p
+        class="p-4 flex-grow flex-shrink"
+        data-testid="project-list-entry-1-description"
+      >
+        Test description
+      </p>
+    </div>
+    <!--&lt;Card&gt;-->
+    <!--&lt;ProjectListEntry&gt;-->
+  </div>
+</body>
+`;

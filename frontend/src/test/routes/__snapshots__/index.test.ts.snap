@@ -5,19 +5,72 @@ exports[`Index page > should match snapshot 1`] = `
   <div>
     <!--&lt;Meta&gt;-->
      
-    <h1>
-      Welcome to SvelteKit
-    </h1>
+    <h2>
+      Projects
+    </h2>
+     
+    
+    <div
+      class="card card-shadow card-rounded card-border mt-4 s-CTyDWs24qi3Z"
+    >
+      <a
+        class="p-4 w-48 truncate"
+        data-testid="project-list-entry-1-title"
+        href="https://google.com"
+      >
+        the cool project
+      </a>
+       
+      <p
+        class="p-4 flex-grow flex-shrink"
+        data-testid="project-list-entry-1-description"
+      >
+        this is a project
+      </p>
+    </div>
+    <!--&lt;Card&gt;-->
+    <!--&lt;ProjectListEntry&gt;-->
+    
+    <div
+      class="card card-shadow card-rounded card-border mt-4 s-CTyDWs24qi3Z"
+    >
+      <a
+        class="p-4 w-48 truncate"
+        data-testid="project-list-entry-0-title"
+        href="https://youtube.com"
+      >
+        the other project
+      </a>
+       
+      <p
+        class="p-4 flex-grow flex-shrink"
+        data-testid="project-list-entry-0-description"
+      >
+        this is another project
+      </p>
+    </div>
+    <!--&lt;Card&gt;-->
+    <!--&lt;ProjectListEntry&gt;-->
+    
+    
+    <!--&lt;+page&gt;-->
+  </div>
+</body>
+`;
+
+exports[`Index page > should match snapshot 2`] = `
+<body>
+  <div>
+    <!--&lt;Meta&gt;-->
+     
+    <h2>
+      Projects
+    </h2>
      
     <p>
-      Visit 
-      <a
-        href="https://kit.svelte.dev"
-      >
-        kit.svelte.dev
-      </a>
-       to read the documentation
+      No projects available
     </p>
+    
     <!--&lt;+page&gt;-->
   </div>
 </body>
