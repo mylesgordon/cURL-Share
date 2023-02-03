@@ -1,4 +1,5 @@
 import ProjectListEntry from '../../lib/components/ProjectListEntry.svelte';
+import '@testing-library/jest-dom/extend-expect';
 import { screen } from '@testing-library/dom';
 import { render } from '@testing-library/svelte';
 import { testMatchingSnapshot } from '../common';
@@ -17,8 +18,8 @@ describe('ProjectListEntry component', () => {
 		render(ProjectListEntry, props);
 		const description = screen.getByTestId('project-list-entry-1-description');
 		const title = screen.getByTestId('project-list-entry-1-title');
-		expect(description.textContent).toBe('Test description');
-		expect(title.textContent).toBe('Project title');
+		expect(description).toHaveTextContent('Test description');
+		expect(title).toHaveTextContent('Project title');
 	});
 
 	it('should link to the correct place', () => {
