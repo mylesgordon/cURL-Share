@@ -34,6 +34,9 @@
 	function assignDialogInstance(event: CustomEvent<SvelteComponent>) {
 		dialogInstance = event.detail.instance;
 	}
+	function closeDialog() {
+		dialogInstance.hide();
+	}
 	function openDialog() {
 		if (dialogInstance) {
 			dialogInstance.show();
@@ -76,8 +79,8 @@
 	<div class="flex flex-col items-center gap-2">
 		<h2>Are you sure you want to delete {data.projectSettings.name}?</h2>
 		<form on:submit|preventDefault={deleteProject}>
-			<Button isBordered isRounded mode="secondary" type="submit">Yes</Button>
-			<Button isBordered isRounded mode="primary">No</Button>
+			<Button isBordered isRounded mode="secondary" type="submit" data-testid="delete-dialog-yes-button">Yes</Button>
+			<Button isBordered isRounded mode="primary" data-testid="delete-dialog-no-button" on:click={closeDialog}>No</Button>
 		</form>
 	</div>
 </Dialog>

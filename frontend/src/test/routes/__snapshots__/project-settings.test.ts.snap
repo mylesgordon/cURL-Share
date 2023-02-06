@@ -1,0 +1,262 @@
+// Vitest Snapshot v1
+
+exports[`Project page > should match snapshot 1`] = `
+<body>
+  <div>
+    <!--&lt;Meta&gt;-->
+     
+    <h1>
+      Placeholder project settings
+    </h1>
+     
+    <form
+      class="flex flex-col space-y-3 pt-4"
+    >
+      <div
+        class="w-100 s-JZthjkXlZrq3"
+      >
+        <label
+          class="label s-JZthjkXlZrq3"
+          for="name"
+        >
+          Name
+        </label>
+         
+        <input
+          class="input input-rounded s-JZthjkXlZrq3"
+          id="name"
+          type="text"
+        />
+         
+      </div>
+      <!--&lt;Input&gt;-->
+       
+      <div
+        class="w-100 s-JZthjkXlZrq3"
+      >
+        <label
+          class="label s-JZthjkXlZrq3"
+          for="description"
+        >
+          Description
+        </label>
+         
+        <input
+          class="input input-rounded s-JZthjkXlZrq3"
+          id="description"
+          type="text"
+        />
+         
+      </div>
+      <!--&lt;Input&gt;-->
+       
+      <fieldset
+        class="radio-group s-K6jzjY3vjtlg"
+      >
+        <legend
+          class="radio-legend s-K6jzjY3vjtlg"
+        >
+          Visibility
+        </legend>
+         
+        <label
+          class="radio-label-wrap s-K6jzjY3vjtlg"
+        >
+          <input
+            class="radio s-K6jzjY3vjtlg"
+            id="visibility-visibility-0"
+            name="visibility"
+            type="radio"
+            value="Public"
+          />
+           
+          <span
+            aria-hidden="true"
+            class="radio-label s-K6jzjY3vjtlg"
+          />
+           
+          <span
+            class="radio-label-copy s-K6jzjY3vjtlg"
+          >
+            Public
+          </span>
+           
+        </label>
+        <label
+          class="radio-label-wrap s-K6jzjY3vjtlg"
+        >
+          <input
+            class="radio s-K6jzjY3vjtlg"
+            id="visibility-visibility-1"
+            name="visibility"
+            type="radio"
+            value="Private"
+          />
+           
+          <span
+            aria-hidden="true"
+            class="radio-label s-K6jzjY3vjtlg"
+          />
+           
+          <span
+            class="radio-label-copy s-K6jzjY3vjtlg"
+          >
+            Private
+          </span>
+           
+        </label>
+      </fieldset>
+      <!--&lt;ChoiceInput&gt;-->
+      <!--&lt;VisibilityInput&gt;-->
+       
+      <div
+        class="w-100 s-JZthjkXlZrq3"
+      >
+        <label
+          class="label s-JZthjkXlZrq3"
+          for="collaborators"
+        >
+          Collaborators
+        </label>
+         
+        <input
+          class="input input-rounded s-JZthjkXlZrq3"
+          id="collaborators"
+          type="text"
+        />
+         
+      </div>
+      <!--&lt;Input&gt;-->
+       
+      <div
+        class="w-100 s-JZthjkXlZrq3"
+      >
+        <label
+          class="label s-JZthjkXlZrq3"
+          for="environments"
+        >
+          Environments
+        </label>
+         
+        <input
+          class="input input-rounded s-JZthjkXlZrq3"
+          id="environments"
+          type="text"
+        />
+         
+      </div>
+      <!--&lt;Input&gt;-->
+       
+      <div
+        class="flex flex-row gap-2 justify-center"
+      >
+        <button
+          class="btn btn-primary btn-bordered btn-rounded s-NAQuwh5ehqbV"
+          type="submit"
+        >
+          Save
+        </button>
+        
+        <!--&lt;Button&gt;-->
+         
+        <button
+          class="btn btn-secondary btn-bordered btn-rounded s-NAQuwh5ehqbV"
+          type="button"
+        >
+          Delete
+        </button>
+        
+        <!--&lt;Button&gt;-->
+      </div>
+    </form>
+     
+    <div
+      aria-hidden="true"
+      aria-labelledby="deleteProjectDialog"
+      class="dialog"
+      id="a11y-dialog"
+      role="dialog"
+    >
+      <div
+        class="dialog-overlay"
+        data-a11y-dialog-hide=""
+        tabindex="-1"
+      />
+       
+      <div
+        class="dialog-content dialog-fade-in"
+        role="document"
+      >
+         
+        <p
+          class="h4 mbe18 flex justify-center"
+          id="deleteProjectDialog"
+        >
+          Delete project
+        </p>
+         
+        <div
+          class="flex flex-col items-center gap-2"
+        >
+          <h2>
+            Are you sure you want to delete 
+            Placeholder project
+            ?
+          </h2>
+           
+          <form>
+            <button
+              class="btn btn-secondary btn-bordered btn-rounded s-NAQuwh5ehqbV"
+              data-testid="delete-dialog-yes-button"
+              type="submit"
+            >
+              Yes
+            </button>
+            
+            <!--&lt;Button&gt;-->
+             
+            <button
+              class="btn btn-primary btn-bordered btn-rounded s-NAQuwh5ehqbV"
+              data-testid="delete-dialog-no-button"
+              type="button"
+            >
+              No
+            </button>
+            
+            <!--&lt;Button&gt;-->
+          </form>
+        </div>
+         
+        <button
+          aria-label="Close delete dialog"
+          class="dialog-close dialog-close-button"
+          data-a11y-dialog-hide=""
+          type="button"
+        >
+          <div
+            class="close-button close-button-large s-C9mYFMcjNvxm"
+          >
+            <svg
+              aria-hidden="true"
+              class="close s-C9mYFMcjNvxm"
+              viewBox="0 0 24 24"
+            >
+              <path
+                class="s-C9mYFMcjNvxm"
+                d="M.439 21.44a1.5 1.5 0 0 0 2.122 2.121l9.262-9.261a.25.25 0 0 1 .354 0l9.262 9.263a1.5 1.5 0 1 0 2.122-2.121L14.3 12.177a.25.25 0 0 1 0-.354l9.263-9.262A1.5 1.5 0 0 0 21.439.44L12.177 9.7a.25.25 0 0 1-.354 0L2.561.44A1.5 1.5 0 0 0 .439 2.561L9.7 11.823a.25.25 0 0 1 0 .354Z"
+                fill="currentColor"
+              />
+            </svg>
+          </div>
+          
+          <!--&lt;Close&gt;-->
+        </button>
+      </div>
+    </div>
+    
+    <!--&lt;SvelteA11yDialog&gt;-->
+    <!--&lt;Dialog&gt;-->
+    <!--&lt;+page&gt;-->
+  </div>
+</body>
+`;
