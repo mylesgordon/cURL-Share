@@ -1,0 +1,122 @@
+// Vitest Snapshot v1
+
+exports[`Project create page > should match snapshot 1`] = `
+<body>
+  <div>
+    <!--&lt;Meta&gt;-->
+     
+    <h2>
+      Create a new project
+    </h2>
+     
+    <form
+      class="flex flex-col space-y-3 pt-4"
+    >
+      <div
+        class="w-100 s-JZthjkXlZrq3"
+      >
+        <label
+          class="label s-JZthjkXlZrq3"
+          for="name"
+        >
+          Name
+        </label>
+         
+        <input
+          class="input input-rounded s-JZthjkXlZrq3"
+          id="name"
+          type="text"
+        />
+         
+      </div>
+      <!--&lt;Input&gt;-->
+       
+      <div
+        class="w-100 s-JZthjkXlZrq3"
+      >
+        <label
+          class="label s-JZthjkXlZrq3"
+          for="description"
+        >
+          Description
+        </label>
+         
+        <textarea
+          class="input input-rounded s-JZthjkXlZrq3"
+          id="description"
+        />
+         
+      </div>
+      <!--&lt;Input&gt;-->
+       
+      <fieldset
+        class="radio-group s-K6jzjY3vjtlg"
+      >
+        <legend
+          class="radio-legend s-K6jzjY3vjtlg"
+        >
+          Visibility
+        </legend>
+         
+        <label
+          class="radio-label-wrap s-K6jzjY3vjtlg"
+        >
+          <input
+            class="radio s-K6jzjY3vjtlg"
+            id="visibility-visibility-0"
+            name="visibility"
+            type="radio"
+            value="Public"
+          />
+           
+          <span
+            aria-hidden="true"
+            class="radio-label s-K6jzjY3vjtlg"
+          />
+           
+          <span
+            class="radio-label-copy s-K6jzjY3vjtlg"
+          >
+            Public
+          </span>
+           
+        </label>
+        <label
+          class="radio-label-wrap s-K6jzjY3vjtlg"
+        >
+          <input
+            class="radio s-K6jzjY3vjtlg"
+            id="visibility-visibility-1"
+            name="visibility"
+            type="radio"
+            value="Private"
+          />
+           
+          <span
+            aria-hidden="true"
+            class="radio-label s-K6jzjY3vjtlg"
+          />
+           
+          <span
+            class="radio-label-copy s-K6jzjY3vjtlg"
+          >
+            Private
+          </span>
+           
+        </label>
+      </fieldset>
+      <!--&lt;ChoiceInput&gt;-->
+       
+      <button
+        class="btn btn-primary btn-bordered btn-rounded s-NAQuwh5ehqbV"
+        type="submit"
+      >
+        Create
+      </button>
+      
+      <!--&lt;Button&gt;-->
+    </form>
+    <!--&lt;+page&gt;-->
+  </div>
+</body>
+`;
