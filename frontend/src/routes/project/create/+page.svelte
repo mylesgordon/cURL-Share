@@ -18,7 +18,7 @@
 <form class="flex flex-col space-y-3 pt-4" on:submit|preventDefault={onSubmit}>
 	<Input isRounded id="name" label="Name" bind:value={name} />
 	<Input isRounded id="description" label="Description" type="textarea" bind:value={description} />
-	<VisibilityInput bind:visibility={visibility} />
+	<VisibilityInput bind:visibility />
 
 	<Button isBordered isRounded mode="primary" type="submit">Create</Button>
 </form>
