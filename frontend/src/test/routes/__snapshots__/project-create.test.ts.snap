@@ -106,6 +106,7 @@ exports[`Project create page > should match snapshot 1`] = `
         </label>
       </fieldset>
       <!--&lt;ChoiceInput&gt;-->
+      <!--&lt;VisibilityInput&gt;-->
        
       <button
         class="btn btn-primary btn-bordered btn-rounded s-NAQuwh5ehqbV"

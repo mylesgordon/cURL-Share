@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button, ButtonGroup, Dialog, Input } from 'agnostic-svelte';
+	import { Button, Dialog, Input } from 'agnostic-svelte';
 	import Meta from '$lib/components/Meta.svelte';
 	import VisibilityInput from '$lib/components/VisibilityInput.svelte';
 
@@ -65,9 +65,9 @@
 	id="a11y-dialog"
 	title="Delete project"
 	dialogRoot="#dialog-root"
-	closeButtonLabel="My close button label"
+	closeButtonLabel="Close delete dialog"
 	closeButtonPosition="last"
-	titleId="uniqueTitleId"
+	titleId="deleteProjectDialog"
 	role="dialog"
 	classNames={{ title: 'h4 mbe18 flex justify-center' }}
 	isAnimationFadeIn

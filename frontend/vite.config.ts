@@ -7,7 +7,10 @@ const config: UserConfig = {
 	test: {
 		environment: 'jsdom',
 		globals: true,
-		include: ['src/**/*.{test,spec}.{js,ts}']
+		include: ['src/**/*.{test,spec}.{js,ts}'],
+		coverage: {
+			exclude: ["~icons/**"]
+		}
 	}
 };
 
