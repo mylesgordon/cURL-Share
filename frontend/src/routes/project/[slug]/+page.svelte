@@ -3,12 +3,22 @@
 	import Meta from '$lib/components/Meta.svelte';
 	import type { PageData } from './$types';
 
+	import Settings from 'virtual:icons/fa/gear'
+	import IconLink from '$lib/components/IconLink.svelte';
+
 	export let data: PageData;
 </script>
 
-<Meta title={data.projectName} />
+<div class="flex flex-row justify-between">
+	<div class="flex flex-row gap-2">
+		<h1>{data.projectName}</h1>
+		<IconLink description="Project settings" href={`/project/${data.projectId}/settings`}>
+			<Settings />
+		</IconLink>
+	</div>
+</div>
 
-<h1>{data.projectName}</h1>
+<Meta title={data.projectName} />
 
 {#if data.groups.length}
 	{#each data.groups as group (group.groupId)}
