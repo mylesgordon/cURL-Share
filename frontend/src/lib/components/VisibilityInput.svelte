@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { Visibility, VisibilityOptions } from '$lib/types';
 	import { ChoiceInput } from 'agnostic-svelte';
+	import { Visibility, VisibilityOptions } from '$lib/types';
 
 	export let visibility: Visibility;
 

@@ -6,7 +6,7 @@ export const load = (({ params }) => {
 			{
 				description: 'this is a project',
 				title: 'the cool project',
-				link: 'https://google.com',
+				link: '/project/1',
 				projectId: 1
 			},
 			{

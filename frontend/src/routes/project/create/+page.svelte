@@ -1,11 +1,11 @@
 <script lang="ts">
+	import { Button, Input } from 'agnostic-svelte';
 	import { Visibility } from '$lib/types';
 	import Meta from '$lib/components/Meta.svelte';
 	import VisibilityInput from '$lib/components/VisibilityInput.svelte';
-	import { Button, Input } from 'agnostic-svelte';
 	let name: string;
 	let description: string;
-	let visibility: Visibility = Visibility.Private;
+	let visibility: Visibility = Visibility.Public;
 
 	function onSubmit(e: SubmitEvent) {
 		console.log(typeof e);

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Meta from '$lib/components/Meta.svelte';
 	import { Button, ButtonGroup, Input } from 'agnostic-svelte';
+	import Meta from '$lib/components/Meta.svelte';
 	let username: string;
 	let password: string;
 

@@ -1,6 +1,6 @@
-import Index from '../../routes/+page.svelte';
 import { render } from '@testing-library/svelte';
 import { testMatchingSnapshot } from '../common';
+import Index from '../../routes/+page.svelte';
 import type { ComponentProps } from 'svelte';
 
 describe('Index page', () => {

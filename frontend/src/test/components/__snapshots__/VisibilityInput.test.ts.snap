@@ -1,0 +1,66 @@
+// Vitest Snapshot v1
+
+exports[`VisibilityInput component > should match snapshot 1`] = `
+<body>
+  <div>
+    <fieldset
+      class="radio-group s-K6jzjY3vjtlg"
+    >
+      <legend
+        class="radio-legend s-K6jzjY3vjtlg"
+      >
+        Visibility
+      </legend>
+       
+      <label
+        class="radio-label-wrap s-K6jzjY3vjtlg"
+      >
+        <input
+          class="radio s-K6jzjY3vjtlg"
+          id="visibility-visibility-0"
+          name="visibility"
+          type="radio"
+          value="Public"
+        />
+         
+        <span
+          aria-hidden="true"
+          class="radio-label s-K6jzjY3vjtlg"
+        />
+         
+        <span
+          class="radio-label-copy s-K6jzjY3vjtlg"
+        >
+          Public
+        </span>
+         
+      </label>
+      <label
+        class="radio-label-wrap s-K6jzjY3vjtlg"
+      >
+        <input
+          class="radio s-K6jzjY3vjtlg"
+          id="visibility-visibility-1"
+          name="visibility"
+          type="radio"
+          value="Private"
+        />
+         
+        <span
+          aria-hidden="true"
+          class="radio-label s-K6jzjY3vjtlg"
+        />
+         
+        <span
+          class="radio-label-copy s-K6jzjY3vjtlg"
+        >
+          Private
+        </span>
+         
+      </label>
+    </fieldset>
+    <!--&lt;ChoiceInput&gt;-->
+    <!--&lt;VisibilityInput&gt;-->
+  </div>
+</body>
+`;

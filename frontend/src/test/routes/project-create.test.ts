@@ -1,6 +1,6 @@
-import ProjectCreatePage from '../../routes/project/create/+page.svelte';
 import { render } from '@testing-library/svelte';
 import { testMatchingSnapshot } from '../common';
+import ProjectCreatePage from '../../routes/project/create/+page.svelte';
 
 describe('Project create page', () => {
 	testMatchingSnapshot(ProjectCreatePage);

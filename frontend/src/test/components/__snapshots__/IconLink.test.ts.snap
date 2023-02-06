@@ -1,0 +1,13 @@
+// Vitest Snapshot v1
+
+exports[`IconLink component > should match snapshot 1`] = `
+<body>
+  <div>
+    <a
+      aria-label="Settings button"
+      href="https://example.com"
+    />
+    <!--&lt;IconLink&gt;-->
+  </div>
+</body>
+`;

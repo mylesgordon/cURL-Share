@@ -5,9 +5,31 @@ exports[`Index page > should match snapshot 1`] = `
   <div>
     <!--&lt;Meta&gt;-->
      
-    <h2>
-      Projects
-    </h2>
+    <div
+      class="flex flex-row gap-2"
+    >
+      <h2>
+        Projects
+      </h2>
+       
+      <a
+        aria-label="Create project"
+        href="/project/create"
+      >
+        <svg
+          height="1.2em"
+          viewBox="0 0 1408 1408"
+          width="1.2em"
+        >
+          <path
+            d="M1408 608v192q0 40-28 68t-68 28H896v416q0 40-28 68t-68 28H608q-40 0-68-28t-28-68V896H96q-40 0-68-28T0 800V608q0-40 28-68t68-28h416V96q0-40 28-68t68-28h192q40 0 68 28t28 68v416h416q40 0 68 28t28 68z"
+            fill="currentColor"
+          />
+        </svg>
+        <!--&lt;Plus&gt;-->
+      </a>
+      <!--&lt;IconLink&gt;-->
+    </div>
      
     
     <div
@@ -63,9 +85,31 @@ exports[`Index page > should match snapshot 2`] = `
   <div>
     <!--&lt;Meta&gt;-->
      
-    <h2>
-      Projects
-    </h2>
+    <div
+      class="flex flex-row gap-2"
+    >
+      <h2>
+        Projects
+      </h2>
+       
+      <a
+        aria-label="Create project"
+        href="/project/create"
+      >
+        <svg
+          height="1.2em"
+          viewBox="0 0 1408 1408"
+          width="1.2em"
+        >
+          <path
+            d="M1408 608v192q0 40-28 68t-68 28H896v416q0 40-28 68t-68 28H608q-40 0-68-28t-28-68V896H96q-40 0-68-28T0 800V608q0-40 28-68t68-28h416V96q0-40 28-68t68-28h192q40 0 68 28t28 68v416h416q40 0 68 28t28 68z"
+            fill="currentColor"
+          />
+        </svg>
+        <!--&lt;Plus&gt;-->
+      </a>
+      <!--&lt;IconLink&gt;-->
+    </div>
      
     <p>
       No projects available

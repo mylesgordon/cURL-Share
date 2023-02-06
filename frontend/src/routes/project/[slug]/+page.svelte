@@ -3,8 +3,8 @@
 	import Meta from '$lib/components/Meta.svelte';
 	import type { PageData } from './$types';
 
-	import Settings from 'virtual:icons/fa/gear';
 	import IconLink from '$lib/components/IconLink.svelte';
+	import Settings from 'virtual:icons/fa/gear';
 
 	export let data: PageData;
 </script>

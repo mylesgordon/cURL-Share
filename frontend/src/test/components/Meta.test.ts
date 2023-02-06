@@ -1,6 +1,6 @@
-import Meta from '../../lib/components/Meta.svelte';
 import { render } from '@testing-library/svelte';
 import { testMatchingSnapshot } from '../common';
+import Meta from '../../lib/components/Meta.svelte';
 
 describe('Meta component', () => {
 	testMatchingSnapshot(Meta);

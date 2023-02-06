@@ -1,6 +1,6 @@
-import LogIn from '../../routes/log-in/+page.svelte';
 import { render } from '@testing-library/svelte';
 import { testMatchingSnapshot } from '../common';
+import LogIn from '../../routes/log-in/+page.svelte';
 
 describe('Log In page', () => {
 	testMatchingSnapshot(LogIn);

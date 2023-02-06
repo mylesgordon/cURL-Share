@@ -1,6 +1,6 @@
-import ProjectPage from '../../routes/project/[slug]/+page.svelte';
 import { render } from '@testing-library/svelte';
 import { testMatchingSnapshot } from '../common';
+import ProjectPage from '../../routes/project/[slug]/+page.svelte';
 import type { ComponentProps } from 'svelte';
 
 describe('Project page', () => {
