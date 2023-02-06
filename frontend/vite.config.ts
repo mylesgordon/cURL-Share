@@ -9,7 +9,7 @@ const config: UserConfig = {
 		globals: true,
 		include: ['src/**/*.{test,spec}.{js,ts}'],
 		coverage: {
-			exclude: ["~icons/**"]
+			exclude: ['~icons/**']
 		}
 	}
 };
