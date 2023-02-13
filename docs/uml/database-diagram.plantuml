@@ -1,0 +1,40 @@
+@startuml database
+
+hide circle
+skinparam linetype ortho
+
+entity curl_group {
+    id: number
+    curls: text
+    description: text
+    labels: text
+    name: text
+    project_id: number <<FK>>
+}
+
+entity project {
+    id: number
+    admin_user_id: number <<FK>>
+    environments: text
+    description: text
+    name: text <<UNIQUE>>
+    visibility: text
+}
+
+entity project_collaborator {
+    project_id: number <<FK>>
+    user_id: number <<FK>>
+}
+
+entity user {
+    id: number
+    name: text
+    password_hash: text
+}
+
+project ||--|{ curl_group
+project ||--|{ project_collaborator
+user ||--|{ project_collaborator
+user ||--|{ project
+
+@enduml
