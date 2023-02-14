@@ -1,22 +1,13 @@
 mod models;
+mod routes;
 
-use crate::models::*;
-use actix_web::{web, App, HttpResponse, HttpServer, Responder};
+use crate::{models::*, routes::*};
+use actix_web::{middleware::Logger, web, App, HttpResponse, HttpServer, Responder};
 use dotenv::dotenv;
+use env_logger::Env;
+use log::info;
 use sqlx::sqlite::SqlitePool;
 use std::env;
-
-async fn get_projects(pool: web::Data<SqlitePool>) -> impl Responder {
-    let pool: &SqlitePool = &pool;
-    let maybe_todos = sqlx::query_as!(Project, r#"SELECT * FROM project"#)
-        .fetch_all(pool)
-        .await;
-
-    match maybe_todos {
-        Ok(todos) => HttpResponse::Ok().json(todos),
-        Err(_) => HttpResponse::InternalServerError().into(),
-    }
-}
 
 async fn status() -> impl Responder {
     HttpResponse::Ok().json(Status {
@@ -29,14 +20,20 @@ async fn main() -> anyhow::Result<()> {
     dotenv().ok();
     let pool = SqlitePool::connect(&env::var("DATABASE_URL")?).await?;
 
+    env_logger::init_from_env(Env::default().default_filter_or("info"));
+
     let bind_address = "127.0.0.1:8080";
-    println!("Starting server at {}", bind_address);
+    info!("Starting server at {}", bind_address);
 
     HttpServer::new(move || {
         App::new()
+            .wrap(Logger::default())
             .app_data(web::Data::new(pool.clone()))
-            .route("/", web::get().to(status))
-            .route("/project", web::get().to(get_projects))
+            .service(
+                web::scope("/api/v1")
+                    .route("/", web::get().to(status))
+                    .configure(project_routes),
+            )
     })
     .bind(bind_address)?
     .run()
@@ -44,4 +41,3 @@ async fn main() -> anyhow::Result<()> {
 
     Ok(())
 }
-

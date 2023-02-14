@@ -10,6 +10,8 @@ actix-web = "4.3.0"
 anyhow = "1.0.69"
 config = "0.13.3"
 dotenv = "0.15.0"
+env_logger = "0.10.0"
+log = "0.4.17"
 serde = "1.0.152"
 sqlx = { version = "0.6.2", features = ["runtime-actix-rustls", "macros", "sqlite"] }
 tokio = { version = "1.25.0", features = ["macros", "rt-multi-thread"] }
