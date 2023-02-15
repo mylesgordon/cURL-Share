@@ -14,6 +14,8 @@ pub struct CurlGroup {
     pub project_id: i64
 }
 
+
+#[derive(Deserialize, Serialize)]
 pub struct Project {
     pub id: i64,
     pub admin_user_id: i64,

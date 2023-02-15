@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS project (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     admin_user_id INTEGER NOT NULL,
     environments TEXT NOT NULL,
-    description TEXT NULL,
+    description TEXT NOT NULL,
     name TEXT UNIQUE NOT NULL,
     visibility TEXT NOT NULL,
     FOREIGN KEY (admin_user_id) REFERENCES user(id)
