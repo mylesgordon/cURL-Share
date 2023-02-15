@@ -17,6 +17,14 @@ jobs:
         working-directory: ./backend
     steps:
       - uses: actions/checkout@v3
+      - name: Cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cargo/registry
+            backend/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('backend/Cargo.lock') }}
+
       - name: Create database
         run: |
           cargo install sqlx-cli --no-default-features --features native-tls,sqlite
