@@ -17,14 +17,14 @@ jobs:
         working-directory: ./backend
     steps:
       - uses: actions/checkout@v3
+      - name: Build
+        run: cargo build --verbose
       - name: Create database
         run: |
-          cargo install sqlx-cli --no-default-features --features "sqlite runtime-actix-rustls"
+          cargo install sqlx-cli --no-default-features --features sqlite
           make initdatabase
       - name: Clippy
         run: cargo clippy --verbose
-      # - name: Build
-        # run: cargo build --verbose
       - name: Run tests
         run: cargo test --verbose
   
