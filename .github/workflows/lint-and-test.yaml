@@ -35,7 +35,7 @@ jobs:
 
       - name: Create database
         run: |
-          cargo install sqlx-cli --no-default-features --features native-tls,sqlite
+          cargo install sqlx-cli --no-default-features --features native-tls,sqlite || true
           make initdatabase
       - name: Build
         run: cargo build --verbose
