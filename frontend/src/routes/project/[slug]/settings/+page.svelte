@@ -5,6 +5,7 @@
 
 	import type { PageData } from './$types';
 	import type { SvelteComponent } from 'svelte';
+	import { splitAndTrim } from '$lib/common';
 	export let data: PageData;
 
 	let name = data.projectSettings.name;
@@ -20,10 +21,6 @@
 	$: environments = splitAndTrim(environmentText);
 
 	const headingAndTitle = `${name} settings`;
-
-	function splitAndTrim(input: string): Array<string> {
-		return input.split(',').map((item) => item.trim());
-	}
 
 	function onSubmit(e: SubmitEvent) {
 		console.log(typeof e);
@@ -84,15 +81,18 @@
 				isRounded
 				mode="secondary"
 				type="submit"
-				data-testid="delete-dialog-yes-button">Yes</Button
+				>Yes</Button
 			>
 			<Button
 				isBordered
 				isRounded
 				mode="primary"
-				data-testid="delete-dialog-no-button"
 				on:click={closeDialog}>No</Button
 			>
 		</form>
 	</div>
 </Dialog>
+
+{#if data.isUnitTest}
+	<div id="dialog-root"></div>
+{/if}

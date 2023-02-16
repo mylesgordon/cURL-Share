@@ -16,7 +16,8 @@ describe('Project page', () => {
 				visibility: Visibility.Public,
 				collaborators: ['collaborator1', 'dave'],
 				environments: ['https://cool.com', 'https://dev.cool.com']
-			}
+			},
+			isUnitTest: true
 		}
 	};
 
@@ -27,22 +28,18 @@ describe('Project page', () => {
 		expect(document.title).toEqual('Placeholder project settings | cURL Share');
 	});
 
-	// it('should display the delete dialog and disappear when \'no\' is clicked', async () => {
-	// 	const page = render(ProjectSettingsPage, props);
-	//     const dialog = screen.getByLabelText('deleteProjectDialog');
-	//     expect(dialog).toHaveAttribute('aria-hidden', 'true');
+	it('should display the delete dialog and disappear when \'no\' is clicked', async () => {
+		render(ProjectSettingsPage, props);
+	    const dialog = screen.getByRole('dialog', {hidden: true});
+	    expect(dialog).toHaveAttribute('aria-hidden', 'true');
 
-	// 	const deleteButton:HTMLInputElement = screen.getByText("Delete");
-	//     console.log(deleteButton)
-	//     await fireEvent.click(deleteButton);
-	//     screen.getByLabelText('deleteProjectDialog');
+		const deleteButton:HTMLInputElement = screen.getByText("Delete");
+	    await fireEvent.click(deleteButton);
 
-	//     // await waitFor(() =>expect(dialog).not.toHaveAttribute('aria-hidden'));
-
-	//     const noButton = screen.getByTestId('delete-dialog-no-button');
-	//     await fireEvent.click(noButton);
-	//     expect(dialog).toHaveAttribute('aria-hidden', 'true');
-	// });
+	    const noButton = screen.getByText('No');
+	    await fireEvent.click(noButton);
+	    expect(dialog).toHaveAttribute('aria-hidden', 'true');
+	});
 
 	// it should send a delete request
 	// it should send a correct post request

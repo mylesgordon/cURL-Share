@@ -12,6 +12,7 @@ const projectSettings = {
 
 export const load = (({ params }) => {
 	return {
-		projectSettings
+		projectSettings,
+		"isUnitTest": false
 	};
 }) satisfies PageServerLoad;
