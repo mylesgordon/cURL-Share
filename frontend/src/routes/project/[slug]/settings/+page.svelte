@@ -3,9 +3,9 @@
 	import Meta from '$lib/components/Meta.svelte';
 	import VisibilityInput from '$lib/components/VisibilityInput.svelte';
 
+	import { splitAndTrim } from '$lib/common';
 	import type { PageData } from './$types';
 	import type { SvelteComponent } from 'svelte';
-	import { splitAndTrim } from '$lib/common';
 	export let data: PageData;
 
 	let name = data.projectSettings.name;
@@ -76,23 +76,12 @@
 	<div class="flex flex-col items-center gap-2">
 		<h2>Are you sure you want to delete {data.projectSettings.name}?</h2>
 		<form on:submit|preventDefault={deleteProject}>
-			<Button
-				isBordered
-				isRounded
-				mode="secondary"
-				type="submit"
-				>Yes</Button
-			>
-			<Button
-				isBordered
-				isRounded
-				mode="primary"
-				on:click={closeDialog}>No</Button
-			>
+			<Button isBordered isRounded mode="secondary" type="submit">Yes</Button>
+			<Button isBordered isRounded mode="primary" on:click={closeDialog}>No</Button>
 		</form>
 	</div>
 </Dialog>
 
 {#if data.isUnitTest}
-	<div id="dialog-root"></div>
+	<div id="dialog-root" />
 {/if}

@@ -1,6 +1,6 @@
 <script lang="ts">
-    import CurlGroupForm from "$lib/components/CurlGroupForm.svelte";
-    import Meta from "$lib/components/Meta.svelte";
+	import CurlGroupForm from '$lib/components/CurlGroupForm.svelte';
+	import Meta from '$lib/components/Meta.svelte';
 </script>
 
 <!-- TODO: change "a curl group" to the actual title -->

@@ -10,9 +10,9 @@ const projectSettings = {
 	environments: ['https://cool.com', 'https://dev.cool.com']
 };
 
-export const load = (({ params }) => {
+export const load = (() => {
 	return {
 		projectSettings,
-		"isUnitTest": false
+		isUnitTest: false
 	};
 }) satisfies PageServerLoad;

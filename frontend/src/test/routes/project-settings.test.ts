@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { Visibility } from '$lib/types';
-import { fireEvent, render, screen, waitFor } from '@testing-library/svelte';
+import { fireEvent, render, screen } from '@testing-library/svelte';
 import { testMatchingSnapshot } from '../common';
 import ProjectSettingsPage from '../../routes/project/[slug]/settings/+page.svelte';
 import type { ComponentProps } from 'svelte';
@@ -28,17 +28,17 @@ describe('Project page', () => {
 		expect(document.title).toEqual('Placeholder project settings | cURL Share');
 	});
 
-	it('should display the delete dialog and disappear when \'no\' is clicked', async () => {
+	it("should display the delete dialog and disappear when 'no' is clicked", async () => {
 		render(ProjectSettingsPage, props);
-	    const dialog = screen.getByRole('dialog', {hidden: true});
-	    expect(dialog).toHaveAttribute('aria-hidden', 'true');
+		const dialog = screen.getByRole('dialog', { hidden: true });
+		expect(dialog).toHaveAttribute('aria-hidden', 'true');
 
-		const deleteButton:HTMLInputElement = screen.getByText("Delete");
-	    await fireEvent.click(deleteButton);
+		const deleteButton: HTMLInputElement = screen.getByText('Delete');
+		await fireEvent.click(deleteButton);
 
-	    const noButton = screen.getByText('No');
-	    await fireEvent.click(noButton);
-	    expect(dialog).toHaveAttribute('aria-hidden', 'true');
+		const noButton = screen.getByText('No');
+		await fireEvent.click(noButton);
+		expect(dialog).toHaveAttribute('aria-hidden', 'true');
 	});
 
 	// it should send a delete request
