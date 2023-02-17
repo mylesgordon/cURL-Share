@@ -4,7 +4,7 @@ dev:
 initdatabase:
 	sqlx database create && sqlx migrate run
 
-resetdatabase: initdatabase
+resetdatabase: 
 	rm data.*
 	$(MAKE) initdatabase
 

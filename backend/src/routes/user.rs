@@ -1,9 +1,10 @@
 use actix_session::Session;
-use actix_web::{post, web, HttpResponse, Responder, HttpResponseBuilder};
+use actix_web::{post, web, HttpResponse, HttpResponseBuilder, Responder};
 use argon2::{
     password_hash::{rand_core::OsRng, PasswordHash, PasswordHasher, PasswordVerifier, SaltString},
     Argon2,
 };
+use log::warn;
 use secrecy::{ExposeSecret, Secret};
 use serde::Deserialize;
 use sqlx::SqlitePool;
@@ -11,7 +12,10 @@ use sqlx::SqlitePool;
 #[derive(Debug)]
 enum UserError {
     PasswordHashError(argon2::password_hash::Error),
+    SqlxDatabaseError,
     SqlxError(sqlx::Error),
+    UserAlreadyExists,
+    UserNotFound(sqlx::Error),
 }
 
 impl From<argon2::password_hash::Error> for UserError {
@@ -22,7 +26,30 @@ impl From<argon2::password_hash::Error> for UserError {
 
 impl From<sqlx::Error> for UserError {
     fn from(e: sqlx::Error) -> Self {
-        Self::SqlxError(e)
+        match e {
+            sqlx::Error::RowNotFound => Self::UserNotFound(e),
+            sqlx::Error::Database(database_err) => {
+                if let Some(database_err_code) = database_err.code() {
+                    match database_err_code.as_ref() {
+                        "2067" => Self::UserAlreadyExists,
+                        _ => Self::SqlxDatabaseError
+                    }
+                } else {
+                    Self::SqlxDatabaseError
+                }
+            }
+            _ => Self::SqlxError(e),
+        }
+    }
+}
+
+impl From<UserError> for HttpResponse {
+    fn from(e: UserError) -> Self {
+        match e {
+            UserError::UserAlreadyExists => HttpResponse::Conflict().into(),
+            UserError::UserNotFound(_) => HttpResponse::Unauthorized().into(),
+            _ => HttpResponse::InternalServerError().into(),
+        }
     }
 }
 
@@ -66,12 +93,13 @@ async fn sign_up_user(body: &UserRequest, pool: &SqlitePool) -> Result<i64, User
 
 fn create_session(code: HttpResponseBuilder, session: &Session, user_id: i64) -> HttpResponse {
     match session.insert("user_id", &user_id) {
-            Ok(_) => {
-                session.renew();
-                code
-            }
-            Err(_) => HttpResponse::InternalServerError(),
-        }.into()
+        Ok(_) => {
+            session.renew();
+            code
+        }
+        Err(_) => HttpResponse::InternalServerError(),
+    }
+    .into()
 }
 
 #[post("/log-in")]
@@ -82,7 +110,10 @@ async fn login(
 ) -> impl Responder {
     match check_user_password(&body, &pool).await {
         Ok(user_id) => create_session(HttpResponse::Ok(), &session, user_id),
-        Err(_) => HttpResponse::InternalServerError().into()
+        Err(e) => {
+            warn!("Error recieved during log in: {:?}", e);
+            e.into()
+        }
     }
 }
 
@@ -94,8 +125,10 @@ async fn signup(
 ) -> impl Responder {
     match sign_up_user(&body, &pool).await {
         Ok(user_id) => create_session(HttpResponse::Created(), &session, user_id),
-        // TODO: more bespoke responses
-        Err(_) => HttpResponse::InternalServerError().into(),
+        Err(e) => {
+            warn!("Error recieved during sign up: {:?}", e);
+            e.into()
+        }
     }
 }
 
