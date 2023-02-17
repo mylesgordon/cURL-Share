@@ -12,9 +12,8 @@ pub struct CurlGroup {
     pub description: String,
     pub labels: String,
     pub name: String,
-    pub project_id: i64
+    pub project_id: i64,
 }
-
 
 #[derive(Deserialize, Serialize)]
 pub struct Project {
@@ -29,12 +28,12 @@ pub struct Project {
 #[allow(dead_code)]
 pub struct ProjectCollaborators {
     pub project_id: i64,
-    pub user_id: i64
+    pub user_id: i64,
 }
 
 #[allow(dead_code)]
 pub struct User {
     pub id: i64,
     pub name: String,
-    pub password_hash: String
+    pub password_hash: String,
 }

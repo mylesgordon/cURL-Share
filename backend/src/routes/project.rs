@@ -1,5 +1,5 @@
 use crate::Project;
-use actix_web::{web, Responder, HttpResponse, get};
+use actix_web::{get, web, HttpResponse, Responder};
 use sqlx::SqlitePool;
 
 #[get("/project")]

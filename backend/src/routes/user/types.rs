@@ -25,7 +25,7 @@ impl From<sqlx::Error> for UserError {
                 if let Some(database_err_code) = database_err.code() {
                     match database_err_code.as_ref() {
                         "2067" => Self::UserAlreadyExists,
-                        _ => Self::SqlxDatabaseError
+                        _ => Self::SqlxDatabaseError,
                     }
                 } else {
                     Self::SqlxDatabaseError
