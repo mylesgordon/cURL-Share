@@ -4,8 +4,13 @@
 	let username: string;
 	let password: string;
 
-	function onSubmit(e: SubmitEvent) {
-		console.log(typeof e);
+	async function onSubmit(_e: SubmitEvent) {
+		await fetch('http://localhost:8080/api/v1/log-in', {
+			method: 'POST',
+			mode: 'cors',
+			headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' },
+			body: JSON.stringify({ username, password })
+		});
 	}
 </script>
 
