@@ -1,5 +1,6 @@
 use std::net::TcpListener;
 
+use actix_cors::Cors;
 use actix_session::{storage::CookieSessionStore, SessionMiddleware};
 use actix_web::{cookie::Key, dev::Server, web, App, HttpServer};
 use sqlx::{sqlite::SqlitePoolOptions, SqlitePool};
@@ -68,6 +69,7 @@ fn run(db_pool: SqlitePool, listener: TcpListener) -> Result<Server, std::io::Er
     let private_key = Key::generate();
     let server = HttpServer::new(move || {
         App::new()
+            .wrap(Cors::permissive())
             .wrap(TracingLogger::default())
             .wrap(
                 SessionMiddleware::builder(CookieSessionStore::default(), private_key.clone())

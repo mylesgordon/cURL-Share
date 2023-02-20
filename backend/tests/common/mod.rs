@@ -21,10 +21,9 @@ pub struct TestApplication {
     port: u16,
 }
 
-
 impl TestApplication {
     fn get_test_user(&self) -> serde_json::Value {
-        serde_json::json!({ "username": "integration", "password": "test"})
+        serde_json::json!({"username": "integration", "password": "test"})
     }
 
     fn generate_url(&self, suffix: &'static str) -> String {
@@ -40,9 +39,13 @@ impl TestApplication {
             .expect("Failed to send health check request")
     }
 
-    pub async fn login(&self) -> reqwest::Response {
+    pub async fn login_default_user(&self) -> reqwest::Response {
+        self.login("integration", "test").await
+    }
+
+    pub async fn login(&self, username: &'static str, password: &'static str) -> reqwest::Response {
         let url = self.generate_url("log-in");
-        let data = self.get_test_user();
+        let data = serde_json::json!({"username": username, "password": password});
 
         reqwest::Client::new()
             .post(url)

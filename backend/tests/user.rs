@@ -45,7 +45,7 @@ mod log_in {
         let app = common::spawn_test_app().await;
         app.signup().await;
 
-        let response = app.login().await;
+        let response = app.login_default_user().await;
         assert_eq!(response.status(), StatusCode::OK);
         assert!(response.cookies().count() == 1);
     }
@@ -53,8 +53,17 @@ mod log_in {
     #[tokio::test]
     async fn failed_login_returns_401() {
         let app = common::spawn_test_app().await;
-        let response = app.login().await;
-        assert_eq!(response.status(), StatusCode::UNAUTHORIZED);
-        assert!(response.cookies().count() == 0);
+        app.signup().await;
+
+        let test_data = [
+            ("integration", "test_wrong_password"),
+            ("fake_user", "test"),
+        ];
+
+        for (username, password) in test_data {
+            let response = app.login(username, password).await;
+            assert_eq!(response.status(), StatusCode::UNAUTHORIZED);
+            assert!(response.cookies().count() == 0);
+        }
     }
 }

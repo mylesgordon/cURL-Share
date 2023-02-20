@@ -5,6 +5,7 @@ use sqlx::error::DatabaseError;
 
 #[derive(Debug)]
 pub enum UserError {
+    InvalidPassword(argon2::password_hash::Error),
     PasswordHashError(argon2::password_hash::Error),
     SqlxDatabaseError(Box<dyn DatabaseError>),
     SqlxError(sqlx::Error),
@@ -14,7 +15,10 @@ pub enum UserError {
 
 impl From<argon2::password_hash::Error> for UserError {
     fn from(e: argon2::password_hash::Error) -> Self {
-        Self::PasswordHashError(e)
+        match e {
+            argon2::password_hash::Error::Password => Self::InvalidPassword(e),
+            _ => Self::PasswordHashError(e),
+        }
     }
 }
 
@@ -40,6 +44,7 @@ impl From<sqlx::Error> for UserError {
 impl From<UserError> for HttpResponse {
     fn from(e: UserError) -> Self {
         match e {
+            UserError::InvalidPassword(_) => HttpResponse::Unauthorized().finish(),
             UserError::UserAlreadyExists => HttpResponse::Conflict().into(),
             UserError::UserNotFound(_) => HttpResponse::Unauthorized().into(),
             _ => HttpResponse::InternalServerError().into(),
