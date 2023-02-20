@@ -1,4 +1,5 @@
-use crate::Project;
+use crate::models::Project;
+
 use actix_web::{get, web, HttpResponse, Responder};
 use sqlx::SqlitePool;
 

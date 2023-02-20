@@ -5,27 +5,31 @@ use actix_web::{cookie::Key, dev::Server, middleware::Logger, web, App, HttpServ
 use log::info;
 use sqlx::SqlitePool;
 
-use crate::{
-    routes::{project_routes, user_routes},
-    status,
-};
+use crate::routes::{health_check, project_routes, user_routes};
 
 pub struct Application {
+    port: u16,
     server: Server,
 }
 
 impl Application {
-    pub async fn build(port: u16) -> Result<Self, std::io::Error> {
+    pub async fn build(db_pool_url: &'static str, port: u16) -> Result<Self, std::io::Error> {
         let address = format!("127.0.0.1:{}", port);
         let listener = TcpListener::bind(&address)?;
-        let db_pool = SqlitePool::connect("data.db").await.unwrap();
+    
+        let db_pool = SqlitePool::connect(db_pool_url).await.unwrap();
 
+        let port = listener.local_addr()?.port();
         let server = run(db_pool, listener)?;
-        Ok(Self { server })
+        Ok(Self { port, server })
     }
 
     pub async fn run_until_stopped(self) -> Result<(), std::io::Error> {
         self.server.await
+    }
+
+    pub fn port(&self) -> u16 {
+        self.port
     }
 }
 
@@ -43,7 +47,7 @@ fn run(db_pool: SqlitePool, listener: TcpListener) -> Result<Server, std::io::Er
             .app_data(web::Data::new(db_pool.clone()))
             .service(
                 web::scope("/api/v1")
-                    .route("/", web::get().to(status))
+                    .route("/health-check", web::get().to(health_check))
                     .configure(project_routes)
                     .configure(user_routes),
             )

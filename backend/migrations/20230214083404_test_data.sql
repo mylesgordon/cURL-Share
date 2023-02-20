@@ -1,3 +1,0 @@
-INSERT INTO user (name, password_hash) VALUES ('User1', 'password123');
-INSERT INTO project (admin_user_id, environments, description, name, visibility) VALUES (1, 'localhost:8080,dev.thing.com', 'This is a test project', 'Test project 1', 'Public');
-INSERT INTO curl_group(curls, description, labels, name, project_id) VALUES ('{}', 'This is a blank cURL group. Please add another full one eventually.', 'Test,Migrations', 'Group 1', 1);
