@@ -9,4 +9,7 @@ resetdatabase:
 	$(MAKE) initdatabase
 
 run:
-	cargo run
+	cargo run | bunyan
+
+test:
+	TEST_LOG=true cargo test | bunyan

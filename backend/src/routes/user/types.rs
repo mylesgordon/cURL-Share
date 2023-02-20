@@ -1,11 +1,12 @@
 use actix_web::HttpResponse;
 use secrecy::Secret;
 use serde::Deserialize;
+use sqlx::error::DatabaseError;
 
 #[derive(Debug)]
 pub enum UserError {
     PasswordHashError(argon2::password_hash::Error),
-    SqlxDatabaseError,
+    SqlxDatabaseError(Box<dyn DatabaseError>),
     SqlxError(sqlx::Error),
     UserAlreadyExists,
     UserNotFound(sqlx::Error),
@@ -25,10 +26,10 @@ impl From<sqlx::Error> for UserError {
                 if let Some(database_err_code) = database_err.code() {
                     match database_err_code.as_ref() {
                         "2067" => Self::UserAlreadyExists,
-                        _ => Self::SqlxDatabaseError,
+                        _ => Self::SqlxDatabaseError(database_err),
                     }
                 } else {
-                    Self::SqlxDatabaseError
+                    Self::SqlxDatabaseError(database_err)
                 }
             }
             _ => Self::SqlxError(e),

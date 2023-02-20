@@ -1,4 +1,4 @@
-mod types;
+pub mod types;
 
 use actix_session::Session;
 use actix_web::{post, web, HttpResponse, HttpResponseBuilder, Responder};
@@ -6,12 +6,18 @@ use argon2::{
     password_hash::{rand_core::OsRng, PasswordHash, PasswordHasher, PasswordVerifier, SaltString},
     Argon2,
 };
-use log::warn;
 use secrecy::ExposeSecret;
 use sqlx::SqlitePool;
 use types::*;
 
 #[post("/log-in")]
+#[tracing::instrument(
+    name = "Logging in user.",
+    skip(body, pool, session),
+    fields(
+        %body.username
+    )
+)]
 async fn login(
     body: web::Json<UserRequest>,
     pool: web::Data<SqlitePool>,
@@ -20,13 +26,20 @@ async fn login(
     match check_user_password(&body, &pool).await {
         Ok(user_id) => create_session(HttpResponse::Ok(), &session, user_id),
         Err(e) => {
-            warn!("Error recieved during log in: {:?}", e);
+            tracing::error!("Error recieved during log in: {:?}", e);
             e.into()
         }
     }
 }
 
 #[post("/sign-up")]
+#[tracing::instrument(
+    name = "Signing up new user.",
+    skip(body, pool, session),
+    fields(
+        %body.username
+    )
+)]
 async fn signup(
     body: web::Json<UserRequest>,
     pool: web::Data<SqlitePool>,
@@ -35,7 +48,7 @@ async fn signup(
     match sign_up_user(&body, &pool).await {
         Ok(user_id) => create_session(HttpResponse::Created(), &session, user_id),
         Err(e) => {
-            warn!("Error recieved during sign up: {:?}", e);
+            tracing::error!("Error recieved during sign up: {:?}", e);
             e.into()
         }
     }
