@@ -67,3 +67,18 @@ mod log_in {
         }
     }
 }
+
+#[cfg(test)]
+mod log_out {
+    use super::*;
+
+    #[tokio::test]
+    async fn successful_logout_returns_204_with_purged_cookie() {
+        let app = common::spawn_test_app().await;
+        app.signup().await;
+
+        let response = app.logout().await;
+        assert_eq!(response.status(), StatusCode::NO_CONTENT);
+        assert!(response.cookies().count() == 0);
+    }
+}

@@ -55,6 +55,16 @@ impl TestApplication {
             .expect("Failed to send sign in request")
     }
 
+    pub async fn logout(&self) -> reqwest::Response {
+        let url = self.generate_url("log-out");
+
+        reqwest::Client::new()
+            .post(url)
+            .send()
+            .await
+            .expect("Failed to send log out request")
+    }
+
     pub async fn signup(&self) -> reqwest::Response {
         let url = self.generate_url("sign-up");
         let data = self.get_test_user();

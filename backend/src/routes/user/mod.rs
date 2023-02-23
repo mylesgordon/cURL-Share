@@ -32,6 +32,18 @@ async fn login(
     }
 }
 
+#[post("/log-out")]
+#[tracing::instrument(
+    name = "Logging out user.",
+    skip(session),
+)]
+async fn logout(
+    session: Session,
+) -> impl Responder {
+    session.purge();    
+    HttpResponse::NoContent().finish()
+}
+
 #[post("/sign-up")]
 #[tracing::instrument(
     name = "Signing up new user.",
@@ -55,7 +67,7 @@ async fn signup(
 }
 
 pub fn user_routes(cfg: &mut web::ServiceConfig) {
-    cfg.service(login).service(signup);
+    cfg.service(login).service(logout).service(signup);
 }
 
 async fn check_user_password(body: &UserRequest, pool: &SqlitePool) -> Result<i64, UserError> {
@@ -91,12 +103,12 @@ async fn sign_up_user(body: &UserRequest, pool: &SqlitePool) -> Result<i64, User
 }
 
 fn create_session(code: HttpResponseBuilder, session: &Session, user_id: i64) -> HttpResponse {
+    session.renew();
     match session.insert("user_id", &user_id) {
         Ok(_) => {
-            session.renew();
             code
         }
         Err(_) => HttpResponse::InternalServerError(),
     }
-    .into()
+    .finish()
 }
