@@ -1,9 +1,10 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import Icons from 'unplugin-icons/vite';
+import basicSsl from '@vitejs/plugin-basic-ssl';
 import type { UserConfig } from 'vite';
 
 const config: UserConfig = {
-	plugins: [sveltekit(), Icons({ compiler: 'svelte' })],
+	plugins: [basicSsl(), sveltekit(), Icons({ compiler: 'svelte' })],
 	test: {
 		environment: 'jsdom',
 		globals: true,

@@ -1,16 +1,27 @@
 <script lang="ts">
 	import { Button, ButtonGroup, Input } from 'agnostic-svelte';
+	import { goto, invalidateAll } from '$app/navigation';
 	import Meta from '$lib/components/Meta.svelte';
 	let username: string;
 	let password: string;
 
 	async function onSubmit(_e: SubmitEvent) {
-		await fetch('http://localhost:8080/api/v1/log-in', {
-			method: 'POST',
-			mode: 'cors',
-			headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' },
-			body: JSON.stringify({ username, password })
-		});
+		try {
+			await fetch('http://localhost:8080/api/v1/log-in', {
+				method: 'POST',
+				mode: 'cors',
+				headers: {
+					'Access-Control-Allow-Origin': 'http://locahost:8080',
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ username, password }),
+				credentials: 'include'
+			});
+			await invalidateAll();
+			await goto('/');
+		} catch (err) {
+			// FIXME
+		}
 	}
 </script>
 
