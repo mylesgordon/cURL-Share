@@ -23,7 +23,7 @@ impl Application {
         port: u16,
         pool_settings: ApplicationPoolSettings,
     ) -> Result<Self, std::io::Error> {
-        let address = format!("127.0.0.1:{}", port);
+        let address = format!("localhost:{}", port);
         let listener = TcpListener::bind(&address)?;
 
         let db_pool = match pool_settings {

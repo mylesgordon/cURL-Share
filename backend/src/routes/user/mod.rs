@@ -64,6 +64,7 @@ async fn signup(
 #[get("/user-status")]
 #[tracing::instrument(name = "Checking user status.", skip(session))]
 async fn user_status(session: Session) -> impl Responder {
+    tracing::info!("Cookies recieved: {}", session.entries().capacity());
     let body = UserStatus {
         is_logged_in: !session.entries().is_empty(),
     };
