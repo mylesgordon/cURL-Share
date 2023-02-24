@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { Button, ButtonGroup, Input } from 'agnostic-svelte';
-	import { goto, invalidateAll } from '$app/navigation';
+	import { goto } from '$app/navigation';
+	import { isLoggedIn } from '$lib/stores';
 	import Meta from '$lib/components/Meta.svelte';
+
 	let username: string;
 	let password: string;
 
@@ -11,13 +13,13 @@
 				method: 'POST',
 				mode: 'cors',
 				headers: {
-					'Access-Control-Allow-Origin': 'http://locahost:8080',
+					'Access-Control-Allow-Origin': 'http://localhost:8080',
 					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify({ username, password }),
 				credentials: 'include'
 			});
-			await invalidateAll();
+			isLoggedIn.set(true);
 			await goto('/');
 		} catch (err) {
 			// FIXME
