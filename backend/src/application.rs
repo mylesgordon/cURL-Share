@@ -73,6 +73,7 @@ fn run(db_pool: SqlitePool, listener: TcpListener) -> Result<Server, std::io::Er
             .wrap(TracingLogger::default())
             .wrap(
                 SessionMiddleware::builder(CookieSessionStore::default(), private_key.clone())
+                    .cookie_secure(false)
                     .build(),
             )
             .app_data(web::Data::new(db_pool.clone()))
