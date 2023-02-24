@@ -30,6 +30,52 @@ exports[`Header component > should match snapshot 1`] = `
               >
                 Log In
               </a>
+              
+            </li>
+            <!--&lt;HeaderNavItem&gt;-->
+          </ul>
+        </nav>
+        <!--&lt;HeaderNav&gt;-->
+         
+      </div>
+    </nav>
+    <!--&lt;Header&gt;-->
+    <!--&lt;Header&gt;-->
+  </div>
+</body>
+`;
+
+exports[`Header component > should match snapshot 2`] = `
+<body>
+  <div>
+    <nav
+      class="header s-0ZVLjeDTECqc"
+    >
+      <div
+        class="header-content s-0ZVLjeDTECqc"
+      >
+         
+        <a
+          href="/"
+        >
+          cURL Share
+        </a>
+         
+        <nav
+          class=" s-IJVakqdrdFix"
+        >
+          <ul
+            class="header-nav s-IJVakqdrdFix"
+          >
+            <li
+              class="header-nav-item s-eWnZjIejw3S-"
+            >
+              <a
+                href="/log-out"
+              >
+                Log Out
+              </a>
+              
             </li>
             <!--&lt;HeaderNavItem&gt;-->
           </ul>
