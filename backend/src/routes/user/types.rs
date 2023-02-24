@@ -1,6 +1,6 @@
 use actix_web::HttpResponse;
 use secrecy::Secret;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use sqlx::error::DatabaseError;
 
 #[derive(Debug)]
@@ -56,4 +56,9 @@ impl From<UserError> for HttpResponse {
 pub struct UserRequest {
     pub username: String,
     pub password: Secret<String>,
+}
+
+#[derive(Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct UserStatus {
+    pub is_logged_in: bool,
 }

@@ -3,6 +3,10 @@ use backend::{
     observability::{get_subscriber, init_subscriber},
 };
 use once_cell::sync::Lazy;
+use reqwest::{
+    cookie::{Cookie, Jar},
+    Client, Url,
+};
 
 static LOGS: Lazy<()> = Lazy::new(|| {
     let subscriber_name = "integration";
@@ -18,7 +22,9 @@ static LOGS: Lazy<()> = Lazy::new(|| {
 });
 
 pub struct TestApplication {
+    client: Client,
     port: u16,
+    url: String,
 }
 
 impl TestApplication {
@@ -27,12 +33,12 @@ impl TestApplication {
     }
 
     fn generate_url(&self, suffix: &'static str) -> String {
-        format!("http://localhost:{}/api/v1/{}", self.port, suffix)
+        format!("{}/api/v1/{}", self.url, suffix)
     }
 
     pub async fn health_check(&self) -> reqwest::Response {
         let url = self.generate_url("health-check");
-        reqwest::Client::new()
+        self.client
             .get(url)
             .send()
             .await
@@ -47,7 +53,7 @@ impl TestApplication {
         let url = self.generate_url("log-in");
         let data = serde_json::json!({"username": username, "password": password});
 
-        reqwest::Client::new()
+        self.client
             .post(url)
             .json(&data)
             .send()
@@ -58,7 +64,7 @@ impl TestApplication {
     pub async fn logout(&self) -> reqwest::Response {
         let url = self.generate_url("log-out");
 
-        reqwest::Client::new()
+        self.client
             .post(url)
             .send()
             .await
@@ -69,12 +75,22 @@ impl TestApplication {
         let url = self.generate_url("sign-up");
         let data = self.get_test_user();
 
-        reqwest::Client::new()
+        self.client
             .post(url)
             .json(&data)
             .send()
             .await
             .expect("Failed to send sign up request")
+    }
+
+    pub async fn user_status(&self) -> reqwest::Response {
+        let url = self.generate_url("user-status");
+
+        self.client
+            .get(url)
+            .send()
+            .await
+            .expect("Failed to send user status request")
     }
 }
 
@@ -84,8 +100,15 @@ pub async fn spawn_test_app() -> TestApplication {
     let application = Application::build(0, ApplicationPoolSettings::Test)
         .await
         .expect("Failed to build test application");
+
+    let client = Client::builder()
+        .cookie_store(true)
+        .build()
+        .expect("Failed to construct reqwest client");
     let port = application.port();
+    let url = format!("http://localhost:{}", port);
+
     let _ = tokio::spawn(application.run_until_stopped());
 
-    TestApplication { port }
+    TestApplication { client, port, url }
 }

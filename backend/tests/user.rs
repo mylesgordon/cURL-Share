@@ -70,6 +70,8 @@ mod log_in {
 
 #[cfg(test)]
 mod log_out {
+    use reqwest::cookie::Cookie;
+
     use super::*;
 
     #[tokio::test]
@@ -78,7 +80,69 @@ mod log_out {
         app.signup().await;
 
         let response = app.logout().await;
+        let response_cookies: Vec<Cookie> = response.cookies().collect();
         assert_eq!(response.status(), StatusCode::NO_CONTENT);
-        assert!(response.cookies().count() == 0);
+
+        // the response sets a Set-Cookie header - this will contain a cookie, but one that is empty.
+        assert!(response_cookies[0].value() == "");
+    }
+}
+
+#[cfg(test)]
+mod user_status {
+    use backend::routes::types::UserStatus;
+
+    use super::*;
+
+    #[tokio::test]
+    async fn logged_in_user_recieves_logged_in_true_with_200() {
+        let app = common::spawn_test_app().await;
+        app.signup().await;
+
+        let response = app.user_status().await;
+        assert_eq!(response.status(), StatusCode::OK);
+        assert_eq!(
+            response
+                .json::<UserStatus>()
+                .await
+                .expect("Failed to convert user response to UserStatus object"),
+            UserStatus { is_logged_in: true }
+        );
+    }
+
+    #[tokio::test]
+    async fn logged_out_user_recieves_logged_in_false_with_200() {
+        let app = common::spawn_test_app().await;
+        app.signup().await;
+        app.logout().await;
+
+        let response = app.user_status().await;
+        assert_eq!(response.status(), StatusCode::OK);
+        assert_eq!(
+            response
+                .json::<UserStatus>()
+                .await
+                .expect("Failed to convert user response to UserStatus object"),
+            UserStatus {
+                is_logged_in: false
+            }
+        );
+    }
+
+    #[tokio::test]
+    async fn user_without_any_previous_action_recieves_logged_in_false_with_200() {
+        let app = common::spawn_test_app().await;
+
+        let response = app.user_status().await;
+        assert_eq!(response.status(), StatusCode::OK);
+        assert_eq!(
+            response
+                .json::<UserStatus>()
+                .await
+                .expect("Failed to convert user response to UserStatus object"),
+            UserStatus {
+                is_logged_in: false
+            }
+        );
     }
 }
