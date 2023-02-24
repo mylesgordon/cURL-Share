@@ -23,7 +23,6 @@ static LOGS: Lazy<()> = Lazy::new(|| {
 
 pub struct TestApplication {
     client: Client,
-    port: u16,
     url: String,
 }
 
@@ -34,6 +33,15 @@ impl TestApplication {
 
     fn generate_url(&self, suffix: &'static str) -> String {
         format!("{}/api/v1/{}", self.url, suffix)
+    }
+
+    pub async fn delete_user(&self) -> reqwest::Response {
+        let url = self.generate_url("delete-user");
+        self.client
+            .post(url)
+            .send()
+            .await
+            .expect("Failed to send delete user request")
     }
 
     pub async fn health_check(&self) -> reqwest::Response {
@@ -105,10 +113,9 @@ pub async fn spawn_test_app() -> TestApplication {
         .cookie_store(true)
         .build()
         .expect("Failed to construct reqwest client");
-    let port = application.port();
-    let url = format!("http://localhost:{}", port);
+    let url = format!("http://localhost:{}", application.port());
 
     let _ = tokio::spawn(application.run_until_stopped());
 
-    TestApplication { client, port, url }
+    TestApplication { client, url }
 }

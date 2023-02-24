@@ -89,6 +89,31 @@ mod log_out {
 }
 
 #[cfg(test)]
+mod delete_user {
+    use super::*;
+
+    #[tokio::test]
+    async fn delete_user_with_session_returns_204_and_deletes_user() {
+        let app = common::spawn_test_app().await;
+        app.signup().await;
+
+        let response = app.delete_user().await;
+        assert_eq!(response.status(), StatusCode::NO_CONTENT);
+
+        let response = app.login_default_user().await;
+        assert_eq!(response.status(), StatusCode::UNAUTHORIZED);
+    }
+
+    #[tokio::test]
+    async fn delete_user_without_session_returns_something_401() {
+        let app = common::spawn_test_app().await;
+
+        let response = app.delete_user().await;
+        assert_eq!(response.status(), StatusCode::UNAUTHORIZED);
+    }
+}
+
+#[cfg(test)]
 mod user_status {
     use backend::routes::types::UserStatus;
 

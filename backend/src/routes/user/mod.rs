@@ -10,6 +10,18 @@ use secrecy::ExposeSecret;
 use sqlx::SqlitePool;
 use types::*;
 
+#[post("/delete-user")]
+#[tracing::instrument(name = "Deleting user.", skip(pool, session))]
+async fn delete_user(pool: web::Data<SqlitePool>, session: Session) -> impl Responder {
+    match get_user_id(&session).await {
+        Ok(id) => match delete_user_from_db(&pool, id).await {
+            Ok(_) => HttpResponse::NoContent().finish(),
+            Err(e) => e.into(),
+        },
+        Err(e) => e.into(),
+    }
+}
+
 #[post("/log-in")]
 #[tracing::instrument(
     name = "Logging in user.",
@@ -72,10 +84,26 @@ async fn user_status(session: Session) -> impl Responder {
 }
 
 pub fn user_routes(cfg: &mut web::ServiceConfig) {
-    cfg.service(login)
+    cfg.service(delete_user)
+        .service(login)
         .service(logout)
         .service(signup)
         .service(user_status);
+}
+
+async fn delete_user_from_db(pool: &SqlitePool, user_id: i64) -> Result<(), UserError> {
+    sqlx::query!(r#"DELETE FROM user WHERE id=?"#, user_id)
+        .execute(pool)
+        .await?;
+    Ok(())
+}
+
+async fn get_user_id(session: &Session) -> Result<i64, UserError> {
+    let maybe_user_id = session.get::<i64>("user_id")?;
+    let id = maybe_user_id.ok_or_else(|| {
+        UserError::SessionGetError("User ID not found within session".to_string())
+    })?;
+    Ok(id)
 }
 
 async fn check_user_password(body: &UserRequest, pool: &SqlitePool) -> Result<i64, UserError> {

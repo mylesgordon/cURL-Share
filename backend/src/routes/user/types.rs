@@ -1,3 +1,4 @@
+use actix_session::SessionGetError;
 use actix_web::HttpResponse;
 use secrecy::Secret;
 use serde::{Deserialize, Serialize};
@@ -7,6 +8,7 @@ use sqlx::error::DatabaseError;
 pub enum UserError {
     InvalidPassword(argon2::password_hash::Error),
     PasswordHashError(argon2::password_hash::Error),
+    SessionGetError(String),
     SqlxDatabaseError(Box<dyn DatabaseError>),
     SqlxError(sqlx::Error),
     UserAlreadyExists,
@@ -19,6 +21,12 @@ impl From<argon2::password_hash::Error> for UserError {
             argon2::password_hash::Error::Password => Self::InvalidPassword(e),
             _ => Self::PasswordHashError(e),
         }
+    }
+}
+
+impl From<SessionGetError> for UserError {
+    fn from(e: SessionGetError) -> Self {
+        UserError::SessionGetError(e.to_string())
     }
 }
 
@@ -44,7 +52,9 @@ impl From<sqlx::Error> for UserError {
 impl From<UserError> for HttpResponse {
     fn from(e: UserError) -> Self {
         match e {
-            UserError::InvalidPassword(_) => HttpResponse::Unauthorized().finish(),
+            UserError::InvalidPassword(_) | UserError::SessionGetError(_) => {
+                HttpResponse::Unauthorized().finish()
+            }
             UserError::UserAlreadyExists => HttpResponse::Conflict().into(),
             UserError::UserNotFound(_) => HttpResponse::Unauthorized().into(),
             _ => HttpResponse::InternalServerError().into(),
