@@ -11,9 +11,9 @@
 	<HeaderNav>
 		<HeaderNavItem>
 			{#if $isLoggedIn}
-				<a href="/log-out">Log Out</a>
+				<a href="/log-out" id="log-out-link">Log Out</a>
 			{:else}
-				<a href="/log-in">Log In</a>
+				<a href="/log-in" id="log-in-link">Log In</a>
 			{/if}
 		</HeaderNavItem>
 	</HeaderNav>
