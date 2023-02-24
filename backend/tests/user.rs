@@ -1,12 +1,11 @@
 mod common;
+use crate::common::TestApplication;
+use reqwest::cookie::Cookie;
+use reqwest::Response;
 use reqwest::StatusCode;
 
 #[cfg(test)]
 mod sign_up {
-    use reqwest::Response;
-
-    use crate::common::TestApplication;
-
     use super::*;
 
     async fn signup_and_assert(
@@ -70,8 +69,6 @@ mod log_in {
 
 #[cfg(test)]
 mod log_out {
-    use reqwest::cookie::Cookie;
-
     use super::*;
 
     #[tokio::test]
@@ -99,6 +96,9 @@ mod delete_user {
 
         let response = app.delete_user().await;
         assert_eq!(response.status(), StatusCode::NO_CONTENT);
+
+        let response_cookies: Vec<Cookie> = response.cookies().collect();
+        assert!(response_cookies[0].value() == "");
 
         let response = app.login_default_user().await;
         assert_eq!(response.status(), StatusCode::UNAUTHORIZED);

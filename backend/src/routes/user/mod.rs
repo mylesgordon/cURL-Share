@@ -15,7 +15,10 @@ use types::*;
 async fn delete_user(pool: web::Data<SqlitePool>, session: Session) -> impl Responder {
     match get_user_id(&session).await {
         Ok(id) => match delete_user_from_db(&pool, id).await {
-            Ok(_) => HttpResponse::NoContent().finish(),
+            Ok(_) => {
+                session.purge();
+                HttpResponse::NoContent().finish()
+            }
             Err(e) => e.into(),
         },
         Err(e) => e.into(),
