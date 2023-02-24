@@ -7,9 +7,22 @@
 	let username: string;
 	let password: string;
 
-	async function onSubmit(_e: SubmitEvent) {
+	async function onSubmit(e: SubmitEvent) {
+		let endpoint = "";
+		switch (e.submitter?.textContent) {
+			case "Log In":
+				endpoint = "log-in";
+				break;
+			case "Sign Up":
+				endpoint = "sign-up";
+				break;
+			default:
+				console.error("Submitter not identified.");
+				break;
+		};
+
 		try {
-			await fetch('http://localhost:8080/api/v1/log-in', {
+			await fetch(`http://localhost:8080/api/v1/${endpoint}`, {
 				method: 'POST',
 				mode: 'cors',
 				headers: {
@@ -35,6 +48,6 @@
 
 	<ButtonGroup ariaLabel="Form submission buttons" css="self-center">
 		<Button isGrouped isBordered mode="primary" type="submit">Log In</Button>
-		<Button isGrouped isBordered mode="primary">Sign Up</Button>
+		<Button isGrouped isBordered mode="primary" type="submit">Sign Up</Button>
 	</ButtonGroup>
 </form>
