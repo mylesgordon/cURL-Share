@@ -4,7 +4,7 @@ import basicSsl from '@vitejs/plugin-basic-ssl';
 import type { UserConfig } from 'vite';
 
 const config: UserConfig = {
-	plugins: [basicSsl(), sveltekit(), Icons({ compiler: 'svelte' })],
+	plugins: [sveltekit(), Icons({ compiler: 'svelte' })],
 	test: {
 		environment: 'jsdom',
 		globals: true,
