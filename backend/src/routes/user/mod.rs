@@ -1,5 +1,5 @@
-pub mod types;
 mod routes;
+pub mod types;
 
 use actix_web::web;
 use routes::*;

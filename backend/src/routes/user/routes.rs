@@ -6,7 +6,9 @@ use argon2::{
 };
 use secrecy::ExposeSecret;
 use sqlx::SqlitePool;
+
 use super::types::*;
+use crate::helpers::*;
 
 #[post("/delete-user")]
 #[tracing::instrument(name = "Deleting user.", skip(pool, session))]
@@ -89,14 +91,6 @@ async fn delete_user_from_db(pool: &SqlitePool, user_id: i64) -> Result<(), User
         .execute(pool)
         .await?;
     Ok(())
-}
-
-async fn get_user_id(session: &Session) -> Result<i64, UserError> {
-    let maybe_user_id = session.get::<i64>("user_id")?;
-    let id = maybe_user_id.ok_or_else(|| {
-        UserError::SessionGetError("User ID not found within session".to_string())
-    })?;
-    Ok(id)
 }
 
 async fn check_user_password(body: &UserRequest, pool: &SqlitePool) -> Result<i64, UserError> {

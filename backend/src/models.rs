@@ -5,7 +5,7 @@ pub struct Status {
     pub status: String,
 }
 
-#[allow(dead_code)]
+#[derive(Deserialize, Serialize)]
 pub struct CurlGroup {
     pub id: i64,
     pub curls: String,
@@ -18,15 +18,14 @@ pub struct CurlGroup {
 #[derive(Deserialize, Serialize)]
 pub struct Project {
     pub id: i64,
-    pub admin_user_id: i64,
     pub environments: String,
     pub description: String,
     pub name: String,
-    pub visibility: String, // TODO: enum
+    pub visibility: String,
 }
 
 #[allow(dead_code)]
-pub struct ProjectCollaborators {
+pub struct ProjectCollaborator {
     pub project_id: i64,
     pub user_id: i64,
 }

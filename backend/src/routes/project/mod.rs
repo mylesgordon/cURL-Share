@@ -1,21 +1,15 @@
-use crate::models::Project;
-
-use actix_web::{get, web, HttpResponse, Responder};
-use sqlx::SqlitePool;
-
-#[get("/project")]
-async fn get_projects(pool: web::Data<SqlitePool>) -> impl Responder {
-    let pool: &SqlitePool = &pool;
-    let projects = sqlx::query_as!(Project, r#"SELECT * FROM project"#)
-        .fetch_all(pool)
-        .await;
-
-    match projects {
-        Ok(projects) => HttpResponse::Ok().json(projects),
-        Err(_) => HttpResponse::InternalServerError().into(),
-    }
-}
+mod routes;
+mod types;
+use actix_web::web;
+use routes::*;
 
 pub fn project_routes(cfg: &mut web::ServiceConfig) {
-    cfg.service(get_projects);
+    cfg.service(get_projects)
+        .service(create_project)
+        .service(delete_project)
+        .service(get_project)
+        .service(post_project)
+        .service(create_curl_group)
+        .service(get_curl_group)
+        .service(update_curl_group);
 }
