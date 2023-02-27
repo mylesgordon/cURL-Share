@@ -55,9 +55,9 @@ impl From<UserError> for HttpResponse {
             UserError::InvalidPassword(_) | UserError::SessionGetError(_) => {
                 HttpResponse::Unauthorized().finish()
             }
-            UserError::UserAlreadyExists => HttpResponse::Conflict().into(),
-            UserError::UserNotFound(_) => HttpResponse::Unauthorized().into(),
-            _ => HttpResponse::InternalServerError().into(),
+            UserError::UserAlreadyExists => HttpResponse::Conflict().finish(),
+            UserError::UserNotFound(_) => HttpResponse::Unauthorized().finish(),
+            _ => HttpResponse::InternalServerError().finish(),
         }
     }
 }

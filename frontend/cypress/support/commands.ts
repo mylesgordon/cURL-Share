@@ -1,12 +1,12 @@
 /// <reference types="cypress" />
 
-Cypress.Commands.add('waitForHydration', () => {
+Cypress.Commands.add('visitAndWaitForHydration', (url: string) => {
+	cy.visit(url);	
 	cy.get('[data-testid="svelte-hydrated"]', { timeout: 10000 }).should('exist');
 });
 
 Cypress.Commands.add('signUpTestUser', () => {
-	cy.visit('/log-in');
-	cy.waitForHydration();
+	cy.visitAndWaitForHydration('/log-in');
 
 	cy.get('#username').type('test');
 	cy.get('#password').type('user');
@@ -15,8 +15,7 @@ Cypress.Commands.add('signUpTestUser', () => {
 });
 
 Cypress.Commands.add('loginAsTestUser', () => {
-	cy.visit('/log-in');
-	cy.waitForHydration();
+	cy.visitAndWaitForHydration('/log-in');
 
 	cy.get('#username').type('test');
 	cy.get('#password').type('user');
@@ -52,7 +51,7 @@ declare global {
 	namespace Cypress {
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		interface Chainable<Subject> {
-			waitForHydration(): Chainable<void>;
+			visitAndWaitForHydration(url: string): Chainable<void>;
 			deleteTestUser(): Chainable<void>;
 			loginAsTestUser(): Chainable<void>;
 			logout(): Chainable<void>;
