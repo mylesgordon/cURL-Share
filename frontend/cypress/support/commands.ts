@@ -5,45 +5,42 @@ Cypress.Commands.add('visitAndWaitForHydration', (url: string) => {
 	cy.get('[data-testid="svelte-hydrated"]', { timeout: 10000 }).should('exist');
 });
 
-Cypress.Commands.add('signUpTestUser', () => {
+Cypress.Commands.add('signUpTestUser', (verifySuccess: boolean) => {
 	cy.visitAndWaitForHydration('/log-in');
 
 	cy.get('#username').type('test');
 	cy.get('#password').type('user');
 	cy.get('button').contains('Sign Up').click();
-	cy.get('#log-out-link').should('exist');
+	if (verifySuccess) {
+		cy.get('#log-out-link').should('exist');
+	}
 });
 
-Cypress.Commands.add('loginAsTestUser', () => {
+Cypress.Commands.add('loginAsTestUser', (verifySuccess: boolean) => {
 	cy.visitAndWaitForHydration('/log-in');
 
 	cy.get('#username').type('test');
 	cy.get('#password').type('user');
 	cy.get('button').contains('Log In').click();
-	cy.get('#log-out-link').should('exist');
+	if (verifySuccess) {
+		cy.get('#log-out-link').should('exist');
+	}
 });
 
-Cypress.Commands.add('logout', () => {
-	cy.get('#log-out-link').then(($element) => $element.trigger('click'));
+Cypress.Commands.add('logout', (verifySuccess: boolean) => {
+	cy.get('#log-out-link').click();
+	if (verifySuccess) {
+		cy.get('#log-in-link').should('exist');
+	}
 });
 
 Cypress.Commands.add('deleteTestUser', () => {
-	let testUserDoesExist = true;
-
-	cy.loginAsTestUser();
-	cy.get('body').then((body) => {
-		testUserDoesExist = body.find('#error-text').length !== 0;
-		cy.log(`${body.find('#error-text').length}`);
+	cy.request({ url: 'http://localhost:8080/api/v1/log-in', method: "POST", body: { username: "test", password: "user" } , failOnStatusCode: false }).then((response) => {
+		if (response.isOkStatusCode) {
+			cy.request({ url: 'http://localhost:8080/api/v1/delete-user', method: "POST" });
+		}
 	});
-
-	if (testUserDoesExist) {
-		cy.log('User exists - deleting');
-		cy.request('POST', 'http://localhost:8080/api/v1/delete-user');
-		cy.reload();
-		cy.get('#log-in-link').should('exist');
-	} else {
-		cy.log("Nothing to do - test user doesn't exist!");
-	}
+	cy.reload();
 });
 
 declare global {
@@ -53,9 +50,9 @@ declare global {
 		interface Chainable<Subject> {
 			visitAndWaitForHydration(url: string): Chainable<void>;
 			deleteTestUser(): Chainable<void>;
-			loginAsTestUser(): Chainable<void>;
-			logout(): Chainable<void>;
-			signUpTestUser(): Chainable<void>;
+			loginAsTestUser(verifySuccess: boolean): Chainable<void>;
+			logout(verifySuccess): Chainable<void>;
+			signUpTestUser(verifySuccess: boolean): Chainable<void>;
 		}
 	}
 }
