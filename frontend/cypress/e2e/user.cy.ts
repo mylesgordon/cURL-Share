@@ -13,7 +13,10 @@ describe('User session', () => {
 		cy.get('#password').type('4nyPassword!');
 		cy.get('button').contains('Sign Up').click();
 
-		cy.get('#error-text').should('contain.text', 'User with that username already exists - please try again.');
+		cy.get('#error-text').should(
+			'contain.text',
+			'User with that username already exists - please try again.'
+		);
 	});
 
 	it('prevents a user from logging in with an incorrect username and/or password', () => {
@@ -24,13 +27,19 @@ describe('User session', () => {
 		cy.get('#password').type('4nyPassword!');
 		cy.get('button').contains('Log In').click();
 
-		cy.get('#error-text').should('contain.text', 'Incorrect username and/or password - please try again.');
+		cy.get('#error-text').should(
+			'contain.text',
+			'Incorrect username and/or password - please try again.'
+		);
 
 		cy.get('#username').type('i-dont-exist');
 		cy.get('#password').type('password');
 		cy.get('button').contains('Log In').click();
 
-		cy.get('#error-text').should('contain.text', 'Incorrect username and/or password - please try again.');
+		cy.get('#error-text').should(
+			'contain.text',
+			'Incorrect username and/or password - please try again.'
+		);
 	});
 
 	it('redirects user to the page they were last on after a successful sign up', () => {

@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
 Cypress.Commands.add('visitAndWaitForHydration', (url: string) => {
-	cy.visit(url);	
+	cy.visit(url);
 	cy.get('[data-testid="svelte-hydrated"]', { timeout: 10000 }).should('exist');
 });
 
@@ -35,9 +35,14 @@ Cypress.Commands.add('logout', (verifySuccess: boolean) => {
 });
 
 Cypress.Commands.add('deleteTestUser', () => {
-	cy.request({ url: 'http://localhost:8080/api/v1/log-in', method: "POST", body: { username: "test", password: "user" } , failOnStatusCode: false }).then((response) => {
+	cy.request({
+		url: 'http://localhost:8080/api/v1/log-in',
+		method: 'POST',
+		body: { username: 'test', password: 'user' },
+		failOnStatusCode: false
+	}).then((response) => {
 		if (response.isOkStatusCode) {
-			cy.request({ url: 'http://localhost:8080/api/v1/delete-user', method: "POST" });
+			cy.request({ url: 'http://localhost:8080/api/v1/delete-user', method: 'POST' });
 		}
 	});
 	cy.reload();
