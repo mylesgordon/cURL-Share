@@ -1,4 +1,5 @@
 use actix_session::SessionGetError;
+use actix_web::HttpResponse;
 use serde::{Deserialize, Serialize};
 
 use crate::routes::types::UserError;
@@ -7,7 +8,7 @@ use crate::routes::types::UserError;
 pub enum ProjectError {
     SessionGetError(String),
     SqlxError(sqlx::Error),
-    Unauthorised(String),
+    Forbidden(String),
     UserError(UserError),
 }
 
@@ -35,6 +36,16 @@ impl From<UserError> for ProjectError {
             // TODO: improve
             UserError::SessionGetError(e) => ProjectError::SessionGetError(e),
             _ => ProjectError::UserError(e),
+        }
+    }
+}
+
+impl From<ProjectError> for HttpResponse {
+    fn from(e: ProjectError) -> Self {
+        match e {
+            ProjectError::SessionGetError(_) => HttpResponse::Unauthorized().finish(),
+            ProjectError::Forbidden(_) => HttpResponse::Forbidden().finish(),
+            _ => HttpResponse::InternalServerError().finish(),
         }
     }
 }

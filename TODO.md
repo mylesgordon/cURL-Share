@@ -1,1 +1,2 @@
 - properly unit test frontend
+- composite pk in project tables

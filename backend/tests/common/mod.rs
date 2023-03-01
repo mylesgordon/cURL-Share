@@ -1,5 +1,6 @@
 use backend::{
     application::{Application, ApplicationPoolSettings},
+    models::Project,
     observability::{get_subscriber, init_subscriber},
 };
 use once_cell::sync::Lazy;
@@ -27,6 +28,7 @@ pub struct TestApplication {
 }
 
 impl TestApplication {
+    // helpers
     fn get_test_user(&self) -> serde_json::Value {
         serde_json::json!({"username": "integration", "password": "test"})
     }
@@ -35,13 +37,8 @@ impl TestApplication {
         format!("{}/api/v1/{}", self.url, suffix)
     }
 
-    pub async fn delete_user(&self) -> reqwest::Response {
-        let url = self.generate_url("delete-user");
-        self.client
-            .post(url)
-            .send()
-            .await
-            .expect("Failed to send delete user request")
+    pub async fn login_default_user(&self) -> reqwest::Response {
+        self.login("integration", "test").await
     }
 
     pub async fn health_check(&self) -> reqwest::Response {
@@ -53,8 +50,54 @@ impl TestApplication {
             .expect("Failed to send health check request")
     }
 
-    pub async fn login_default_user(&self) -> reqwest::Response {
-        self.login("integration", "test").await
+    pub fn get_public_project(&self) -> Project {
+        Project {
+            id: 1,
+            name: "Public Project".to_string(),
+            environments: "localhost:8080,https://coolurl.com".to_string(),
+            description: "A test public project".to_string(),
+            visibility: "Public".to_string(),
+        }
+    }
+
+    pub fn get_private_project(&self) -> Project {
+        Project {
+            id: 2,
+            name: "Private Project".to_string(),
+            environments: "localhost:1800,https://coolurl.co.uk".to_string(),
+            description: "A test private project".to_string(),
+            visibility: "Private".to_string(),
+        }
+    }
+
+    // project
+    pub async fn create_project(&self, project: &Project) -> reqwest::Response {
+        let url = self.generate_url("project");
+        self.client
+            .post(url)
+            .json(&project)
+            .send()
+            .await
+            .expect("Failed to send create project request")
+    }
+
+    pub async fn get_projects(&self) -> reqwest::Response {
+        let url = self.generate_url("project");
+        self.client
+            .get(url)
+            .send()
+            .await
+            .expect("Failed to send get project request")
+    }
+
+    // user
+    pub async fn delete_user(&self) -> reqwest::Response {
+        let url = self.generate_url("delete-user");
+        self.client
+            .post(url)
+            .send()
+            .await
+            .expect("Failed to send delete user request")
     }
 
     pub async fn login(&self, username: &'static str, password: &'static str) -> reqwest::Response {

@@ -13,14 +13,14 @@ use super::types::ProjectError;
 #[get("/project")]
 #[tracing::instrument(name = "Getting projects.", skip(pool, session))]
 async fn get_projects(
-    query: web::Query<ProjectParams>,
+    // query: web::Query<ProjectParams>,
     pool: web::Data<SqlitePool>,
     session: Session,
 ) -> impl Responder {
     // TODO: handle search query & labels
     match get_projects_from_db(&pool, &session).await {
         Ok(projects) => HttpResponse::Ok().json(projects),
-        Err(_) => HttpResponse::InternalServerError().into(),
+        Err(e) => e.into(),
     }
 }
 
@@ -32,8 +32,8 @@ async fn create_project(
     session: Session,
 ) -> impl Responder {
     match insert_project_into_db(&body, &pool, &session).await {
-        Ok(id) => HttpResponse::Ok().json(ProjectId { id }),
-        Err(_) => HttpResponse::InternalServerError().finish(),
+        Ok(id) => HttpResponse::NoContent().json(ProjectId { id }),
+        Err(e) => e.into()
     }
 }
 
@@ -46,7 +46,7 @@ async fn delete_project(
 ) -> impl Responder {
     match delete_project_from_db(*params, &pool, &session).await {
         Ok(_) => HttpResponse::NoContent().finish(),
-        Err(_) => HttpResponse::InternalServerError().into(),
+        Err(e) => e.into(),
     }
 }
 
@@ -59,7 +59,7 @@ async fn get_project(
 ) -> impl Responder {
     match get_project_from_db(*params, &pool, &session).await {
         Ok(project) => HttpResponse::Ok().json(project),
-        Err(_) => HttpResponse::InternalServerError().into(),
+        Err(e) => e.into(),
     }
 }
 
@@ -72,8 +72,8 @@ async fn post_project(
     session: Session,
 ) -> impl Responder {
     match update_project_in_db(*params, &body, &pool, &session).await {
-        Ok(_) => HttpResponse::Ok().finish(),
-        Err(_) => HttpResponse::InternalServerError().finish(),
+        Ok(_) => HttpResponse::NoContent().finish(),
+        Err(e) => e.into(),
     }
 }
 
@@ -87,7 +87,7 @@ async fn create_curl_group(
 ) -> impl Responder {
     match insert_curl_group_into_db(*params, &body, &pool, &session).await {
         Ok(curl_group_id) => HttpResponse::Ok().json(curl_group_id),
-        Err(_) => HttpResponse::InternalServerError().into(),
+        Err(e) => e.into(),
     }
 }
 
@@ -100,7 +100,7 @@ async fn get_curl_group(
 ) -> impl Responder {
     match get_curl_group_from_db(*params, &pool, &session).await {
         Ok(curl_group) => HttpResponse::Ok().json(curl_group),
-        Err(_) => HttpResponse::InternalServerError().into(),
+        Err(e) => e.into(),
     }
 }
 
@@ -114,7 +114,7 @@ async fn update_curl_group(
 ) -> impl Responder {
     match update_curl_group_in_db(*params, &body, &pool, &session).await {
         Ok(_) => HttpResponse::NoContent().finish(),
-        Err(_) => HttpResponse::InternalServerError().finish(),
+        Err(e) => e.into(),
     }
 }
 
@@ -142,15 +142,7 @@ async fn update_curl_group_in_db(
     session: &Session,
 ) -> Result<(), ProjectError> {
     let user_id = get_user_id(session).await?;
-    let project_id = sqlx::query!(
-        "SELECT project_id FROM curl_group WHERE id = ?",
-        curl_group_id
-    )
-    .fetch_one(pool)
-    .await?
-    .project_id;
-
-    check_user_has_project_permission(user_id, project_id, pool).await?;
+    check_user_has_curl_group_permission(user_id, curl_group_id, pool).await?;
 
     sqlx::query!(
         r#"UPDATE curl_group SET curls = ?, description = ?, labels = ?, name = ? WHERE id = ?"#,
@@ -181,7 +173,7 @@ async fn check_user_has_project_permission(
     .await;
 
     if admin_query.is_err() && collaborator_query.is_err() {
-        return Err(ProjectError::Unauthorised(
+        return Err(ProjectError::Forbidden(
             "User does not have permission to view this cURL group".to_string(),
         ));
     }
@@ -203,7 +195,7 @@ async fn check_user_has_project_admin_permission(
     .await;
 
     if query.is_err() {
-        return Err(ProjectError::Unauthorised(
+        return Err(ProjectError::Forbidden(
             "User does not have permission to for this project".to_string(),
         ));
     }
@@ -297,7 +289,14 @@ async fn get_projects_from_db(
     let user_id = get_user_id(session).await;
 
     let projects = match user_id {
-        Ok(_user_id) => todo!("Not yet implemented"),
+        Ok(user_id) => {
+            sqlx::query_as!(Project, r#"
+            SELECT id, environments, description, name, visibility FROM project
+            LEFT JOIN project_admin ON project_admin.project_id = project.id AND project_admin.user_id = ?
+            LEFT JOIN project_collaborator ON project_collaborator.project_id = project.id AND project_collaborator.user_id = ?
+            WHERE visibility = "Public" OR project_admin.user_id = ? OR project_collaborator.user_id = ?;"#, user_id, user_id, user_id, user_id)
+            .fetch_all(pool).await?
+        },
         Err(_) => {
             sqlx::query_as!(
                 Project,

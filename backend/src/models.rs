@@ -15,7 +15,7 @@ pub struct CurlGroup {
     pub project_id: i64,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize, PartialEq, Eq)]
 pub struct Project {
     pub id: i64,
     pub environments: String,
