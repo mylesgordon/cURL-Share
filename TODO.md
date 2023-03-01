@@ -1,2 +1,3 @@
 - properly unit test frontend
 - composite pk in project tables
+- adding project admins/collaborators
