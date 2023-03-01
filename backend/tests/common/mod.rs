@@ -90,6 +90,24 @@ impl TestApplication {
             .expect("Failed to send create project request")
     }
 
+    pub async fn get_project(
+        &self,
+        project: &Project,
+        id_override: Option<i64>,
+    ) -> reqwest::Response {
+        let project_id = match id_override {
+            Some(id) => id,
+            None => project.id,
+        };
+        let url = self.generate_url(format!("project/{}", project_id));
+
+        self.client
+            .get(url)
+            .send()
+            .await
+            .expect("Failed to send get project request")
+    }
+
     pub async fn get_projects(&self) -> reqwest::Response {
         let url = self.generate_url("project".to_string());
         self.client

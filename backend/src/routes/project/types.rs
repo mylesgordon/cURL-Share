@@ -25,7 +25,9 @@ impl From<SessionGetError> for ProjectError {
 impl From<sqlx::Error> for ProjectError {
     fn from(e: sqlx::Error) -> Self {
         match e {
-            // TODO: improve
+            sqlx::Error::RowNotFound => {
+                ProjectError::ProjectDoesNotExistError("Project was not found".to_string())
+            }
             _ => ProjectError::SqlxError(e),
         }
     }

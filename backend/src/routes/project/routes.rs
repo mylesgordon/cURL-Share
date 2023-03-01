@@ -268,12 +268,12 @@ async fn get_project_from_db(
     pool: &SqlitePool,
     session: &Session,
 ) -> Result<Project, ProjectError> {
-    let user_id = get_user_id(session).await?;
-    check_user_has_project_permission(user_id, project_id, &pool).await?;
-
     let project = sqlx::query_as!(Project, r#"SELECT * FROM project WHERE id = ?"#, project_id)
         .fetch_one(pool)
         .await?;
+
+    let user_id = get_user_id(session).await?;
+    check_user_has_project_permission(user_id, project_id, &pool).await?;
 
     Ok(project)
 }

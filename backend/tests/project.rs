@@ -161,12 +161,46 @@ mod delete_project {
 mod get_project {
     use super::*;
 
-    // Test 1 - 404 for non existent project
-    // Test 2 - Succesful when project admin and private
-    // Test 3 - Succesful when project collaborator and private
-    // Test 4 - Fails when private and not collaborator/admin
-    // Test 5 - Fails when not logged in and private
     // Test 6 - Successful when public and not logged in + logged in
+
+    #[tokio::test]
+    async fn getting_non_existent_project_returns_404() {
+        let app = common::spawn_test_app().await;
+
+        let mut fake_project = app.get_public_project();
+        fake_project.id = 5;
+
+        let response = app.get_project(&fake_project, None).await;
+        assert_eq!(response.status(), StatusCode::NOT_FOUND);
+    }
+
+    #[tokio::test]
+    async fn getting_private_project_as_admin_returns_200() {
+        // TODO
+    }
+
+    #[tokio::test]
+    async fn getting_private_project_as_collaborator_returns_200() {
+        // TODO
+    }
+
+    #[tokio::test]
+    async fn getting_private_project_as_non_logged_in_user_returns_401() {
+        let app = common::spawn_test_app().await;
+        app.signup().await;
+
+        let project = app.get_private_project();
+        app.create_project(&project).await;
+
+        app.logout().await;
+        let response = app.get_project(&project, Some(1)).await;
+        assert_eq!(response.status(), StatusCode::UNAUTHORIZED);
+    }
+
+    #[tokio::test]
+    async fn getting_private_project_as_non_permitted_user_returns_403() {
+        // TODO
+    }
 }
 
 #[cfg(test)]
