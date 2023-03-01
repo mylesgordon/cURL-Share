@@ -15,15 +15,15 @@ CREATE TABLE IF NOT EXISTS project (
 CREATE TABLE IF NOT EXISTS project_admin (
     project_id INTEGER NOT NULL,
     user_id INTEGER NOT NULL,
-    FOREIGN KEY (project_id) REFERENCES project(id),
-    FOREIGN KEY (user_id) REFERENCES user(id)
+    FOREIGN KEY (project_id) REFERENCES project(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS project_collaborator (
     project_id INTEGER NOT NULL,
     user_id INTEGER NOT NULL,
-    FOREIGN KEY (project_id) REFERENCES project(id),
-    FOREIGN KEY (user_id) REFERENCES user(id)
+    FOREIGN KEY (project_id) REFERENCES project(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS curl_group (
@@ -33,5 +33,5 @@ CREATE TABLE IF NOT EXISTS curl_group (
     labels TEXT NOT NULL,
     name TEXT NOT NULL,
     project_id INTEGER NOT NULL,
-    FOREIGN KEY (project_id) REFERENCES project(id)
+    FOREIGN KEY (project_id) REFERENCES project(id) ON DELETE CASCADE
 );

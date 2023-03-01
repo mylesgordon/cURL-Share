@@ -102,10 +102,59 @@ mod get_projects {
 mod delete_project {
     use super::*;
 
-    // Test 1 - must be logged in to delete project
-    // Test 2 - attempt to delete as normie or collaborator fails
-    // Test 3 - 404 for non existent project
-    // Test 4 - successful
+    async fn assert_number_of_projects(app: &TestApplication, number: usize) {
+        let projects: Vec<Project> = app
+            .get_projects()
+            .await
+            .json()
+            .await
+            .expect("Failed to serialise response");
+        assert_eq!(projects.len(), number);
+    }
+
+    // TODO: test cascades once collaborators/admins implemented
+
+    #[tokio::test]
+    async fn deleting_project_not_logged_in_returns_401() {
+        let app = common::spawn_test_app().await;
+        app.signup().await;
+
+        let public_project = app.get_public_project();
+        app.create_project(&public_project).await;
+        app.logout().await;
+
+        let response = app.delete_project(&public_project).await;
+        assert_eq!(response.status(), StatusCode::UNAUTHORIZED);
+        assert_number_of_projects(&app, 1).await;
+    }
+
+    #[tokio::test]
+    async fn deleting_project_not_as_admin_returns_403() {
+        // TODO
+    }
+
+    #[tokio::test]
+    async fn deleting_non_existent_project_returns_404() {
+        let app = common::spawn_test_app().await;
+        app.signup().await;
+
+        let public_project = app.get_public_project();
+        let response = app.delete_project(&public_project).await;
+        assert_eq!(response.status(), StatusCode::NOT_FOUND);
+    }
+
+    #[tokio::test]
+    async fn deleting_project_sucessfully_returns_204() {
+        let app = common::spawn_test_app().await;
+        app.signup().await;
+
+        let public_project = app.get_public_project();
+        app.create_project(&public_project).await;
+
+        let response = app.delete_project(&public_project).await;
+        assert_eq!(response.status(), StatusCode::NO_CONTENT);
+        assert_number_of_projects(&app, 0).await;
+    }
 }
 
 #[cfg(test)]

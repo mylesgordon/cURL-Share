@@ -6,9 +6,10 @@ use crate::routes::types::UserError;
 
 #[derive(Debug)]
 pub enum ProjectError {
+    Forbidden(String),
+    ProjectDoesNotExistError(String),
     SessionGetError(String),
     SqlxError(sqlx::Error),
-    Forbidden(String),
     UserError(UserError),
 }
 
@@ -43,6 +44,7 @@ impl From<UserError> for ProjectError {
 impl From<ProjectError> for HttpResponse {
     fn from(e: ProjectError) -> Self {
         match e {
+            ProjectError::ProjectDoesNotExistError(_) => HttpResponse::NotFound().finish(),
             ProjectError::SessionGetError(_) => HttpResponse::Unauthorized().finish(),
             ProjectError::Forbidden(_) => HttpResponse::Forbidden().finish(),
             _ => HttpResponse::InternalServerError().finish(),

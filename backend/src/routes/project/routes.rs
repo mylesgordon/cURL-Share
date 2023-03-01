@@ -33,7 +33,7 @@ async fn create_project(
 ) -> impl Responder {
     match insert_project_into_db(&body, &pool, &session).await {
         Ok(id) => HttpResponse::NoContent().json(ProjectId { id }),
-        Err(e) => e.into()
+        Err(e) => e.into(),
     }
 }
 
@@ -186,7 +186,18 @@ async fn check_user_has_project_admin_permission(
     project_id: i64,
     pool: &SqlitePool,
 ) -> Result<(), ProjectError> {
-    let query = sqlx::query!(
+    let project_does_exist_query =
+        sqlx::query!(r#"SELECT id FROM project WHERE id = ?"#, project_id)
+            .fetch_one(pool)
+            .await;
+
+    if project_does_exist_query.is_err() {
+        return Err(ProjectError::ProjectDoesNotExistError(
+            "Requested project does not exist.".to_string(),
+        ));
+    }
+
+    let project_admin_query = sqlx::query!(
         r#"SELECT * FROM project_admin WHERE project_id = ? AND user_id = ?"#,
         project_id,
         user_id
@@ -194,7 +205,7 @@ async fn check_user_has_project_admin_permission(
     .fetch_one(pool)
     .await;
 
-    if query.is_err() {
+    if project_admin_query.is_err() {
         return Err(ProjectError::Forbidden(
             "User does not have permission to for this project".to_string(),
         ));
@@ -248,21 +259,6 @@ async fn delete_project_from_db(
     sqlx::query!(r#"DELETE FROM project WHERE id = ?"#, project_id)
         .execute(pool)
         .await?;
-    let _ = sqlx::query!(
-        r#"DELETE FROM project_admin WHERE project_id = ?"#,
-        project_id
-    )
-    .execute(pool)
-    .await;
-    let _ = sqlx::query!(
-        r#"DELETE FROM project_collaborator WHERE project_id = ?"#,
-        project_id
-    )
-    .execute(pool)
-    .await;
-    let _ = sqlx::query!(r#"DELETE FROM curl_group WHERE project_id = ?"#, project_id)
-        .execute(pool)
-        .await;
 
     Ok(())
 }

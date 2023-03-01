@@ -33,7 +33,7 @@ impl TestApplication {
         serde_json::json!({"username": "integration", "password": "test"})
     }
 
-    fn generate_url(&self, suffix: &'static str) -> String {
+    fn generate_url(&self, suffix: String) -> String {
         format!("{}/api/v1/{}", self.url, suffix)
     }
 
@@ -42,7 +42,7 @@ impl TestApplication {
     }
 
     pub async fn health_check(&self) -> reqwest::Response {
-        let url = self.generate_url("health-check");
+        let url = self.generate_url("health-check".to_string());
         self.client
             .get(url)
             .send()
@@ -72,7 +72,7 @@ impl TestApplication {
 
     // project
     pub async fn create_project(&self, project: &Project) -> reqwest::Response {
-        let url = self.generate_url("project");
+        let url = self.generate_url("project".to_string());
         self.client
             .post(url)
             .json(&project)
@@ -81,8 +81,17 @@ impl TestApplication {
             .expect("Failed to send create project request")
     }
 
+    pub async fn delete_project(&self, project: &Project) -> reqwest::Response {
+        let url = self.generate_url(format!("project/{}", project.id));
+        self.client
+            .delete(url)
+            .send()
+            .await
+            .expect("Failed to send create project request")
+    }
+
     pub async fn get_projects(&self) -> reqwest::Response {
-        let url = self.generate_url("project");
+        let url = self.generate_url("project".to_string());
         self.client
             .get(url)
             .send()
@@ -92,7 +101,7 @@ impl TestApplication {
 
     // user
     pub async fn delete_user(&self) -> reqwest::Response {
-        let url = self.generate_url("delete-user");
+        let url = self.generate_url("delete-user".to_string());
         self.client
             .post(url)
             .send()
@@ -101,7 +110,7 @@ impl TestApplication {
     }
 
     pub async fn login(&self, username: &'static str, password: &'static str) -> reqwest::Response {
-        let url = self.generate_url("log-in");
+        let url = self.generate_url("log-in".to_string());
         let data = serde_json::json!({"username": username, "password": password});
 
         self.client
@@ -113,7 +122,7 @@ impl TestApplication {
     }
 
     pub async fn logout(&self) -> reqwest::Response {
-        let url = self.generate_url("log-out");
+        let url = self.generate_url("log-out".to_string());
 
         self.client
             .post(url)
@@ -123,7 +132,7 @@ impl TestApplication {
     }
 
     pub async fn signup(&self) -> reqwest::Response {
-        let url = self.generate_url("sign-up");
+        let url = self.generate_url("sign-up".to_string());
         let data = self.get_test_user();
 
         self.client
@@ -135,7 +144,7 @@ impl TestApplication {
     }
 
     pub async fn user_status(&self) -> reqwest::Response {
-        let url = self.generate_url("user-status");
+        let url = self.generate_url("user-status".to_string());
 
         self.client
             .get(url)
