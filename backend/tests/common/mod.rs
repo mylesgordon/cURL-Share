@@ -117,6 +117,17 @@ impl TestApplication {
             .expect("Failed to send get project request")
     }
 
+    pub async fn update_project(&self, project: &Project) -> reqwest::Response {
+        let url = self.generate_url(format!("project/{}", project.id));
+
+        self.client
+            .post(url)
+            .json(project)
+            .send()
+            .await
+            .expect("Failed to send update project request")
+    }
+
     // user
     pub async fn delete_user(&self) -> reqwest::Response {
         let url = self.generate_url("delete-user".to_string());

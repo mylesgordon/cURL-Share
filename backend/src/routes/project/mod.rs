@@ -8,7 +8,7 @@ pub fn project_routes(cfg: &mut web::ServiceConfig) {
         .service(create_project)
         .service(delete_project)
         .service(get_project)
-        .service(post_project)
+        .service(update_project)
         .service(create_curl_group)
         .service(get_curl_group)
         .service(update_curl_group);

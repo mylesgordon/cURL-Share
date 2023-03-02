@@ -201,16 +201,93 @@ mod get_project {
     async fn getting_private_project_as_non_permitted_user_returns_403() {
         // TODO
     }
+
+    #[tokio::test]
+    async fn getting_public_project_as_non_logged_in_user_returns_200() {
+        let app = common::spawn_test_app().await;
+        app.signup().await;
+
+        let project = app.get_public_project();
+        app.create_project(&project).await;
+
+        app.logout().await;
+        let response = app.get_project(&project, None).await;
+        assert_eq!(response.status(), StatusCode::OK);
+
+        let project_from_db: Project = response.json().await.unwrap();
+        assert_eq!(project_from_db, project);
+    }
 }
 
 #[cfg(test)]
 mod update_project {
     use super::*;
 
-    // Test 1 - 404 for non existent project
-    // Test 2 - Successful when user is project admin
-    // Test 3 - Fails when user is not project admin
-    // Test 4 - Fails when user is not logged in
+    #[tokio::test]
+    async fn updating_non_existent_project_returns_404() {
+        let app = common::spawn_test_app().await;
+        app.signup().await;
+
+        let project = app.get_public_project();
+
+        let response = app.update_project(&project).await;
+        assert_eq!(response.status(), StatusCode::NOT_FOUND);
+    }
+
+    #[tokio::test]
+    async fn updating_project_as_project_admin_returns_204() {
+        let app = common::spawn_test_app().await;
+        app.signup().await;
+
+        let mut project = app.get_public_project();
+        app.create_project(&project).await;
+
+        project.description = "Woah it's been updated!".to_string();
+        let response = app.update_project(&project).await;
+        assert_eq!(response.status(), StatusCode::NO_CONTENT);
+
+        let project_from_server: Project = app
+            .get_project(&project, None)
+            .await
+            .json()
+            .await
+            .expect("Failed to serialise response.");
+        assert_eq!(
+            project_from_server.description,
+            "Woah it's been updated!".to_string()
+        );
+    }
+
+    #[tokio::test]
+    async fn updating_project_not_as_project_admin_returns_403() {
+        // TODO
+    }
+
+    #[tokio::test]
+    async fn updating_project_not_logged_in_returns_401() {
+        let app = common::spawn_test_app().await;
+        app.signup().await;
+
+        let mut project = app.get_public_project();
+        app.create_project(&project).await;
+        app.logout().await;
+
+        project.description = "Updated again!".to_string();
+
+        let response = app.update_project(&project).await;
+        assert_eq!(response.status(), StatusCode::UNAUTHORIZED);
+
+        let project_from_server: Project = app
+            .get_project(&project, None)
+            .await
+            .json()
+            .await
+            .expect("Failed to serialise response.");
+        assert_eq!(
+            project_from_server.description,
+            "A test public project".to_string()
+        );
+    }
 }
 
 #[cfg(test)]

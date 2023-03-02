@@ -65,7 +65,7 @@ async fn get_project(
 
 #[post("/project/{project_id}")]
 #[tracing::instrument(name = "Updating project.", skip(body, pool, session))]
-async fn post_project(
+async fn update_project(
     params: web::Path<i64>,
     body: web::Json<Project>,
     pool: web::Data<SqlitePool>,
@@ -272,8 +272,10 @@ async fn get_project_from_db(
         .fetch_one(pool)
         .await?;
 
-    let user_id = get_user_id(session).await?;
-    check_user_has_project_permission(user_id, project_id, &pool).await?;
+    if project.visibility == "Private" {
+        let user_id = get_user_id(session).await?;
+        check_user_has_project_permission(user_id, project_id, &pool).await?;
+    }
 
     Ok(project)
 }
