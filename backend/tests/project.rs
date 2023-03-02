@@ -1,6 +1,7 @@
 mod common;
 use crate::common::TestApplication;
 use backend::models::Project;
+use backend::routes::project::types::Id;
 use reqwest::cookie::Cookie;
 use reqwest::Response;
 use reqwest::StatusCode;
@@ -12,13 +13,16 @@ mod create_project {
     use super::*;
 
     #[tokio::test]
-    async fn creating_new_public_project_returns_204_and_is_visible() {
+    async fn creating_new_public_project_returns_200_and_is_visible() {
         let app = common::spawn_test_app().await;
-        app.signup().await;
+        app.signup("integration-test").await;
         let public_project = app.get_public_project();
 
         let response = app.create_project(&public_project).await;
-        assert_eq!(response.status(), StatusCode::NO_CONTENT);
+        assert_eq!(response.status(), StatusCode::OK);
+
+        let response_id: Id = response.json().await.unwrap();
+        assert_eq!(response_id.id, 1);
 
         let projects: Vec<Project> = app
             .get_projects()
@@ -31,15 +35,18 @@ mod create_project {
     }
 
     #[tokio::test]
-    async fn creating_new_private_project_returns_204_and_is_visible() {
+    async fn creating_new_private_project_returns_200_and_is_visible() {
         let app = common::spawn_test_app().await;
-        app.signup().await;
+        app.signup("integration-test").await;
         let public_project = app.get_public_project();
         let private_project = app.get_private_project();
 
         app.create_project(&public_project).await;
         let response = app.create_project(&private_project).await;
-        assert_eq!(response.status(), StatusCode::NO_CONTENT);
+        assert_eq!(response.status(), StatusCode::OK);
+
+        let response_id: Id = response.json().await.unwrap();
+        assert_eq!(response_id.id, 2);
 
         let projects: Vec<Project> = app
             .get_projects()
@@ -70,7 +77,7 @@ mod get_projects {
     #[tokio::test]
     async fn get_projects_depends_on_whether_user_is_logged_in() {
         let app = common::spawn_test_app().await;
-        app.signup().await;
+        app.signup("integration-test").await;
         let public_project = app.get_public_project();
         let private_project = app.get_private_project();
 
@@ -117,7 +124,7 @@ mod delete_project {
     #[tokio::test]
     async fn deleting_project_not_logged_in_returns_401() {
         let app = common::spawn_test_app().await;
-        app.signup().await;
+        app.signup("integration-test").await;
 
         let public_project = app.get_public_project();
         app.create_project(&public_project).await;
@@ -136,7 +143,7 @@ mod delete_project {
     #[tokio::test]
     async fn deleting_non_existent_project_returns_404() {
         let app = common::spawn_test_app().await;
-        app.signup().await;
+        app.signup("integration-test").await;
 
         let public_project = app.get_public_project();
         let response = app.delete_project(&public_project).await;
@@ -146,7 +153,7 @@ mod delete_project {
     #[tokio::test]
     async fn deleting_project_sucessfully_returns_204() {
         let app = common::spawn_test_app().await;
-        app.signup().await;
+        app.signup("integration-test").await;
 
         let public_project = app.get_public_project();
         app.create_project(&public_project).await;
@@ -187,7 +194,7 @@ mod get_project {
     #[tokio::test]
     async fn getting_private_project_as_non_logged_in_user_returns_401() {
         let app = common::spawn_test_app().await;
-        app.signup().await;
+        app.signup("integration-test").await;
 
         let project = app.get_private_project();
         app.create_project(&project).await;
@@ -205,7 +212,7 @@ mod get_project {
     #[tokio::test]
     async fn getting_public_project_as_non_logged_in_user_returns_200() {
         let app = common::spawn_test_app().await;
-        app.signup().await;
+        app.signup("integration-test").await;
 
         let project = app.get_public_project();
         app.create_project(&project).await;
@@ -226,7 +233,7 @@ mod update_project {
     #[tokio::test]
     async fn updating_non_existent_project_returns_404() {
         let app = common::spawn_test_app().await;
-        app.signup().await;
+        app.signup("integration-test").await;
 
         let project = app.get_public_project();
 
@@ -237,7 +244,7 @@ mod update_project {
     #[tokio::test]
     async fn updating_project_as_project_admin_returns_204() {
         let app = common::spawn_test_app().await;
-        app.signup().await;
+        app.signup("integration-test").await;
 
         let mut project = app.get_public_project();
         app.create_project(&project).await;
@@ -266,7 +273,7 @@ mod update_project {
     #[tokio::test]
     async fn updating_project_not_logged_in_returns_401() {
         let app = common::spawn_test_app().await;
-        app.signup().await;
+        app.signup("integration-test").await;
 
         let mut project = app.get_public_project();
         app.create_project(&project).await;
@@ -294,12 +301,67 @@ mod update_project {
 mod create_curl_group {
     use super::*;
 
-    // Test 1 - 404 for non existent project
-    // Test 2 - Succesful when project collaborator
-    // Test 3 - Succesful when project admin
-    // Test 4 - Fails when private and not collaborator/admin
-    // Test 5 - Succesful when logged in and public
-    // Test 6 - Fails when not logged in
+    #[tokio::test]
+    async fn creating_group_for_non_existent_project_returns_404() {
+        let app = common::spawn_test_app().await;
+        app.signup("integration-test").await;
+
+        let curl_group = app.get_curl_group();
+
+        let response = app.create_curl_group(1, &curl_group).await;
+        assert_eq!(response.status(), StatusCode::NOT_FOUND);
+    }
+
+    #[tokio::test]
+    async fn creating_group_while_not_logged_in_returns_401() {
+        let app = common::spawn_test_app().await;
+        app.signup("integration-test").await;
+
+        let project = app.get_public_project();
+        app.create_project(&project).await;
+        app.logout().await;
+
+        let curl_group = app.get_curl_group();
+        let response = app.create_curl_group(1, &curl_group).await;
+        assert_eq!(response.status(), StatusCode::UNAUTHORIZED);
+    }
+
+    #[tokio::test]
+    async fn creating_group_while_project_collaborator_returns_200() {
+        // TODO
+    }
+
+    #[tokio::test]
+    async fn creating_group_while_project_admin_returns_200() {
+        let app = common::spawn_test_app().await;
+        app.signup("integration-test").await;
+
+        let project = app.get_public_project();
+        app.create_project(&project).await;
+
+        let curl_group = app.get_curl_group();
+        let response = app.create_curl_group(1, &curl_group).await;
+        assert_eq!(response.status(), StatusCode::OK);
+
+        let response_id: Id = response.json().await.unwrap();
+        assert_eq!(response_id.id, 1);
+    }
+
+    #[tokio::test]
+    async fn creating_group_for_private_project_while_not_permitted_returns_403() {
+        let app = common::spawn_test_app().await;
+        app.signup("integration-test").await;
+
+        let project = app.get_private_project();
+        app.create_project(&project).await;
+
+        app.logout().await;
+        app.signup("integration-other-user").await;
+
+        let curl_group = app.get_curl_group();
+        let response = app.create_curl_group(1, &curl_group).await;
+        assert_eq!(response.status(), StatusCode::FORBIDDEN);
+    }
 }
 
 #[cfg(test)]

@@ -1,6 +1,6 @@
 use backend::{
     application::{Application, ApplicationPoolSettings},
-    models::Project,
+    models::{CurlGroup, Project},
     observability::{get_subscriber, init_subscriber},
 };
 use once_cell::sync::Lazy;
@@ -29,16 +29,8 @@ pub struct TestApplication {
 
 impl TestApplication {
     // helpers
-    fn get_test_user(&self) -> serde_json::Value {
-        serde_json::json!({"username": "integration", "password": "test"})
-    }
-
     fn generate_url(&self, suffix: String) -> String {
         format!("{}/api/v1/{}", self.url, suffix)
-    }
-
-    pub async fn login_default_user(&self) -> reqwest::Response {
-        self.login("integration", "test").await
     }
 
     pub async fn health_check(&self) -> reqwest::Response {
@@ -48,6 +40,17 @@ impl TestApplication {
             .send()
             .await
             .expect("Failed to send health check request")
+    }
+
+    pub fn get_curl_group(&self) -> CurlGroup {
+        CurlGroup {
+            id: 0,
+            curls: "some-curl".to_string(),
+            description: "This is a test curl group".to_string(),
+            labels: "test1,test2".to_string(),
+            name: "CurlGroup 1".to_string(),
+            project_id: 1,
+        }
     }
 
     pub fn get_public_project(&self) -> Project {
@@ -128,6 +131,21 @@ impl TestApplication {
             .expect("Failed to send update project request")
     }
 
+    pub async fn create_curl_group(
+        &self,
+        project_id: i64,
+        curl_group: &CurlGroup,
+    ) -> reqwest::Response {
+        let url = self.generate_url(format!("project/{}/group", project_id));
+
+        self.client
+            .post(url)
+            .json(curl_group)
+            .send()
+            .await
+            .expect("Failed to send update project request")
+    }
+
     // user
     pub async fn delete_user(&self) -> reqwest::Response {
         let url = self.generate_url("delete-user".to_string());
@@ -160,9 +178,9 @@ impl TestApplication {
             .expect("Failed to send log out request")
     }
 
-    pub async fn signup(&self) -> reqwest::Response {
+    pub async fn signup(&self, username: &'static str) -> reqwest::Response {
         let url = self.generate_url("sign-up".to_string());
-        let data = self.get_test_user();
+        let data = serde_json::json!({"username": username.to_string(), "password": "test"});
 
         self.client
             .post(url)

@@ -1,7 +1,7 @@
 use crate::{
     helpers::get_user_id,
     models::{CurlGroup, Project},
-    routes::project::types::{ProjectId, ProjectParams},
+    routes::project::types::{Id, ProjectParams},
 };
 
 use actix_session::Session;
@@ -32,7 +32,7 @@ async fn create_project(
     session: Session,
 ) -> impl Responder {
     match insert_project_into_db(&body, &pool, &session).await {
-        Ok(id) => HttpResponse::NoContent().json(ProjectId { id }),
+        Ok(id) => HttpResponse::Ok().json(Id { id }),
         Err(e) => e.into(),
     }
 }
@@ -86,7 +86,7 @@ async fn create_curl_group(
     session: Session,
 ) -> impl Responder {
     match insert_curl_group_into_db(*params, &body, &pool, &session).await {
-        Ok(curl_group_id) => HttpResponse::Ok().json(curl_group_id),
+        Ok(curl_group_id) => HttpResponse::Ok().json(Id { id: curl_group_id }),
         Err(e) => e.into(),
     }
 }
@@ -172,13 +172,25 @@ async fn check_user_has_project_permission(
     .fetch_one(pool)
     .await;
 
-    if admin_query.is_err() && collaborator_query.is_err() {
-        return Err(ProjectError::Forbidden(
-            "User does not have permission to view this cURL group".to_string(),
-        ));
-    }
+    if admin_query.is_ok() || collaborator_query.is_ok() {
+        Ok(())
+    } else {
+        // Return 404 if project not found - else just return forbidden
+        let mut error = ProjectError::Forbidden(
+            "User does not not have permission to perform that action on this project.".to_string(),
+        );
 
-    Ok(())
+        if admin_query.is_err() {
+            match admin_query.unwrap_err() {
+                ProjectError::ProjectDoesNotExistError(e) => {
+                    error = ProjectError::ProjectDoesNotExistError(e)
+                }
+                _ => (),
+            }
+        }
+
+        Err(error)
+    }
 }
 
 async fn check_user_has_project_admin_permission(

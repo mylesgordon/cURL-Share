@@ -2,7 +2,7 @@ use actix_session::SessionGetError;
 use actix_web::HttpResponse;
 use serde::{Deserialize, Serialize};
 
-use crate::routes::types::UserError;
+use crate::routes::user::types::UserError;
 
 #[derive(Debug)]
 pub enum ProjectError {
@@ -54,8 +54,8 @@ impl From<ProjectError> for HttpResponse {
     }
 }
 
-#[derive(Serialize)]
-pub struct ProjectId {
+#[derive(Deserialize, Serialize)]
+pub struct Id {
     pub id: i64,
 }
 

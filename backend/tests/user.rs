@@ -12,7 +12,7 @@ mod sign_up {
         app: &TestApplication,
         asserted_status_code: StatusCode,
     ) -> Response {
-        let response = app.signup().await;
+        let response = app.signup("integration-test").await;
         assert_eq!(response.status(), asserted_status_code);
         response
     }
@@ -42,9 +42,9 @@ mod log_in {
     #[tokio::test]
     async fn successful_login_returns_200_with_cookie() {
         let app = common::spawn_test_app().await;
-        app.signup().await;
+        app.signup("integration-test").await;
 
-        let response = app.login_default_user().await;
+        let response = app.login("integration-test", "test").await;
         assert_eq!(response.status(), StatusCode::OK);
         assert!(response.cookies().count() == 1);
     }
@@ -52,7 +52,7 @@ mod log_in {
     #[tokio::test]
     async fn failed_login_returns_401() {
         let app = common::spawn_test_app().await;
-        app.signup().await;
+        app.signup("integration-test").await;
 
         let test_data = [
             ("integration", "test_wrong_password"),
@@ -74,7 +74,7 @@ mod log_out {
     #[tokio::test]
     async fn successful_logout_returns_204_with_purged_cookie() {
         let app = common::spawn_test_app().await;
-        app.signup().await;
+        app.signup("integration-test").await;
 
         let response = app.logout().await;
         let response_cookies: Vec<Cookie> = response.cookies().collect();
@@ -92,7 +92,7 @@ mod delete_user {
     #[tokio::test]
     async fn delete_user_with_session_returns_204_and_deletes_user() {
         let app = common::spawn_test_app().await;
-        app.signup().await;
+        app.signup("integration-test").await;
 
         let response = app.delete_user().await;
         assert_eq!(response.status(), StatusCode::NO_CONTENT);
@@ -100,7 +100,7 @@ mod delete_user {
         let response_cookies: Vec<Cookie> = response.cookies().collect();
         assert!(response_cookies[0].value() == "");
 
-        let response = app.login_default_user().await;
+        let response = app.login("integration-test", "test").await;
         assert_eq!(response.status(), StatusCode::UNAUTHORIZED);
     }
 
@@ -115,14 +115,14 @@ mod delete_user {
 
 #[cfg(test)]
 mod user_status {
-    use backend::routes::types::UserStatus;
+    use backend::routes::user::types::UserStatus;
 
     use super::*;
 
     #[tokio::test]
     async fn logged_in_user_recieves_logged_in_true_with_200() {
         let app = common::spawn_test_app().await;
-        app.signup().await;
+        app.signup("integration-test").await;
 
         let response = app.user_status().await;
         assert_eq!(response.status(), StatusCode::OK);
@@ -138,7 +138,7 @@ mod user_status {
     #[tokio::test]
     async fn logged_out_user_recieves_logged_in_false_with_200() {
         let app = common::spawn_test_app().await;
-        app.signup().await;
+        app.signup("integration-test").await;
         app.logout().await;
 
         let response = app.user_status().await;
