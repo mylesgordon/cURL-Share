@@ -42,7 +42,7 @@ impl TestApplication {
             .expect("Failed to send health check request")
     }
 
-    pub fn get_curl_group(&self) -> CurlGroup {
+    pub fn get_test_curl_group(&self) -> CurlGroup {
         CurlGroup {
             id: 0,
             curls: "some-curl".to_string(),
@@ -53,7 +53,7 @@ impl TestApplication {
         }
     }
 
-    pub fn get_public_project(&self) -> Project {
+    pub fn get_test_public_project(&self) -> Project {
         Project {
             id: 1,
             name: "Public Project".to_string(),
@@ -63,7 +63,7 @@ impl TestApplication {
         }
     }
 
-    pub fn get_private_project(&self) -> Project {
+    pub fn get_test_private_project(&self) -> Project {
         Project {
             id: 2,
             name: "Private Project".to_string(),

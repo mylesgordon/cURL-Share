@@ -16,7 +16,7 @@ mod create_project {
     async fn creating_new_public_project_returns_200_and_is_visible() {
         let app = common::spawn_test_app().await;
         app.signup("integration-test").await;
-        let public_project = app.get_public_project();
+        let public_project = app.get_test_public_project();
 
         let response = app.create_project(&public_project).await;
         assert_eq!(response.status(), StatusCode::OK);
@@ -38,8 +38,8 @@ mod create_project {
     async fn creating_new_private_project_returns_200_and_is_visible() {
         let app = common::spawn_test_app().await;
         app.signup("integration-test").await;
-        let public_project = app.get_public_project();
-        let private_project = app.get_private_project();
+        let public_project = app.get_test_public_project();
+        let private_project = app.get_test_private_project();
 
         app.create_project(&public_project).await;
         let response = app.create_project(&private_project).await;
@@ -61,7 +61,7 @@ mod create_project {
     #[tokio::test]
     async fn attempting_to_create_new_project_not_logged_in_returns_401() {
         let app = common::spawn_test_app().await;
-        let public_project = app.get_public_project();
+        let public_project = app.get_test_public_project();
 
         let response = app.create_project(&public_project).await;
         assert_eq!(response.status(), StatusCode::UNAUTHORIZED);
@@ -78,8 +78,8 @@ mod get_projects {
     async fn get_projects_depends_on_whether_user_is_logged_in() {
         let app = common::spawn_test_app().await;
         app.signup("integration-test").await;
-        let public_project = app.get_public_project();
-        let private_project = app.get_private_project();
+        let public_project = app.get_test_public_project();
+        let private_project = app.get_test_private_project();
 
         app.create_project(&public_project).await;
         app.create_project(&private_project).await;
@@ -126,7 +126,7 @@ mod delete_project {
         let app = common::spawn_test_app().await;
         app.signup("integration-test").await;
 
-        let public_project = app.get_public_project();
+        let public_project = app.get_test_public_project();
         app.create_project(&public_project).await;
         app.logout().await;
 
@@ -145,7 +145,7 @@ mod delete_project {
         let app = common::spawn_test_app().await;
         app.signup("integration-test").await;
 
-        let public_project = app.get_public_project();
+        let public_project = app.get_test_public_project();
         let response = app.delete_project(&public_project).await;
         assert_eq!(response.status(), StatusCode::NOT_FOUND);
     }
@@ -155,7 +155,7 @@ mod delete_project {
         let app = common::spawn_test_app().await;
         app.signup("integration-test").await;
 
-        let public_project = app.get_public_project();
+        let public_project = app.get_test_public_project();
         app.create_project(&public_project).await;
 
         let response = app.delete_project(&public_project).await;
@@ -174,7 +174,7 @@ mod get_project {
     async fn getting_non_existent_project_returns_404() {
         let app = common::spawn_test_app().await;
 
-        let mut fake_project = app.get_public_project();
+        let mut fake_project = app.get_test_public_project();
         fake_project.id = 5;
 
         let response = app.get_project(&fake_project, None).await;
@@ -196,7 +196,7 @@ mod get_project {
         let app = common::spawn_test_app().await;
         app.signup("integration-test").await;
 
-        let project = app.get_private_project();
+        let project = app.get_test_private_project();
         app.create_project(&project).await;
 
         app.logout().await;
@@ -214,7 +214,7 @@ mod get_project {
         let app = common::spawn_test_app().await;
         app.signup("integration-test").await;
 
-        let project = app.get_public_project();
+        let project = app.get_test_public_project();
         app.create_project(&project).await;
 
         app.logout().await;
@@ -235,7 +235,7 @@ mod update_project {
         let app = common::spawn_test_app().await;
         app.signup("integration-test").await;
 
-        let project = app.get_public_project();
+        let project = app.get_test_public_project();
 
         let response = app.update_project(&project).await;
         assert_eq!(response.status(), StatusCode::NOT_FOUND);
@@ -246,7 +246,7 @@ mod update_project {
         let app = common::spawn_test_app().await;
         app.signup("integration-test").await;
 
-        let mut project = app.get_public_project();
+        let mut project = app.get_test_public_project();
         app.create_project(&project).await;
 
         project.description = "Woah it's been updated!".to_string();
@@ -275,7 +275,7 @@ mod update_project {
         let app = common::spawn_test_app().await;
         app.signup("integration-test").await;
 
-        let mut project = app.get_public_project();
+        let mut project = app.get_test_public_project();
         app.create_project(&project).await;
         app.logout().await;
 
@@ -306,7 +306,7 @@ mod create_curl_group {
         let app = common::spawn_test_app().await;
         app.signup("integration-test").await;
 
-        let curl_group = app.get_curl_group();
+        let curl_group = app.get_test_curl_group();
 
         let response = app.create_curl_group(1, &curl_group).await;
         assert_eq!(response.status(), StatusCode::NOT_FOUND);
@@ -317,11 +317,11 @@ mod create_curl_group {
         let app = common::spawn_test_app().await;
         app.signup("integration-test").await;
 
-        let project = app.get_public_project();
+        let project = app.get_test_public_project();
         app.create_project(&project).await;
         app.logout().await;
 
-        let curl_group = app.get_curl_group();
+        let curl_group = app.get_test_curl_group();
         let response = app.create_curl_group(1, &curl_group).await;
         assert_eq!(response.status(), StatusCode::UNAUTHORIZED);
     }
@@ -336,10 +336,10 @@ mod create_curl_group {
         let app = common::spawn_test_app().await;
         app.signup("integration-test").await;
 
-        let project = app.get_public_project();
+        let project = app.get_test_public_project();
         app.create_project(&project).await;
 
-        let curl_group = app.get_curl_group();
+        let curl_group = app.get_test_curl_group();
         let response = app.create_curl_group(1, &curl_group).await;
         assert_eq!(response.status(), StatusCode::OK);
 
@@ -352,13 +352,13 @@ mod create_curl_group {
         let app = common::spawn_test_app().await;
         app.signup("integration-test").await;
 
-        let project = app.get_private_project();
+        let project = app.get_test_private_project();
         app.create_project(&project).await;
 
         app.logout().await;
         app.signup("integration-other-user").await;
 
-        let curl_group = app.get_curl_group();
+        let curl_group = app.get_test_curl_group();
         let response = app.create_curl_group(1, &curl_group).await;
         assert_eq!(response.status(), StatusCode::FORBIDDEN);
     }
