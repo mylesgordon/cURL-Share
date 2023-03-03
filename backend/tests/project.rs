@@ -572,17 +572,28 @@ mod update_curl_group {
         let app = common::spawn_test_app().await;
         app.signup("integration-test").await;
 
-        let mut project = app.get_test_private_project();
-        project.id = 1;
-        app.create_project(&project).await;
+        let public_project = app.get_test_private_project();
+        let private_project = app.get_test_private_project();
+        app.create_project(&public_project).await;
+        app.create_project(&private_project).await;
 
-        let mut curl_group = app.get_test_curl_group();
-        app.create_curl_group(project.id, &curl_group).await;
+        let mut curl_group_public = app.get_test_curl_group();
+        let mut curl_group_private = app.get_test_curl_group();
+        curl_group_private.project_id = 2;
+
+        app.create_curl_group(public_project.id, &curl_group_public)
+            .await;
+        app.create_curl_group(private_project.id, &curl_group_private)
+            .await;
 
         app.logout().await;
 
-        curl_group.description = "Updated".to_string();
-        let response = app.update_curl_group(&curl_group).await;
+        curl_group_public.description = "Updated".to_string();
+        curl_group_private.description = "Updated".to_string();
+
+        let response = app.update_curl_group(&curl_group_public).await;
+        assert_eq!(response.status(), StatusCode::UNAUTHORIZED);
+        let response = app.update_curl_group(&curl_group_private).await;
         assert_eq!(response.status(), StatusCode::UNAUTHORIZED);
     }
 }
