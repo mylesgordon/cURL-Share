@@ -141,8 +141,8 @@ async fn update_curl_group_in_db(
     pool: &SqlitePool,
     session: &Session,
 ) -> Result<(), ProjectError> {
-    let user_id = get_user_id(session).await?;
-    check_user_has_curl_group_permission(user_id, curl_group_id, pool).await?;
+    get_user_id(session).await?;
+    curl_group_check_user_permission(curl_group_id, pool, session).await?;
 
     sqlx::query!(
         r#"UPDATE curl_group SET curls = ?, description = ?, labels = ?, name = ? WHERE id = ?"#,
@@ -226,10 +226,10 @@ async fn check_user_has_project_admin_permission(
     Ok(())
 }
 
-async fn check_user_has_curl_group_permission(
-    user_id: i64,
+async fn curl_group_check_user_permission(
     group_id: i64,
     pool: &SqlitePool,
+    session: &Session,
 ) -> Result<(), ProjectError> {
     let project_id = sqlx::query!(
         r#"SELECT project_id FROM curl_group WHERE id = ?"#,
@@ -239,7 +239,10 @@ async fn check_user_has_curl_group_permission(
     .await?
     .project_id;
 
-    check_user_has_project_permission(user_id, project_id, pool).await
+    // checks project visibility and such things - we just discard the resulting project output
+    get_project_from_db(project_id, pool, session).await?;
+
+    Ok(())
 }
 
 async fn get_curl_group_from_db(
@@ -247,8 +250,7 @@ async fn get_curl_group_from_db(
     pool: &SqlitePool,
     session: &Session,
 ) -> Result<CurlGroup, ProjectError> {
-    let user_id = get_user_id(session).await?;
-    check_user_has_curl_group_permission(user_id, group_id, &pool).await?;
+    curl_group_check_user_permission(group_id, &pool, &session).await?;
 
     let curl_group = sqlx::query_as!(
         CurlGroup,
@@ -257,6 +259,7 @@ async fn get_curl_group_from_db(
     )
     .fetch_one(pool)
     .await?;
+
     Ok(curl_group)
 }
 

@@ -44,7 +44,7 @@ impl TestApplication {
 
     pub fn get_test_curl_group(&self) -> CurlGroup {
         CurlGroup {
-            id: 0,
+            id: 1,
             curls: "some-curl".to_string(),
             description: "This is a test curl group".to_string(),
             labels: "test1,test2".to_string(),
@@ -143,7 +143,17 @@ impl TestApplication {
             .json(curl_group)
             .send()
             .await
-            .expect("Failed to send update project request")
+            .expect("Failed to send create curl group request")
+    }
+
+    pub async fn get_curl_group(&self, id: i64) -> reqwest::Response {
+        let url = self.generate_url(format!("group/{}", id));
+
+        self.client
+            .get(url)
+            .send()
+            .await
+            .expect("Failed to send get curl group request")
     }
 
     // user

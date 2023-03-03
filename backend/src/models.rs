@@ -5,7 +5,7 @@ pub struct Status {
     pub status: String,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize, PartialEq, Eq)]
 pub struct CurlGroup {
     pub id: i64,
     pub curls: String,

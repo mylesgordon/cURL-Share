@@ -366,13 +366,118 @@ mod create_curl_group {
 
 #[cfg(test)]
 mod get_curl_group {
+    use backend::models::CurlGroup;
+
     use super::*;
 
-    // test 1 - 404 for non existent group
-    // test 2 - succesful when project collaborator
-    // test 3 - succesful when project admin
-    // test 4 - fails when private and not collaborator/admin
-    // test 5 - successful for not logged in/logged in and public
+    #[tokio::test]
+    async fn getting_non_existent_group_returns_404() {
+        let app = common::spawn_test_app().await;
+
+        let response = app.get_curl_group(1).await;
+        assert_eq!(response.status(), StatusCode::NOT_FOUND);
+
+        app.signup("integration-test").await;
+        let response = app.get_curl_group(1).await;
+        assert_eq!(response.status(), StatusCode::NOT_FOUND);
+    }
+
+    #[tokio::test]
+    async fn getting_curl_group_when_project_collaborator_returns_200() {
+        // TODO
+    }
+
+    #[tokio::test]
+    async fn getting_curl_group_when_project_admin_returns_200() {
+        let app = common::spawn_test_app().await;
+        app.signup("integration-test").await;
+
+        let project = app.get_test_public_project();
+        let curl_group = app.get_test_curl_group();
+        app.create_project(&project).await;
+        app.create_curl_group(project.id, &curl_group).await;
+
+        let response = app.get_curl_group(1).await;
+        assert_eq!(response.status(), StatusCode::OK);
+        let response_curl_group: CurlGroup = response.json().await.unwrap();
+        assert_eq!(curl_group, response_curl_group);
+    }
+
+    #[tokio::test]
+    async fn getting_private_curl_group_when_not_project_admin_or_collaborator_returns_403() {
+        let app = common::spawn_test_app().await;
+        app.signup("integration-test").await;
+
+        let mut project = app.get_test_private_project();
+        project.id = 1;
+        let curl_group = app.get_test_curl_group();
+        app.create_project(&project).await;
+        app.create_curl_group(1, &curl_group).await;
+
+        app.logout().await;
+        app.signup("integration-test-other-user").await;
+
+        let response = app.get_curl_group(1).await;
+        assert_eq!(response.status(), StatusCode::FORBIDDEN);
+        let response_curl_group: Result<CurlGroup, reqwest::Error> = response.json().await;
+        assert!(response_curl_group.is_err());
+    }
+
+    #[tokio::test]
+    async fn getting_private_curl_group_when_not_logged_in_returns_401() {
+        let app = common::spawn_test_app().await;
+        app.signup("integration-test").await;
+
+        let mut project = app.get_test_private_project();
+        project.id = 1;
+        let curl_group = app.get_test_curl_group();
+        app.create_project(&project).await;
+        app.create_curl_group(project.id, &curl_group).await;
+
+        app.logout().await;
+
+        let response = app.get_curl_group(1).await;
+        assert_eq!(response.status(), StatusCode::UNAUTHORIZED);
+        let response_curl_group: Result<CurlGroup, reqwest::Error> = response.json().await;
+        assert!(response_curl_group.is_err());
+    }
+
+    #[tokio::test]
+    async fn getting_public_curl_group_when_not_admin_or_collaborator_in_returns_200() {
+        let app = common::spawn_test_app().await;
+        app.signup("integration-test").await;
+
+        let project = app.get_test_public_project();
+        let curl_group = app.get_test_curl_group();
+        app.create_project(&project).await;
+        app.create_curl_group(project.id, &curl_group).await;
+
+        app.logout().await;
+        app.signup("integration-test-other-user").await;
+
+        let response = app.get_curl_group(1).await;
+        assert_eq!(response.status(), StatusCode::OK);
+        let response_curl_group: CurlGroup = response.json().await.unwrap();
+        assert_eq!(curl_group, response_curl_group);
+    }
+
+    #[tokio::test]
+    async fn getting_public_curl_group_when_not_logged_in_returns_200() {
+        let app = common::spawn_test_app().await;
+        app.signup("integration-test").await;
+
+        let project = app.get_test_public_project();
+        let curl_group = app.get_test_curl_group();
+        app.create_project(&project).await;
+        app.create_curl_group(project.id, &curl_group).await;
+
+        app.logout().await;
+
+        let response = app.get_curl_group(1).await;
+        assert_eq!(response.status(), StatusCode::OK);
+        let response_curl_group: CurlGroup = response.json().await.unwrap();
+        assert_eq!(curl_group, response_curl_group);
+    }
 }
 
 #[cfg(test)]
