@@ -156,6 +156,17 @@ impl TestApplication {
             .expect("Failed to send get curl group request")
     }
 
+    pub async fn update_curl_group(&self, curl_group: &CurlGroup) -> reqwest::Response {
+        let url = self.generate_url(format!("group/{}", curl_group.id));
+
+        self.client
+            .post(url)
+            .json(curl_group)
+            .send()
+            .await
+            .expect("Failed to send update curl group request")
+    }
+
     // user
     pub async fn delete_user(&self) -> reqwest::Response {
         let url = self.generate_url("delete-user".to_string());

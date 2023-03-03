@@ -482,12 +482,107 @@ mod get_curl_group {
 
 #[cfg(test)]
 mod update_curl_group {
+    use backend::models::CurlGroup;
+
     use super::*;
 
-    // test 1 - 404 for non existent group
-    // test 2 - succesful when project collaborator
-    // test 3 - succesful when project admin
-    // test 4 - fails when private and not collaborator/admin
-    // test 5 - successful when logged in and public
-    // test 6 - fails when not logged in
+    #[tokio::test]
+    async fn updating_non_existent_group_returns_404() {
+        let app = common::spawn_test_app().await;
+        app.signup("integration-test").await;
+
+        let curl_group = app.get_test_curl_group();
+        let response = app.update_curl_group(&curl_group).await;
+        assert_eq!(response.status(), StatusCode::NOT_FOUND);
+    }
+
+    #[tokio::test]
+    async fn updating_curl_group_when_project_collaborator_returns_204() {
+        // TODO
+    }
+
+    #[tokio::test]
+    async fn updating_curl_group_when_project_admin_returns_204() {
+        let app = common::spawn_test_app().await;
+        app.signup("integration-test").await;
+
+        let mut project = app.get_test_private_project();
+        project.id = 1;
+        app.create_project(&project).await;
+
+        let mut curl_group = app.get_test_curl_group();
+        app.create_curl_group(project.id, &curl_group).await;
+
+        curl_group.description = "I have been updated!".to_string();
+        curl_group.curls = "updated.com".to_string();
+        curl_group.labels = "1,2,3".to_string();
+        curl_group.name = "Updated curl group".to_string();
+        let response = app.update_curl_group(&curl_group).await;
+        assert_eq!(response.status(), StatusCode::NO_CONTENT);
+
+        let curl_group_from_db: CurlGroup = app
+            .get_curl_group(curl_group.id)
+            .await
+            .json()
+            .await
+            .unwrap();
+        assert_eq!(curl_group, curl_group_from_db);
+    }
+
+    #[tokio::test]
+    async fn updating_private_project_curl_group_when_not_collaborator_or_admin_returns_403() {
+        let app = common::spawn_test_app().await;
+        app.signup("integration-test").await;
+
+        let mut project = app.get_test_private_project();
+        project.id = 1;
+        app.create_project(&project).await;
+
+        let curl_group = app.get_test_curl_group();
+        app.create_curl_group(project.id, &curl_group).await;
+
+        app.logout().await;
+        app.signup("integration-test-other-user").await;
+
+        let response = app.update_curl_group(&curl_group).await;
+        assert_eq!(response.status(), StatusCode::FORBIDDEN);
+    }
+
+    #[tokio::test]
+    async fn updating_public_project_curl_group_when_logged_in_returns_204() {
+        let app = common::spawn_test_app().await;
+        app.signup("integration-test").await;
+
+        let project = app.get_test_public_project();
+        app.create_project(&project).await;
+
+        let mut curl_group = app.get_test_curl_group();
+        app.create_curl_group(project.id, &curl_group).await;
+
+        app.logout().await;
+        app.signup("integration-test-other-user").await;
+
+        curl_group.description = "Updated".to_string();
+        let response = app.update_curl_group(&curl_group).await;
+        assert_eq!(response.status(), StatusCode::NO_CONTENT);
+    }
+
+    #[tokio::test]
+    async fn updating_project_when_not_logged_in_returns_401() {
+        let app = common::spawn_test_app().await;
+        app.signup("integration-test").await;
+
+        let mut project = app.get_test_private_project();
+        project.id = 1;
+        app.create_project(&project).await;
+
+        let mut curl_group = app.get_test_curl_group();
+        app.create_curl_group(project.id, &curl_group).await;
+
+        app.logout().await;
+
+        curl_group.description = "Updated".to_string();
+        let response = app.update_curl_group(&curl_group).await;
+        assert_eq!(response.status(), StatusCode::UNAUTHORIZED);
+    }
 }
