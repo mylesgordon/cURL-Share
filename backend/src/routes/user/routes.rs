@@ -127,7 +127,7 @@ async fn sign_up_user(body: &UserRequest, pool: &SqlitePool) -> Result<i64, User
 
 fn create_session(code: HttpResponseBuilder, session: &Session, user_id: i64) -> HttpResponse {
     session.renew();
-    match session.insert("user_id", &user_id) {
+    match session.insert("user_id", user_id) {
         Ok(_) => code,
         Err(_) => HttpResponse::InternalServerError(),
     }

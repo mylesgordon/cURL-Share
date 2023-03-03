@@ -1,7 +1,7 @@
 use crate::{
     helpers::get_user_id,
     models::{CurlGroup, Project},
-    routes::project::types::{Id, ProjectParams},
+    routes::project::types::Id,
 };
 
 use actix_session::Session;
@@ -180,13 +180,8 @@ async fn check_user_has_project_permission(
             "User does not not have permission to perform that action on this project.".to_string(),
         );
 
-        if admin_query.is_err() {
-            match admin_query.unwrap_err() {
-                ProjectError::ProjectDoesNotExistError(e) => {
-                    error = ProjectError::ProjectDoesNotExistError(e)
-                }
-                _ => (),
-            }
+        if let ProjectError::ProjectDoesNotExistError(e) = admin_query.unwrap_err() {
+            error = ProjectError::ProjectDoesNotExistError(e)
         }
 
         Err(error)
@@ -250,7 +245,7 @@ async fn get_curl_group_from_db(
     pool: &SqlitePool,
     session: &Session,
 ) -> Result<CurlGroup, ProjectError> {
-    curl_group_check_user_permission(group_id, &pool, &session).await?;
+    curl_group_check_user_permission(group_id, pool, session).await?;
 
     let curl_group = sqlx::query_as!(
         CurlGroup,
@@ -289,7 +284,7 @@ async fn get_project_from_db(
 
     if project.visibility == "Private" {
         let user_id = get_user_id(session).await?;
-        check_user_has_project_permission(user_id, project_id, &pool).await?;
+        check_user_has_project_permission(user_id, project_id, pool).await?;
     }
 
     Ok(project)
