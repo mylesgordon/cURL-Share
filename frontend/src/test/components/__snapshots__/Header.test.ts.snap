@@ -27,6 +27,7 @@ exports[`Header component > should match snapshot 1`] = `
             >
               <a
                 href="/log-in"
+                id="log-in-link"
               >
                 Log In
               </a>
@@ -72,6 +73,7 @@ exports[`Header component > should match snapshot 2`] = `
             >
               <a
                 href="/log-out"
+                id="log-out-link"
               >
                 Log Out
               </a>

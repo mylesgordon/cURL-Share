@@ -46,6 +46,7 @@ exports[`Log In page > should match snapshot 1`] = `
       </div>
       <!--&lt;Input&gt;-->
        
+       
       <div
         aria-label="Form submission buttons"
         class="btn-group self-center s-_5WuMKolmwWJ"
@@ -62,7 +63,7 @@ exports[`Log In page > should match snapshot 1`] = `
          
         <button
           class="btn btn-primary btn-bordered btn-grouped s-NAQuwh5ehqbV"
-          type="button"
+          type="submit"
         >
           Sign Up
         </button>
