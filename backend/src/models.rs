@@ -16,12 +16,19 @@ pub struct CurlGroup {
 }
 
 #[derive(Debug, Deserialize, Serialize, PartialEq, Eq)]
-pub struct Project {
+pub struct ProjectInfo {
     pub id: i64,
     pub environments: String,
     pub description: String,
     pub name: String,
     pub visibility: String,
+}
+
+#[derive(Debug, Deserialize, Serialize, PartialEq, Eq)]
+pub struct Project {
+    pub info: ProjectInfo,
+    pub admins: Vec<String>,
+    pub collaborators: Vec<String>,
 }
 
 #[allow(dead_code)]

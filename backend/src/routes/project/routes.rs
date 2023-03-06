@@ -1,6 +1,6 @@
 use crate::{
     helpers::get_user_id,
-    models::{CurlGroup, Project},
+    models::{CurlGroup, Project, ProjectInfo},
     routes::project::types::Id,
 };
 
@@ -27,7 +27,7 @@ async fn get_projects(
 #[post("/project")]
 #[tracing::instrument(name = "Creating new project.", skip(body, pool, session))]
 async fn create_project(
-    body: web::Json<Project>,
+    body: web::Json<ProjectInfo>,
     pool: web::Data<SqlitePool>,
     session: Session,
 ) -> impl Responder {
@@ -278,14 +278,25 @@ async fn get_project_from_db(
     pool: &SqlitePool,
     session: &Session,
 ) -> Result<Project, ProjectError> {
-    let project = sqlx::query_as!(Project, r#"SELECT * FROM project WHERE id = ?"#, project_id)
-        .fetch_one(pool)
-        .await?;
+    let info = sqlx::query_as!(
+        ProjectInfo,
+        r#"SELECT * FROM project WHERE id = ?"#,
+        project_id
+    )
+    .fetch_one(pool)
+    .await?;
 
-    if project.visibility == "Private" {
+    if info.visibility == "Private" {
         let user_id = get_user_id(session).await?;
         check_user_has_project_permission(user_id, project_id, pool).await?;
     }
+
+    let (admins, collaborators) = get_admins_and_collaborators(info.id, pool).await?;
+    let project = Project {
+        info,
+        admins,
+        collaborators,
+    };
 
     Ok(project)
 }
@@ -293,12 +304,12 @@ async fn get_project_from_db(
 async fn get_projects_from_db(
     pool: &SqlitePool,
     session: &Session,
-) -> Result<Vec<Project>, ProjectError> {
+) -> Result<Vec<ProjectInfo>, ProjectError> {
     let user_id = get_user_id(session).await;
 
-    let projects = match user_id {
+    let project_infos = match user_id {
         Ok(user_id) => {
-            sqlx::query_as!(Project, r#"
+            sqlx::query_as!(ProjectInfo, r#"
             SELECT id, environments, description, name, visibility FROM project
             LEFT JOIN project_admin ON project_admin.project_id = project.id AND project_admin.user_id = ?
             LEFT JOIN project_collaborator ON project_collaborator.project_id = project.id AND project_collaborator.user_id = ?
@@ -307,7 +318,7 @@ async fn get_projects_from_db(
         },
         Err(_) => {
             sqlx::query_as!(
-                Project,
+                ProjectInfo,
                 r#"SELECT * FROM project WHERE visibility = "Public""#
             )
             .fetch_all(pool)
@@ -315,18 +326,18 @@ async fn get_projects_from_db(
         }
     };
 
-    Ok(projects)
+    Ok(project_infos)
 }
 
 async fn insert_project_into_db(
-    project: &Project,
+    project_info: &ProjectInfo,
     pool: &SqlitePool,
     session: &Session,
 ) -> Result<i64, ProjectError> {
     let user_id = get_user_id(session).await?;
 
     let project_id = sqlx::query!(r#"INSERT INTO project (environments, description, name, visibility) VALUES (?, ?, ?, ?) RETURNING id"#, 
-        project.environments, project.description, project.name, project.visibility)
+        project_info.environments, project_info.description, project_info.name, project_info.visibility)
         .fetch_one(pool)
         .await?.id;
 
@@ -352,14 +363,124 @@ async fn update_project_in_db(
 
     sqlx::query!(
         r#"UPDATE project SET environments = ?, description = ?, name = ?, visibility = ? WHERE id = ?"#,
-        project.environments,
-        project.description,
-        project.name,
-        project.visibility,
+        project.info.environments,
+        project.info.description,
+        project.info.name,
+        project.info.visibility,
         project_id
     )
     .execute(pool)
     .await?;
 
+    update_project_admins_and_collaborators(project, pool).await?;
+
     Ok(())
+}
+
+async fn update_project_admins_and_collaborators(
+    project: &Project,
+    pool: &SqlitePool,
+) -> Result<(), ProjectError> {
+    // TODO: use query builder eventually!
+
+    let admin_list = generate_user_list(&project.admins).await;
+    let collaborator_list = generate_user_list(&project.admins).await;
+    sqlx::query!(
+        r#"DELETE FROM project_admin WHERE user_id in (
+        SELECT user_id FROM project_admin
+        LEFT JOIN user ON user.id = project_admin.user_id
+        WHERE user.name NOT IN (?)
+    )"#,
+        admin_list
+    )
+    .execute(pool)
+    .await?;
+
+    sqlx::query!(
+        r#"DELETE FROM project_collaborator WHERE user_id in (
+        SELECT user_id FROM project_collaborator
+        LEFT JOIN user ON user.id = project_collaborator.user_id
+        WHERE user.name NOT IN (?)
+    )"#,
+        collaborator_list
+    )
+    .execute(pool)
+    .await?;
+
+    for admin in &project.admins {
+        sqlx::query!(
+            r#"INSERT INTO project_admin (project_id, user_id) VALUES (?, (SELECT id FROM user WHERE name = ?))"#,
+            project.info.id, admin,
+        ).execute(pool).await?;
+    }
+
+    for collaborator in &project.collaborators {
+        sqlx::query!(
+            r#"INSERT INTO project_collaborator (project_id, user_id) VALUES (?, (SELECT id FROM user WHERE name = ?))"#,
+            project.info.id, collaborator,
+        ).execute(pool).await?;
+    }
+
+    Ok(())
+}
+
+async fn get_admins_and_collaborators(
+    project_id: i64,
+    pool: &SqlitePool,
+) -> Result<(Vec<String>, Vec<String>), ProjectError> {
+    // TODO: tidy up
+    let admins: Vec<String> = sqlx::query!(
+        r#"SELECT name FROM user 
+        LEFT JOIN project_admin ON project_admin.user_id = user.id
+        WHERE project_admin.project_id = ?
+    "#,
+        project_id
+    )
+    .fetch_all(pool)
+    .await?
+    .iter()
+    .map(|record| record.name.clone())
+    .collect();
+
+    let collaborators: Vec<String> = sqlx::query!(
+        r#"SELECT name FROM user 
+        LEFT JOIN project_collaborator ON project_collaborator.user_id = user.id
+        WHERE project_collaborator.project_id = ?
+    "#,
+        project_id
+    )
+    .fetch_all(pool)
+    .await?
+    .iter()
+    .map(|record| record.name.clone())
+    .collect();
+
+    Ok((admins, collaborators))
+}
+
+async fn generate_user_list(users: &Vec<String>) -> String {
+    let mut users = users.clone();
+    for i in 0..users.len() {
+        users[i] = format!("\"{}\"", users[i]);
+    }
+    users.join(", ")
+}
+
+#[cfg(test)]
+mod user_list_test {
+    use super::generate_user_list;
+
+    #[tokio::test]
+    async fn generates_user_list_as_expected() {
+        let users = vec!["user".to_string(), "other_user".to_string()];
+        let user_list = generate_user_list(&users).await;
+        assert_eq!(user_list, "\"user\", \"other_user\"");
+    }
+
+    #[tokio::test]
+    async fn generates_blank_string_as_expected_when_no_users() {
+        let users = vec![];
+        let user_list = generate_user_list(&users).await;
+        assert_eq!(user_list, "");
+    }
 }

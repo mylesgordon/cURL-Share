@@ -1,6 +1,6 @@
 use backend::{
     application::{Application, ApplicationPoolSettings},
-    models::{CurlGroup, Project},
+    models::{CurlGroup, Project, ProjectInfo},
     observability::{get_subscriber, init_subscriber},
 };
 use once_cell::sync::Lazy;
@@ -55,26 +55,34 @@ impl TestApplication {
 
     pub fn get_test_public_project(&self) -> Project {
         Project {
-            id: 1,
-            name: "Public Project".to_string(),
-            environments: "localhost:8080,https://coolurl.com".to_string(),
-            description: "A test public project".to_string(),
-            visibility: "Public".to_string(),
+            admins: vec!["integration-test".to_string()],
+            collaborators: vec![],
+            info: ProjectInfo {
+                id: 1,
+                name: "Public Project".to_string(),
+                environments: "localhost:8080,https://coolurl.com".to_string(),
+                description: "A test public project".to_string(),
+                visibility: "Public".to_string(),
+            },
         }
     }
 
     pub fn get_test_private_project(&self) -> Project {
         Project {
-            id: 2,
-            name: "Private Project".to_string(),
-            environments: "localhost:1800,https://coolurl.co.uk".to_string(),
-            description: "A test private project".to_string(),
-            visibility: "Private".to_string(),
+            admins: vec!["integration-test".to_string()],
+            collaborators: vec![],
+            info: ProjectInfo {
+                id: 2,
+                name: "Private Project".to_string(),
+                environments: "localhost:1800,https://coolurl.co.uk".to_string(),
+                description: "A test private project".to_string(),
+                visibility: "Private".to_string(),
+            },
         }
     }
 
     // project
-    pub async fn create_project(&self, project: &Project) -> reqwest::Response {
+    pub async fn create_project(&self, project: &ProjectInfo) -> reqwest::Response {
         let url = self.generate_url("project".to_string());
         self.client
             .post(url)
@@ -84,7 +92,7 @@ impl TestApplication {
             .expect("Failed to send create project request")
     }
 
-    pub async fn delete_project(&self, project: &Project) -> reqwest::Response {
+    pub async fn delete_project(&self, project: &ProjectInfo) -> reqwest::Response {
         let url = self.generate_url(format!("project/{}", project.id));
         self.client
             .delete(url)
@@ -100,7 +108,7 @@ impl TestApplication {
     ) -> reqwest::Response {
         let project_id = match id_override {
             Some(id) => id,
-            None => project.id,
+            None => project.info.id,
         };
         let url = self.generate_url(format!("project/{}", project_id));
 
@@ -121,7 +129,7 @@ impl TestApplication {
     }
 
     pub async fn update_project(&self, project: &Project) -> reqwest::Response {
-        let url = self.generate_url(format!("project/{}", project.id));
+        let url = self.generate_url(format!("project/{}", project.info.id));
 
         self.client
             .post(url)

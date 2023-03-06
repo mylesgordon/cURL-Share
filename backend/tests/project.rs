@@ -2,14 +2,14 @@ mod common;
 use crate::common::TestApplication;
 use backend::models::Project;
 use backend::routes::project::types::Id;
-use reqwest::cookie::Cookie;
-use reqwest::Response;
 use reqwest::StatusCode;
 
 // TODO: split helpers into its own file
 
 #[cfg(test)]
 mod create_project {
+    use backend::models::ProjectInfo;
+
     use super::*;
 
     #[tokio::test]
@@ -18,20 +18,20 @@ mod create_project {
         app.signup("integration-test").await;
         let public_project = app.get_test_public_project();
 
-        let response = app.create_project(&public_project).await;
+        let response = app.create_project(&public_project.info).await;
         assert_eq!(response.status(), StatusCode::OK);
 
         let response_id: Id = response.json().await.unwrap();
         assert_eq!(response_id.id, 1);
 
-        let projects: Vec<Project> = app
+        let projects: Vec<ProjectInfo> = app
             .get_projects()
             .await
             .json()
             .await
             .expect("Failed to serialise response");
         assert_eq!(projects.len(), 1);
-        assert_eq!(projects[0], public_project);
+        assert_eq!(projects[0], public_project.info);
     }
 
     #[tokio::test]
@@ -41,21 +41,21 @@ mod create_project {
         let public_project = app.get_test_public_project();
         let private_project = app.get_test_private_project();
 
-        app.create_project(&public_project).await;
-        let response = app.create_project(&private_project).await;
+        app.create_project(&public_project.info).await;
+        let response = app.create_project(&private_project.info).await;
         assert_eq!(response.status(), StatusCode::OK);
 
         let response_id: Id = response.json().await.unwrap();
         assert_eq!(response_id.id, 2);
 
-        let projects: Vec<Project> = app
+        let projects: Vec<ProjectInfo> = app
             .get_projects()
             .await
             .json()
             .await
             .expect("Failed to serialise response");
         assert_eq!(projects.len(), 2);
-        assert_eq!(projects[0], public_project);
+        assert_eq!(projects[0], public_project.info);
     }
 
     #[tokio::test]
@@ -63,14 +63,14 @@ mod create_project {
         let app = common::spawn_test_app().await;
         let public_project = app.get_test_public_project();
 
-        let response = app.create_project(&public_project).await;
+        let response = app.create_project(&public_project.info).await;
         assert_eq!(response.status(), StatusCode::UNAUTHORIZED);
     }
 }
 
 #[cfg(test)]
 mod get_projects {
-    use backend::models::Project;
+    use backend::models::{Project, ProjectInfo};
 
     use super::*;
 
@@ -81,10 +81,10 @@ mod get_projects {
         let public_project = app.get_test_public_project();
         let private_project = app.get_test_private_project();
 
-        app.create_project(&public_project).await;
-        app.create_project(&private_project).await;
+        app.create_project(&public_project.info).await;
+        app.create_project(&private_project.info).await;
 
-        let projects: Vec<Project> = app
+        let projects: Vec<ProjectInfo> = app
             .get_projects()
             .await
             .json()
@@ -94,23 +94,25 @@ mod get_projects {
 
         app.logout().await;
 
-        let projects: Vec<Project> = app
+        let projects: Vec<ProjectInfo> = app
             .get_projects()
             .await
             .json()
             .await
             .expect("Failed to serialise response");
         assert_eq!(projects.len(), 1);
-        assert_eq!(projects[0], public_project);
+        assert_eq!(projects[0], public_project.info);
     }
 }
 
 #[cfg(test)]
 mod delete_project {
+    use backend::models::ProjectInfo;
+
     use super::*;
 
     async fn assert_number_of_projects(app: &TestApplication, number: usize) {
-        let projects: Vec<Project> = app
+        let projects: Vec<ProjectInfo> = app
             .get_projects()
             .await
             .json()
@@ -127,10 +129,10 @@ mod delete_project {
         app.signup("integration-test").await;
 
         let public_project = app.get_test_public_project();
-        app.create_project(&public_project).await;
+        app.create_project(&public_project.info).await;
         app.logout().await;
 
-        let response = app.delete_project(&public_project).await;
+        let response = app.delete_project(&public_project.info).await;
         assert_eq!(response.status(), StatusCode::UNAUTHORIZED);
         assert_number_of_projects(&app, 1).await;
     }
@@ -146,7 +148,7 @@ mod delete_project {
         app.signup("integration-test").await;
 
         let public_project = app.get_test_public_project();
-        let response = app.delete_project(&public_project).await;
+        let response = app.delete_project(&public_project.info).await;
         assert_eq!(response.status(), StatusCode::NOT_FOUND);
     }
 
@@ -156,9 +158,9 @@ mod delete_project {
         app.signup("integration-test").await;
 
         let public_project = app.get_test_public_project();
-        app.create_project(&public_project).await;
+        app.create_project(&public_project.info).await;
 
-        let response = app.delete_project(&public_project).await;
+        let response = app.delete_project(&public_project.info).await;
         assert_eq!(response.status(), StatusCode::NO_CONTENT);
         assert_number_of_projects(&app, 0).await;
     }
@@ -175,7 +177,7 @@ mod get_project {
         let app = common::spawn_test_app().await;
 
         let mut fake_project = app.get_test_public_project();
-        fake_project.id = 5;
+        fake_project.info.id = 5;
 
         let response = app.get_project(&fake_project, None).await;
         assert_eq!(response.status(), StatusCode::NOT_FOUND);
@@ -197,7 +199,7 @@ mod get_project {
         app.signup("integration-test").await;
 
         let project = app.get_test_private_project();
-        app.create_project(&project).await;
+        app.create_project(&project.info).await;
 
         app.logout().await;
         let response = app.get_project(&project, Some(1)).await;
@@ -215,14 +217,14 @@ mod get_project {
         app.signup("integration-test").await;
 
         let project = app.get_test_public_project();
-        app.create_project(&project).await;
+        app.create_project(&project.info).await;
 
         app.logout().await;
         let response = app.get_project(&project, None).await;
         assert_eq!(response.status(), StatusCode::OK);
 
         let project_from_db: Project = response.json().await.unwrap();
-        assert_eq!(project_from_db, project);
+        assert_eq!(project_from_db.info, project.info);
     }
 }
 
@@ -247,9 +249,9 @@ mod update_project {
         app.signup("integration-test").await;
 
         let mut project = app.get_test_public_project();
-        app.create_project(&project).await;
+        app.create_project(&project.info).await;
 
-        project.description = "Woah it's been updated!".to_string();
+        project.info.description = "Woah it's been updated!".to_string();
         let response = app.update_project(&project).await;
         assert_eq!(response.status(), StatusCode::NO_CONTENT);
 
@@ -260,7 +262,7 @@ mod update_project {
             .await
             .expect("Failed to serialise response.");
         assert_eq!(
-            project_from_server.description,
+            project_from_server.info.description,
             "Woah it's been updated!".to_string()
         );
     }
@@ -276,10 +278,10 @@ mod update_project {
         app.signup("integration-test").await;
 
         let mut project = app.get_test_public_project();
-        app.create_project(&project).await;
+        app.create_project(&project.info).await;
         app.logout().await;
 
-        project.description = "Updated again!".to_string();
+        project.info.description = "Updated again!".to_string();
 
         let response = app.update_project(&project).await;
         assert_eq!(response.status(), StatusCode::UNAUTHORIZED);
@@ -291,7 +293,7 @@ mod update_project {
             .await
             .expect("Failed to serialise response.");
         assert_eq!(
-            project_from_server.description,
+            project_from_server.info.description,
             "A test public project".to_string()
         );
     }
@@ -318,7 +320,7 @@ mod create_curl_group {
         app.signup("integration-test").await;
 
         let project = app.get_test_public_project();
-        app.create_project(&project).await;
+        app.create_project(&project.info).await;
         app.logout().await;
 
         let curl_group = app.get_test_curl_group();
@@ -337,7 +339,7 @@ mod create_curl_group {
         app.signup("integration-test").await;
 
         let project = app.get_test_public_project();
-        app.create_project(&project).await;
+        app.create_project(&project.info).await;
 
         let curl_group = app.get_test_curl_group();
         let response = app.create_curl_group(1, &curl_group).await;
@@ -353,7 +355,7 @@ mod create_curl_group {
         app.signup("integration-test").await;
 
         let project = app.get_test_private_project();
-        app.create_project(&project).await;
+        app.create_project(&project.info).await;
 
         app.logout().await;
         app.signup("integration-other-user").await;
@@ -394,8 +396,8 @@ mod get_curl_group {
 
         let project = app.get_test_public_project();
         let curl_group = app.get_test_curl_group();
-        app.create_project(&project).await;
-        app.create_curl_group(project.id, &curl_group).await;
+        app.create_project(&project.info).await;
+        app.create_curl_group(project.info.id, &curl_group).await;
 
         let response = app.get_curl_group(1).await;
         assert_eq!(response.status(), StatusCode::OK);
@@ -409,9 +411,9 @@ mod get_curl_group {
         app.signup("integration-test").await;
 
         let mut project = app.get_test_private_project();
-        project.id = 1;
+        project.info.id = 1;
         let curl_group = app.get_test_curl_group();
-        app.create_project(&project).await;
+        app.create_project(&project.info).await;
         app.create_curl_group(1, &curl_group).await;
 
         app.logout().await;
@@ -429,10 +431,10 @@ mod get_curl_group {
         app.signup("integration-test").await;
 
         let mut project = app.get_test_private_project();
-        project.id = 1;
+        project.info.id = 1;
         let curl_group = app.get_test_curl_group();
-        app.create_project(&project).await;
-        app.create_curl_group(project.id, &curl_group).await;
+        app.create_project(&project.info).await;
+        app.create_curl_group(project.info.id, &curl_group).await;
 
         app.logout().await;
 
@@ -449,8 +451,8 @@ mod get_curl_group {
 
         let project = app.get_test_public_project();
         let curl_group = app.get_test_curl_group();
-        app.create_project(&project).await;
-        app.create_curl_group(project.id, &curl_group).await;
+        app.create_project(&project.info).await;
+        app.create_curl_group(project.info.id, &curl_group).await;
 
         app.logout().await;
         app.signup("integration-test-other-user").await;
@@ -468,8 +470,8 @@ mod get_curl_group {
 
         let project = app.get_test_public_project();
         let curl_group = app.get_test_curl_group();
-        app.create_project(&project).await;
-        app.create_curl_group(project.id, &curl_group).await;
+        app.create_project(&project.info).await;
+        app.create_curl_group(project.info.id, &curl_group).await;
 
         app.logout().await;
 
@@ -507,11 +509,11 @@ mod update_curl_group {
         app.signup("integration-test").await;
 
         let mut project = app.get_test_private_project();
-        project.id = 1;
-        app.create_project(&project).await;
+        project.info.id = 1;
+        app.create_project(&project.info).await;
 
         let mut curl_group = app.get_test_curl_group();
-        app.create_curl_group(project.id, &curl_group).await;
+        app.create_curl_group(project.info.id, &curl_group).await;
 
         curl_group.description = "I have been updated!".to_string();
         curl_group.curls = "updated.com".to_string();
@@ -535,11 +537,11 @@ mod update_curl_group {
         app.signup("integration-test").await;
 
         let mut project = app.get_test_private_project();
-        project.id = 1;
-        app.create_project(&project).await;
+        project.info.id = 1;
+        app.create_project(&project.info).await;
 
         let curl_group = app.get_test_curl_group();
-        app.create_curl_group(project.id, &curl_group).await;
+        app.create_curl_group(project.info.id, &curl_group).await;
 
         app.logout().await;
         app.signup("integration-test-other-user").await;
@@ -554,10 +556,10 @@ mod update_curl_group {
         app.signup("integration-test").await;
 
         let project = app.get_test_public_project();
-        app.create_project(&project).await;
+        app.create_project(&project.info).await;
 
         let mut curl_group = app.get_test_curl_group();
-        app.create_curl_group(project.id, &curl_group).await;
+        app.create_curl_group(project.info.id, &curl_group).await;
 
         app.logout().await;
         app.signup("integration-test-other-user").await;
@@ -574,16 +576,16 @@ mod update_curl_group {
 
         let public_project = app.get_test_private_project();
         let private_project = app.get_test_private_project();
-        app.create_project(&public_project).await;
-        app.create_project(&private_project).await;
+        app.create_project(&public_project.info).await;
+        app.create_project(&private_project.info).await;
 
         let mut curl_group_public = app.get_test_curl_group();
         let mut curl_group_private = app.get_test_curl_group();
         curl_group_private.project_id = 2;
 
-        app.create_curl_group(public_project.id, &curl_group_public)
+        app.create_curl_group(public_project.info.id, &curl_group_public)
             .await;
-        app.create_curl_group(private_project.id, &curl_group_private)
+        app.create_curl_group(private_project.info.id, &curl_group_private)
             .await;
 
         app.logout().await;
