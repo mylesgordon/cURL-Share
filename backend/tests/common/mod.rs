@@ -33,6 +33,22 @@ impl TestApplication {
         format!("{}/api/v1/{}", self.url, suffix)
     }
 
+    pub async fn add_other_user_as_collaborator_and_login(&self, project: &mut Project) {
+        self.logout().await;
+        self.signup("integration-test-other-user").await;
+
+        self.logout().await;
+        self.login("integration-test", "test").await;
+
+        project
+            .collaborators
+            .push("integration-test-other-user".to_string());
+        self.update_project(&project).await;
+
+        self.logout().await;
+        self.login("integration-test-other-user", "test").await;
+    }
+
     pub async fn health_check(&self) -> reqwest::Response {
         let url = self.generate_url("health-check".to_string());
         self.client
