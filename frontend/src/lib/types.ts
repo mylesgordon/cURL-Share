@@ -1,3 +1,11 @@
+export type projectInfo = {
+	id: number;
+	environments: string;
+	description: string;
+	name: string;
+	visibility: string;
+};
+
 export enum Visibility {
 	Public = 'Public',
 	Private = 'Private'

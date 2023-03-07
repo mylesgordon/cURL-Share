@@ -8,9 +8,8 @@ import type { ComponentProps } from 'svelte';
 describe('ProjectListEntry component', () => {
 	const props: ComponentProps<ProjectListEntry> = {
 		description: 'Test description',
-		link: 'https://google.com',
-		projectId: 1,
-		title: 'Project title'
+		id: 1,
+		name: 'Project title'
 	};
 	testMatchingSnapshot(ProjectListEntry, props);
 
@@ -25,6 +24,6 @@ describe('ProjectListEntry component', () => {
 	it('should link to the correct place', () => {
 		render(ProjectListEntry, props);
 		const title = screen.getByTestId('project-list-entry-1-title');
-		expect(title.getAttribute('href')).toBe('https://google.com');
+		expect(title.getAttribute('href')).toBe('/project/1');
 	});
 });

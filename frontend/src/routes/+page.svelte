@@ -17,8 +17,8 @@
 	</IconLink>
 </div>
 
-{#if data.entries.length}
-	{#each data.entries as entry (entry.projectId)}
+{#if data.data.length}
+	{#each data.data as entry (entry.id)}
 		<ProjectListEntry {...entry} />
 	{/each}
 {:else}

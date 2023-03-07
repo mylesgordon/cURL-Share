@@ -9,7 +9,7 @@ exports[`ProjectListEntry component > should match snapshot 1`] = `
       <a
         class="p-4 w-48 truncate"
         data-testid="project-list-entry-1-title"
-        href="https://google.com"
+        href="/project/1"
       >
         Project title
       </a>

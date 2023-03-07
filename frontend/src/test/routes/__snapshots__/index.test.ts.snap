@@ -38,7 +38,7 @@ exports[`Index page > should match snapshot 1`] = `
       <a
         class="p-4 w-48 truncate"
         data-testid="project-list-entry-1-title"
-        href="https://google.com"
+        href="/project/1"
       >
         the cool project
       </a>
@@ -59,7 +59,7 @@ exports[`Index page > should match snapshot 1`] = `
       <a
         class="p-4 w-48 truncate"
         data-testid="project-list-entry-0-title"
-        href="https://youtube.com"
+        href="/project/0"
       >
         the other project
       </a>

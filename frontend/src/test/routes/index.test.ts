@@ -7,23 +7,25 @@ describe('Index page', () => {
 	type IndexProps = ComponentProps<Index>;
 	const propsWithEntries: IndexProps = {
 		data: {
-			entries: [
+			data: [
 				{
 					description: 'this is a project',
-					title: 'the cool project',
-					link: 'https://google.com',
-					projectId: 1
+					name: 'the cool project',
+					id: 1,
+					environments: 'localhost,http://other.com',
+					visibility: 'Public'
 				},
 				{
 					description: 'this is another project',
-					title: 'the other project',
-					link: 'https://youtube.com',
-					projectId: 0
+					name: 'the other project',
+					id: 0,
+					environments: 'http://irrelevant.com',
+					visibility: 'Public'
 				}
 			]
 		}
 	};
-	const propsWithNoEntries: IndexProps = { data: { entries: [] } };
+	const propsWithNoEntries: IndexProps = { data: { data: [] } };
 
 	testMatchingSnapshot(Index, propsWithEntries);
 	testMatchingSnapshot(Index, propsWithNoEntries);
