@@ -5,7 +5,7 @@
 
 	async function logOut() {
 		try {
-			await fetch('http://localhost:8080/api/v1/log-out', {
+			await fetch(`${import.meta.env.VITE_BACKEND_BASE_URL}/api/v1/log-out`, {
 				method: 'POST',
 				mode: 'cors',
 				headers: { 'Access-Control-Allow-Origin': 'http://localhost:8080' },

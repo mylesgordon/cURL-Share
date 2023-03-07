@@ -23,7 +23,7 @@
 		}
 
 		try {
-			let request = await fetch(`http://localhost:8080/api/v1/${endpoint}`, {
+			let request = await fetch(`${import.meta.env.VITE_BACKEND_BASE_URL}/api/v1/${endpoint}`, {
 				method: 'POST',
 				mode: 'cors',
 				headers: {
