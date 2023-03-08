@@ -2,13 +2,14 @@
 	import { Card, Tag } from 'agnostic-svelte';
 
 	export let description: string;
-	export let groupId: number;
-	export let labels: Array<string>;
-	export let projectId: string;
-	export let title: string;
+	export let id: number;
+	export let labels: string;
+	export let project_id: number;
+	export let name: string;
 
-	const dataTestIdPrefix = `curl-group-list-entry-${groupId}`;
-	const link = `/project/${projectId}/group/${groupId}`;
+	const dataTestIdPrefix = `curl-group-list-entry-${id}`;
+	const labelsArray = labels.split(',');
+	const link = `/project/${project_id}/group/${id}`;
 </script>
 
 <Card isBorder isRounded isShadow css="mt-4">
@@ -17,7 +18,7 @@
 		class="p-4 flex-grow full truncate text-center project-title"
 		data-testid={dataTestIdPrefix + '-title'}
 	>
-		{title}
+		{name}
 	</a>
 	<p class="p-4 flex-grow project-description" data-testid={dataTestIdPrefix + '-description'}>
 		{description}
@@ -26,7 +27,7 @@
 		aria-label="Project labels"
 		class="flex flex-grow flex-wrap justify-center project-label-container"
 	>
-		{#each labels as label}
+		{#each labelsArray as label}
 			<span data-testid={dataTestIdPrefix + '-label-' + label}>
 				<Tag shape="pill">{label}</Tag>
 			</span>

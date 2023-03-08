@@ -7,23 +7,27 @@
 	import Settings from 'virtual:icons/fa/gear';
 
 	export let data: PageData;
+	const { project } = data;
 </script>
 
-<div class="flex flex-row justify-between">
-	<div class="flex flex-row gap-2">
-		<h1>{data.projectName}</h1>
-		<IconLink description="Project settings" href={`/project/${data.projectId}/settings`}>
-			<Settings />
-		</IconLink>
+{#if project}
+	<div class="flex flex-row justify-between">
+		<div class="flex flex-row gap-2">
+			<h1>{project.info.name}</h1>
+			<IconLink description="Project settings" href={`/project/${project.info.id}/settings`}>
+				<Settings />
+			</IconLink>
+		</div>
 	</div>
-</div>
 
-<Meta title={data.projectName} />
+	<Meta title={project.info.name} />
 
-{#if data.groups.length}
-	{#each data.groups as group (group.groupId)}
-		<CurlGroupListEntry {...group} projectId={data.projectId} />
-	{/each}
-{:else}
-	<p>No groups available</p>
+	{#if project.groups}
+		{#each project.groups as group (group.id)}
+			<CurlGroupListEntry {...group} />
+		{/each}
+	{:else}
+		<p>No groups available</p>
+	{/if}
 {/if}
+

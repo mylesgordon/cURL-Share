@@ -7,9 +7,9 @@ import type { ComponentProps } from 'svelte';
 
 describe('ProjectListEntry component', () => {
 	const props: ComponentProps<CurlGroupListEntry> = {
-		groupId: 1,
+		id: 1,
 		projectId: '1',
-		title: 'Login Journey',
+		name: 'Login Journey',
 		description: 'cURL group defining a user journey!',
 		labels: ['label 1', 'label 2']
 	};
@@ -25,7 +25,7 @@ describe('ProjectListEntry component', () => {
 		expect(description).toHaveTextContent(props.description);
 		expect(label1).toHaveTextContent(props.labels[0]);
 		expect(label2).toHaveTextContent(props.labels[1]);
-		expect(title).toHaveTextContent(props.title);
+		expect(title).toHaveTextContent(props.name);
 	});
 
 	it('should link to the correct place', () => {

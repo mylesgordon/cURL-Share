@@ -1,7 +1,7 @@
 import { backendUrl } from '$lib/stores';
 import { get } from 'svelte/store';
 import type { PageServerLoad } from './$types';
-import type { projectInfo } from '$lib/types';
+import type { ProjectInfo } from '$lib/types';
 
 export const load = (async ({ fetch }) => {
 	try {
@@ -12,7 +12,7 @@ export const load = (async ({ fetch }) => {
 			headers: { 'Access-Control-Allow-Origin': url },
 			credentials: 'include'
 		});
-		const data = (await response.json()) as projectInfo[];
+		const data = (await response.json()) as ProjectInfo[];
 		console.log(data);
 		return { data };
 	} catch (e) {

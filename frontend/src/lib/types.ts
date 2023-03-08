@@ -1,4 +1,20 @@
-export type projectInfo = {
+export type CurlGroup = {
+	id: number,
+	curls: string,
+	description: string,
+	labels: string,
+	name: string,
+	project_id: number,
+};
+
+export type Project = {
+	info: ProjectInfo,
+	admins: Array<string>,
+	collaborators: Array<string>,
+	groups: Array<CurlGroup>
+};
+
+export type ProjectInfo = {
 	id: number;
 	environments: string;
 	description: string;
