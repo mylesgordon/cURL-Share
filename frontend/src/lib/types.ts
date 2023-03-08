@@ -1,17 +1,17 @@
 export type CurlGroup = {
-	id: number,
-	curls: string,
-	description: string,
-	labels: string,
-	name: string,
-	project_id: number,
+	id: number;
+	curls: string;
+	description: string;
+	labels: string;
+	name: string;
+	project_id: number;
 };
 
 export type Project = {
-	info: ProjectInfo,
-	admins: Array<string>,
-	collaborators: Array<string>,
-	groups: Array<CurlGroup>
+	info: ProjectInfo;
+	admins: Array<string>;
+	collaborators: Array<string>;
+	groups: Array<CurlGroup>;
 };
 
 export type ProjectInfo = {

@@ -6,7 +6,7 @@ import type { UserConfig } from 'vite';
 const config: UserConfig = {
 	plugins: [sveltekit(), Icons({ compiler: 'svelte' })],
 	server: {
-		host: "0.0.0.0",
+		host: '0.0.0.0'
 	},
 	test: {
 		environment: 'jsdom',

@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { Button, ButtonGroup, Input } from 'agnostic-svelte';
 	import { goto } from '$app/navigation';
-	import { backendUrl, isLoggedIn } from '$lib/stores';
-	import Meta from '$lib/components/Meta.svelte';
+	import { isLoggedIn } from '$lib/stores';
 	import { logInRequest } from '$lib/api';
+	import Meta from '$lib/components/Meta.svelte';
 
 	let errorText: string;
 	let username: string;

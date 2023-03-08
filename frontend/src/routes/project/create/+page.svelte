@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { Button, Input } from 'agnostic-svelte';
-	import { Visibility, type ProjectInfo } from '$lib/types';
+	import { type ProjectInfo, Visibility } from '$lib/types';
+	import { createProjectRequest } from '$lib/api';
+	import { goto } from '$app/navigation';
 	import Meta from '$lib/components/Meta.svelte';
 	import VisibilityInput from '$lib/components/VisibilityInput.svelte';
-	import { goto } from '$app/navigation';
-	import { createProjectRequest } from '$lib/api';
 	let name: string;
 	let description: string;
 	let visibility: Visibility = Visibility.Public;
@@ -12,7 +12,7 @@
 	async function sendCreateProjectRequest() {
 		const projectToBeCreated: ProjectInfo = {
 			id: 0,
-			environments: "",
+			environments: '',
 			description,
 			name,
 			visibility
@@ -25,7 +25,7 @@
 		try {
 			sendCreateProjectRequest().then((response) => {
 				goto(`project/${response.id}`);
-			})
+			});
 		} catch (e) {
 			console.error(e);
 		}

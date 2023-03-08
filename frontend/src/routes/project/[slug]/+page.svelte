@@ -30,4 +30,3 @@
 		<p>No groups available</p>
 	{/if}
 {/if}
-

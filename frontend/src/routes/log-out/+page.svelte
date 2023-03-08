@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { isLoggedIn } from '$lib/stores';
-	import Meta from '$lib/components/Meta.svelte';
 	import { logOutRequest } from '$lib/api';
+	import Meta from '$lib/components/Meta.svelte';
 
 	async function logOut() {
 		try {

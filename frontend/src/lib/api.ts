@@ -1,14 +1,16 @@
-import { backendUrl } from "./stores";
-import { get } from "svelte/store";
-import type { Project, ProjectInfo } from "./types";
+import { backendUrl } from './stores';
+import { get } from 'svelte/store';
+import type { Project, ProjectInfo } from './types';
 
 const url = get(backendUrl);
 
 type CreateProjectResponse = {
-	id: number
-}
+	id: number;
+};
 
-export async function fetchIsLoggedIn(fetch: any): Promise<boolean> {
+type Fetch = typeof fetch;
+
+export async function fetchIsLoggedIn(fetch: Fetch): Promise<boolean> {
 	const response = await fetch(`${url}/api/v1/user-status`, {
 		method: 'GET',
 		mode: 'cors',
@@ -19,18 +21,18 @@ export async function fetchIsLoggedIn(fetch: any): Promise<boolean> {
 	return responseJson.is_logged_in ? responseJson.is_logged_in : false;
 }
 
-export async function fetchProject(fetch: any, projectId: string): Promise<Project> {
+export async function fetchProject(fetch: Fetch, projectId: string): Promise<Project> {
 	const projectResponse = await fetch(`${url}/api/v1/project/${projectId}`, {
 		method: 'GET',
 		mode: 'cors',
 		headers: { 'Access-Control-Allow-Origin': url },
 		credentials: 'include'
-	});		
+	});
 
-    return await projectResponse.json();
+	return await projectResponse.json();
 }
 
-export async function fetchProjects(fetch: any): Promise<ProjectInfo[]> {
+export async function fetchProjects(fetch: Fetch): Promise<ProjectInfo[]> {
 	const response = await fetch(`${url}/api/v1/project`, {
 		method: 'GET',
 		mode: 'cors',
@@ -40,19 +42,27 @@ export async function fetchProjects(fetch: any): Promise<ProjectInfo[]> {
 	return await response.json();
 }
 
-export async function createProjectRequest(fetch: any, projectInfo: ProjectInfo): Promise<CreateProjectResponse> {
+export async function createProjectRequest(
+	fetch: Fetch,
+	projectInfo: ProjectInfo
+): Promise<CreateProjectResponse> {
 	const response = await fetch(`${url}/api/v1/project`, {
 		method: 'POST',
 		body: JSON.stringify(projectInfo),
 		mode: 'cors',
 		headers: { 'Access-Control-Allow-Origin': url, 'Content-Type': 'application/json' },
-		credentials: 'include',
+		credentials: 'include'
 	});
 
-    return await response.json();
+	return await response.json();
 }
 
-export async function logInRequest(fetch: any, endpoint: string, username: string, password: string): Promise<number> {
+export async function logInRequest(
+	fetch: Fetch,
+	endpoint: string,
+	username: string,
+	password: string
+): Promise<number> {
 	const request = await fetch(`${url}/api/v1/${endpoint}`, {
 		method: 'POST',
 		mode: 'cors',
@@ -64,10 +74,10 @@ export async function logInRequest(fetch: any, endpoint: string, username: strin
 		credentials: 'include'
 	});
 
-    return request.status;
+	return request.status;
 }
 
-export async function logOutRequest(fetch: any): Promise<void> {
+export async function logOutRequest(fetch: Fetch): Promise<void> {
 	await fetch(`${url}/api/v1/log-out`, {
 		method: 'POST',
 		mode: 'cors',
