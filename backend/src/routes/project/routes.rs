@@ -292,10 +292,12 @@ async fn get_project_from_db(
     }
 
     let (admins, collaborators) = get_admins_and_collaborators(info.id, pool).await?;
+    let groups = get_curl_groups_for_project(project_id, pool).await?;
     let project = Project {
         info,
         admins,
         collaborators,
+        groups
     };
 
     Ok(project)
@@ -456,6 +458,20 @@ async fn get_admins_and_collaborators(
     .collect();
 
     Ok((admins, collaborators))
+}
+
+async fn get_curl_groups_for_project(
+    project_id: i64,
+    pool: &SqlitePool,
+) -> Result<Vec<CurlGroup>, ProjectError> {
+    let curl_groups: Vec<CurlGroup> = sqlx::query_as!(CurlGroup,
+        r#"SELECT * FROM curl_group WHERE project_id = ?"#,
+        project_id
+    )
+    .fetch_all(pool)
+    .await?;
+
+    Ok(curl_groups)
 }
 
 async fn generate_user_list(users: &Vec<String>) -> String {

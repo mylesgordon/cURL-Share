@@ -1,8 +1,12 @@
 use std::net::TcpListener;
 
 use actix_cors::Cors;
-use actix_session::{storage::CookieSessionStore, SessionMiddleware};
-use actix_web::{cookie::Key, dev::Server, web, App, HttpServer};
+use actix_session::{config::PersistentSession, storage::CookieSessionStore, SessionMiddleware};
+use actix_web::{
+    cookie::{time, Key},
+    dev::Server,
+    web, App, HttpServer,
+};
 use sqlx::{sqlite::SqlitePoolOptions, SqlitePool};
 use tracing_actix_web::TracingLogger;
 
@@ -23,7 +27,7 @@ impl Application {
         port: u16,
         pool_settings: ApplicationPoolSettings,
     ) -> Result<Self, std::io::Error> {
-        let address = format!("0.0.0.0:{}", port);
+        let address = format!("localhost:{}", port);
         let listener = TcpListener::bind(&address)?;
 
         let db_pool = match pool_settings {
@@ -73,7 +77,10 @@ fn run(db_pool: SqlitePool, listener: TcpListener) -> Result<Server, std::io::Er
             .wrap(TracingLogger::default())
             .wrap(
                 SessionMiddleware::builder(CookieSessionStore::default(), private_key.clone())
-                    .cookie_secure(false)
+                    .cookie_same_site(actix_web::cookie::SameSite::Lax)
+                    .session_lifecycle(
+                        PersistentSession::default().session_ttl(time::Duration::days(5)),
+                    )
                     .build(),
             )
             .app_data(web::Data::new(db_pool.clone()))
