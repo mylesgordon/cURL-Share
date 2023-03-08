@@ -57,6 +57,25 @@ export async function createProjectRequest(
 	return await response.json();
 }
 
+export async function deleteProjectRequest(fetch: Fetch, project_id: number): Promise<void> {
+	await fetch(`${url}/api/v1/project/${project_id}`, {
+		method: 'DELETE',
+		mode: 'cors',
+		headers: { 'Access-Control-Allow-Origin': url },
+		credentials: 'include'
+	});
+}
+
+export async function updateProjectRequest(fetch: Fetch, project: Project): Promise<void> {
+	await fetch(`${url}/api/v1/project/${project.info.id}`, {
+		method: 'POST',
+		body: JSON.stringify(project),
+		mode: 'cors',
+		headers: { 'Access-Control-Allow-Origin': url, 'Content-Type': 'application/json' },
+		credentials: 'include'
+	});
+}
+
 export async function logInRequest(
 	fetch: Fetch,
 	endpoint: string,

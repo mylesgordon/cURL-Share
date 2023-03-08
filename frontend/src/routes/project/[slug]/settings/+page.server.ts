@@ -1,18 +1,23 @@
-import { Visibility } from '$lib/types';
+import { fetchProject } from '$lib/api';
 import type { PageServerLoad } from './$types';
+import type { Project } from '$lib/types';
 
-const projectSettings = {
-	id: 1,
-	name: 'Placeholder project',
-	description: 'This is a placeholder project',
-	visibility: Visibility.Public,
-	collaborators: ['collaborator1', 'dave'],
-	environments: ['https://cool.com', 'https://dev.cool.com']
-};
-
-export const load = (() => {
-	return {
-		projectSettings,
-		isUnitTest: false
+export const load = (async ({ fetch, params }) => {
+	// dummy project so project isn't undefined
+	let project: Project = {
+		info: { id: -1, environments: '', description: '', name: '', visibility: '' },
+		admins: [],
+		collaborators: [],
+		groups: []
 	};
+	let success = false;
+
+	try {
+		project = await fetchProject(fetch, params.slug);
+		success = true;
+	} catch (e) {
+		console.error(e);
+	}
+
+	return { project, isUnitTest: false, success };
 }) satisfies PageServerLoad;
