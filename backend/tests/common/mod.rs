@@ -80,6 +80,7 @@ impl TestApplication {
                 description: "A test public project".to_string(),
                 visibility: "Public".to_string(),
             },
+            groups: vec![],
         }
     }
 
@@ -94,6 +95,7 @@ impl TestApplication {
                 description: "A test private project".to_string(),
                 visibility: "Private".to_string(),
             },
+            groups: vec![],
         }
     }
 

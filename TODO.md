@@ -1,3 +1,3 @@
 - properly unit test frontend
 - composite pk in project tables
-- adding project admins/collaborators
+- int tests for get project including curl group

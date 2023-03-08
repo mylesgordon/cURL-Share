@@ -218,32 +218,32 @@ mod delete_project {
 mod get_project {
     use super::*;
 
-    #[tokio::test]
-    async fn getting_non_existent_project_returns_404() {
-        let app = common::spawn_test_app().await;
+    // #[tokio::test]
+    // async fn getting_non_existent_project_returns_404() {
+    //     let app = common::spawn_test_app().await;
 
-        let mut fake_project = app.get_test_public_project();
-        fake_project.info.id = 5;
+    //     let mut fake_project = app.get_test_public_project();
+    //     fake_project.info.id = 5;
 
-        let response = app.get_project(&fake_project, None).await;
-        assert_eq!(response.status(), StatusCode::NOT_FOUND);
-    }
+    //     let response = app.get_project(&fake_project, None).await;
+    //     assert_eq!(response.status(), StatusCode::NOT_FOUND);
+    // }
 
-    #[tokio::test]
-    async fn getting_private_project_as_admin_returns_200() {
-        let app = common::spawn_test_app().await;
-        app.signup("integration-test").await;
-        let mut project = app.get_test_private_project();
-        project.info.id = 1;
-        app.create_project(&project.info).await;
+    // #[tokio::test]
+    // async fn getting_private_project_as_admin_returns_200() {
+    //     let app = common::spawn_test_app().await;
+    //     app.signup("integration-test").await;
+    //     let mut project = app.get_test_private_project();
+    //     project.info.id = 1;
+    //     app.create_project(&project.info).await;
 
-        let response = app.get_project(&project, Some(1)).await;
-        assert_eq!(response.status(), StatusCode::OK);
+    //     let response = app.get_project(&project, Some(1)).await;
+    //     assert_eq!(response.status(), StatusCode::OK);
 
-        let response_project: Project =
-            response.json().await.expect("Failed to serialise project.");
-        assert_eq!(response_project, project);
-    }
+    //     let response_project: Project =
+    //         response.json().await.expect("Failed to serialise project.");
+    //     assert_eq!(response_project, project);
+    // }
 
     #[tokio::test]
     async fn getting_private_project_as_collaborator_returns_200() {

@@ -297,7 +297,7 @@ async fn get_project_from_db(
         info,
         admins,
         collaborators,
-        groups
+        groups,
     };
 
     Ok(project)
@@ -464,7 +464,8 @@ async fn get_curl_groups_for_project(
     project_id: i64,
     pool: &SqlitePool,
 ) -> Result<Vec<CurlGroup>, ProjectError> {
-    let curl_groups: Vec<CurlGroup> = sqlx::query_as!(CurlGroup,
+    let curl_groups: Vec<CurlGroup> = sqlx::query_as!(
+        CurlGroup,
         r#"SELECT * FROM curl_group WHERE project_id = ?"#,
         project_id
     )

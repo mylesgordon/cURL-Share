@@ -29,7 +29,7 @@ pub struct Project {
     pub info: ProjectInfo,
     pub admins: Vec<String>,
     pub collaborators: Vec<String>,
-    pub groups: Vec<CurlGroup>
+    pub groups: Vec<CurlGroup>,
 }
 
 #[allow(dead_code)]

@@ -91,7 +91,8 @@ fn run(db_pool: SqlitePool, listener: TcpListener) -> Result<Server, std::io::Er
                     .configure(user_routes),
             )
     })
-    .listen(listener)?
+    // .listen(listener)?
+    .bind(("localhost", listener.local_addr()?.port()))?
     .run();
 
     Ok(server)
