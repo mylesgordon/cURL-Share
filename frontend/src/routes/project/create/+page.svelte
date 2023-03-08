@@ -4,7 +4,7 @@
 	import Meta from '$lib/components/Meta.svelte';
 	import VisibilityInput from '$lib/components/VisibilityInput.svelte';
 	import { goto } from '$app/navigation';
-	import { backendUrl } from '$lib/stores';
+	import { createProjectRequest } from '$lib/api';
 	let name: string;
 	let description: string;
 	let visibility: Visibility = Visibility.Public;
@@ -18,15 +18,7 @@
 			visibility
 		};
 
-		const response = await fetch(`${$backendUrl}/api/v1/project`, {
-			method: 'POST',
-			body: JSON.stringify(projectToBeCreated),
-			mode: 'cors',
-			headers: { 'Access-Control-Allow-Origin': $backendUrl, 'Content-Type': 'application/json' },
-			credentials: 'include',
-		});
-
-		return await response.json();
+		return await createProjectRequest(fetch, projectToBeCreated);
 	}
 
 	function onSubmit(e: SubmitEvent) {

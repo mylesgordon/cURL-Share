@@ -3,6 +3,7 @@
 	import { goto } from '$app/navigation';
 	import { backendUrl, isLoggedIn } from '$lib/stores';
 	import Meta from '$lib/components/Meta.svelte';
+	import { logInRequest } from '$lib/api';
 
 	let errorText: string;
 	let username: string;
@@ -23,18 +24,9 @@
 		}
 
 		try {
-			let request = await fetch(`${$backendUrl}/api/v1/${endpoint}`, {
-				method: 'POST',
-				mode: 'cors',
-				headers: {
-					'Access-Control-Allow-Origin': $backendUrl,
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ username, password }),
-				credentials: 'include'
-			});
+			const requestStatus = await logInRequest(fetch, endpoint, username, password);
 
-			switch (request.status) {
+			switch (requestStatus) {
 				case 200:
 				case 201:
 					isLoggedIn.set(true);

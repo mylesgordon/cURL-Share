@@ -1,16 +1,12 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { backendUrl, isLoggedIn } from '$lib/stores';
+	import { isLoggedIn } from '$lib/stores';
 	import Meta from '$lib/components/Meta.svelte';
+	import { logOutRequest } from '$lib/api';
 
 	async function logOut() {
 		try {
-			await fetch(`${$backendUrl}/api/v1/log-out`, {
-				method: 'POST',
-				mode: 'cors',
-				headers: { 'Access-Control-Allow-Origin': $backendUrl },
-				credentials: 'include'
-			});
+			await logOutRequest(fetch);
 			isLoggedIn.set(false);
 			await goto('/');
 		} catch (e) {
