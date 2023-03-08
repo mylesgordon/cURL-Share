@@ -151,6 +151,7 @@ exports[`Project page > should match snapshot 1`] = `
     <!--&lt;CurlGroupListEntry&gt;-->
     
     
+    
     <!--&lt;+page&gt;-->
   </div>
 </body>
@@ -191,9 +192,8 @@ exports[`Project page > should match snapshot 2`] = `
      
     <!--&lt;Meta&gt;-->
      
-    <p>
-      No groups available
-    </p>
+    
+    
     
     <!--&lt;+page&gt;-->
   </div>

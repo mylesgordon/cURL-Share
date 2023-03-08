@@ -9,15 +9,20 @@ describe('Project page', () => {
 	type ProjectSettingsPageProps = ComponentProps<ProjectSettingsPage>;
 	const props: ProjectSettingsPageProps = {
 		data: {
-			projectSettings: {
-				id: 1,
-				name: 'Placeholder project',
-				description: 'This is a placeholder project',
-				visibility: Visibility.Public,
+			project: {
+				admins: ['admin1, admin2'],
 				collaborators: ['collaborator1', 'dave'],
-				environments: ['https://cool.com', 'https://dev.cool.com']
+				groups: [],
+				info: {
+					id: 1,
+					name: 'Placeholder project',
+					description: 'This is a placeholder project',
+					visibility: Visibility.Public,
+					environments: 'https://cool.com, https://dev.cool.com'
+				}
 			},
-			isUnitTest: true
+			isUnitTest: true,
+			success: true
 		}
 	};
 
@@ -41,6 +46,7 @@ describe('Project page', () => {
 		expect(dialog).toHaveAttribute('aria-hidden', 'true');
 	});
 
+	// TODO success: false
 	// it should send a delete request
 	// it should send a correct post request
 });

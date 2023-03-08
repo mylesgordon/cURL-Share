@@ -114,6 +114,25 @@ exports[`Project page > should match snapshot 1`] = `
       >
         <label
           class="label s-JZthjkXlZrq3"
+          for="admins"
+        >
+          Administrators
+        </label>
+         
+        <input
+          class="input input-rounded s-JZthjkXlZrq3"
+          id="admins"
+          type="text"
+        />
+         
+      </div>
+      <!--&lt;Input&gt;-->
+       
+      <div
+        class="w-100 s-JZthjkXlZrq3"
+      >
+        <label
+          class="label s-JZthjkXlZrq3"
           for="collaborators"
         >
           Collaborators

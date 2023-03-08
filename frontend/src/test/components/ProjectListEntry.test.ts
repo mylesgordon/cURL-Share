@@ -2,7 +2,7 @@ import '@testing-library/jest-dom/extend-expect';
 import { render } from '@testing-library/svelte';
 import { screen } from '@testing-library/dom';
 import { testMatchingSnapshot } from '../common';
-import ProjectListEntry from '../../lib/components/ProjectListEntry.svelte';
+import ProjectListEntry from '$lib/components/ProjectListEntry.svelte';
 import type { ComponentProps } from 'svelte';
 
 describe('ProjectListEntry component', () => {

@@ -8,10 +8,10 @@ import type { ComponentProps } from 'svelte';
 describe('ProjectListEntry component', () => {
 	const props: ComponentProps<CurlGroupListEntry> = {
 		id: 1,
-		projectId: '1',
+		project_id: 1,
 		name: 'Login Journey',
 		description: 'cURL group defining a user journey!',
-		labels: ['label 1', 'label 2']
+		labels: 'label 1,label 2'
 	};
 
 	testMatchingSnapshot(CurlGroupListEntry, props);

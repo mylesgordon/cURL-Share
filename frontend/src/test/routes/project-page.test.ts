@@ -6,30 +6,49 @@ import type { ComponentProps } from 'svelte';
 describe('Project page', () => {
 	type ProjectPageProps = ComponentProps<ProjectPage>;
 	const labels = ['IPB-xxxx', 'Feature', 'User Journey'];
-	const commonProps = { labels, projectId: '1', projectName: 'Cool project' };
-
-	const propsWithEntries: ProjectPageProps = {
-		data: {
-			...commonProps,
-			groups: [
-				{
-					groupId: 1,
-					title: 'Login Journey',
-					description: 'cURL group defining a user journey!',
-					labels: [labels[1], labels[2]]
-				},
-				{
-					groupId: 2,
-					title: 'IPB-1293',
-					description:
-						'Lorem ipsum this is long text Lorem ipsum this is long text Lorem ipsum this is long text Lorem ipsum this is long text Lorem ipsum this is long text Lorem ipsum this is long text ',
-					labels: [labels[0], labels[1], labels[2]]
-				}
-			]
+	const commonProjectProps = {
+		admins: [],
+		collaborators: [],
+		info: {
+			labels: labels.join(','),
+			id: 1,
+			name: 'Cool project',
+			description: 'Really cool',
+			environments: '',
+			visibility: 'Public'
 		}
 	};
 
-	const propsWithNoEntries: ProjectPageProps = { data: { ...commonProps, groups: [] } };
+	const propsWithEntries: ProjectPageProps = {
+		data: {
+			project: {
+				...commonProjectProps,
+				groups: [
+					{
+						id: 1,
+						curls: '',
+						project_id: commonProjectProps.info.id,
+						name: 'Login Journey',
+						description: 'cURL group defining a user journey!',
+						labels: `${labels[1]},${labels[2]}`
+					},
+					{
+						id: 2,
+						curls: '',
+						project_id: commonProjectProps.info.id,
+						name: 'IPB-1293',
+						description:
+							'Lorem ipsum this is long text Lorem ipsum this is long text Lorem ipsum this is long text Lorem ipsum this is long text Lorem ipsum this is long text Lorem ipsum this is long text ',
+						labels: `${labels[0]},${labels[1]},${labels[2]}`
+					}
+				]
+			}
+		}
+	};
+
+	const propsWithNoEntries: ProjectPageProps = {
+		data: { project: { ...commonProjectProps, groups: [] } }
+	};
 
 	testMatchingSnapshot(ProjectPage, propsWithEntries);
 	testMatchingSnapshot(ProjectPage, propsWithNoEntries);
