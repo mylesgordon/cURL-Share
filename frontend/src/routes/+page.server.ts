@@ -1,12 +1,15 @@
+import { backendUrl } from '$lib/stores';
+import { get } from 'svelte/store';
 import type { PageServerLoad } from './$types';
 import type { projectInfo } from '$lib/types';
 
 export const load = (async ({ fetch }) => {
 	try {
-		const response = await fetch(`${import.meta.env.VITE_BACKEND_BASE_URL}/api/v1/project`, {
+		const url = get(backendUrl);
+		const response = await fetch(`${url}/api/v1/project`, {
 			method: 'GET',
 			mode: 'cors',
-			headers: { 'Access-Control-Allow-Origin': 'http://localhost:8080' },
+			headers: { 'Access-Control-Allow-Origin': url },
 			credentials: 'include'
 		});
 		const data = (await response.json()) as projectInfo[];

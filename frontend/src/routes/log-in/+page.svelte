@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Button, ButtonGroup, Input } from 'agnostic-svelte';
 	import { goto } from '$app/navigation';
-	import { isLoggedIn } from '$lib/stores';
+	import { backendUrl, isLoggedIn } from '$lib/stores';
 	import Meta from '$lib/components/Meta.svelte';
 
 	let errorText: string;
@@ -23,11 +23,11 @@
 		}
 
 		try {
-			let request = await fetch(`${import.meta.env.VITE_BACKEND_BASE_URL}/api/v1/${endpoint}`, {
+			let request = await fetch(`${$backendUrl}/api/v1/${endpoint}`, {
 				method: 'POST',
 				mode: 'cors',
 				headers: {
-					'Access-Control-Allow-Origin': 'http://localhost:8080',
+					'Access-Control-Allow-Origin': $backendUrl,
 					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify({ username, password }),

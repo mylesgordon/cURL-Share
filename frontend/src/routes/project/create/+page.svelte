@@ -1,14 +1,42 @@
 <script lang="ts">
 	import { Button, Input } from 'agnostic-svelte';
-	import { Visibility } from '$lib/types';
+	import { Visibility, type projectInfo } from '$lib/types';
 	import Meta from '$lib/components/Meta.svelte';
 	import VisibilityInput from '$lib/components/VisibilityInput.svelte';
+	import { goto } from '$app/navigation';
+	import { backendUrl } from '$lib/stores';
 	let name: string;
 	let description: string;
 	let visibility: Visibility = Visibility.Public;
 
+	async function sendCreateProjectRequest() {
+		const projectToBeCreated: projectInfo = {
+			id: 0,
+			environments: "",
+			description,
+			name,
+			visibility
+		};
+
+		const response = await fetch(`${$backendUrl}/api/v1/project`, {
+			method: 'POST',
+			body: JSON.stringify(projectToBeCreated),
+			mode: 'cors',
+			headers: { 'Access-Control-Allow-Origin': $backendUrl, 'Content-Type': 'application/json' },
+			credentials: 'include',
+		});
+
+		return await response.json();
+	}
+
 	function onSubmit(e: SubmitEvent) {
-		console.log(typeof e);
+		try {
+			sendCreateProjectRequest().then((response) => {
+				goto(`project/${response.id}`);
+			})
+		} catch (e) {
+			console.error(e);
+		}
 	}
 </script>
 
