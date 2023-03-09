@@ -4,6 +4,8 @@ import ProjectPage from '../../routes/project/[slug]/+page.svelte';
 import type { ComponentProps } from 'svelte';
 
 describe('Project page', () => {
+	// TODO: private project
+
 	type ProjectPageProps = ComponentProps<ProjectPage>;
 	const labels = ['IPB-xxxx', 'Feature', 'User Journey'];
 	const commonProjectProps = {
@@ -21,6 +23,8 @@ describe('Project page', () => {
 
 	const propsWithEntries: ProjectPageProps = {
 		data: {
+			adminStatus: { isUserAdmin: true },
+			isLoggedIn: true,
 			project: {
 				...commonProjectProps,
 				groups: [
@@ -47,7 +51,11 @@ describe('Project page', () => {
 	};
 
 	const propsWithNoEntries: ProjectPageProps = {
-		data: { project: { ...commonProjectProps, groups: [] } }
+		data: {
+			adminStatus: { isUserAdmin: false },
+			isLoggedIn: true,
+			project: { ...commonProjectProps, groups: [] }
+		}
 	};
 
 	testMatchingSnapshot(ProjectPage, propsWithEntries);

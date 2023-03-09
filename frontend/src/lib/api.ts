@@ -10,7 +10,7 @@ type CreateProjectResponse = {
 
 type ProjectAdminStatus = {
 	isUserAdmin: boolean;
-}
+};
 
 type Fetch = typeof fetch;
 
@@ -36,7 +36,10 @@ export async function fetchProject(fetch: Fetch, projectId: string): Promise<Pro
 	return await projectResponse.json();
 }
 
-export async function fetchProjectAdminStatus(fetch: Fetch, projectId: string): Promise<ProjectAdminStatus> {
+export async function fetchProjectAdminStatus(
+	fetch: Fetch,
+	projectId: string
+): Promise<ProjectAdminStatus> {
 	const projectResponse = await fetch(`${url}/api/v1/project/${projectId}/is-user-admin`, {
 		method: 'GET',
 		mode: 'cors',

@@ -14,7 +14,7 @@
 	<div class="flex flex-row justify-between">
 		<div class="flex flex-row gap-2">
 			<h1>{project.info.name}</h1>
-			{#if adminStatus.isUserAdmin }
+			{#if adminStatus.isUserAdmin}
 				<IconLink description="Project settings" href={`/project/${project.info.id}/settings`}>
 					<Settings />
 				</IconLink>
@@ -32,5 +32,7 @@
 		<p>No groups available</p>
 	{/if}
 {:else}
-	<p>Something went wrong loading this project - please ensure you have permission and try again.</p>
+	<p>
+		Something went wrong loading this project - please ensure you have permission and try again.
+	</p>
 {/if}

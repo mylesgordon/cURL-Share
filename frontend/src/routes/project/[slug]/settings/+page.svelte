@@ -9,14 +9,16 @@
 	import type { PageData } from './$types';
 	import type { SvelteComponent } from 'svelte';
 	import type { Visibility } from '$lib/types';
-	export let data: PageData;
 
-	let name = data.project.info.name;
-	let description = data.project.info.description;
-	let visibility = data.project.info.visibility as Visibility;
-	let admins = data.project.admins;
-	let collaborators = data.project.collaborators;
-	let environments = data.project.info.environments;
+	export let data: PageData;
+	const { project, success, userAdminStatus } = data;
+
+	let name = project.info.name;
+	let description = project.info.description;
+	let visibility = project.info.visibility as Visibility;
+	let admins = project.admins;
+	let collaborators = project.collaborators;
+	let environments = project.info.environments;
 
 	let adminText = admins?.join(',');
 	let collaboratorText = collaborators?.join(',');
@@ -31,10 +33,10 @@
 			await updateProjectRequest(window.fetch, {
 				admins,
 				collaborators,
-				groups: data.project.groups,
-				info: { id: data.project.info.id, environments, description, name, visibility }
+				groups: project.groups,
+				info: { id: project.info.id, environments, description, name, visibility }
 			});
-			goto(`/project/${data.project.info.id}`);
+			goto(`/project/${project.info.id}`);
 		} catch (e) {
 			console.error(e);
 		}
@@ -56,7 +58,7 @@
 
 	async function deleteProject(_e: SubmitEvent) {
 		try {
-			await deleteProjectRequest(window.fetch, data.project.info.id);
+			await deleteProjectRequest(window.fetch, project.info.id);
 			goto('/');
 		} catch (e) {
 			console.error(e);
@@ -64,7 +66,7 @@
 	}
 </script>
 
-{#if data.success}
+{#if success && userAdminStatus.isUserAdmin}
 	<Meta title={headingAndTitle} />
 	<h1>{headingAndTitle}</h1>
 
@@ -95,7 +97,7 @@
 		on:instance={assignDialogInstance}
 	>
 		<div class="flex flex-col items-center gap-2">
-			<h2>Are you sure you want to delete {data.project.info.name}?</h2>
+			<h2>Are you sure you want to delete {project.info.name}?</h2>
 			<form on:submit|preventDefault={deleteProject}>
 				<Button isBordered isRounded mode="secondary" type="submit">Yes</Button>
 				<Button isBordered isRounded mode="primary" on:click={closeDialog}>No</Button>

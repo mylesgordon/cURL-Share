@@ -9,6 +9,7 @@ describe('Project page', () => {
 	type ProjectSettingsPageProps = ComponentProps<ProjectSettingsPage>;
 	const props: ProjectSettingsPageProps = {
 		data: {
+			isLoggedIn: true,
 			project: {
 				admins: ['admin1, admin2'],
 				collaborators: ['collaborator1', 'dave'],
@@ -22,11 +23,15 @@ describe('Project page', () => {
 				}
 			},
 			isUnitTest: true,
-			success: true
+			success: true,
+			userAdminStatus: { isUserAdmin: true }
 		}
 	};
+	const propsNotAdmin = JSON.parse(JSON.stringify(props));
+	propsNotAdmin.data.userAdminStatus.isUserAdmin = false;
 
 	testMatchingSnapshot(ProjectSettingsPage, props);
+	testMatchingSnapshot(ProjectSettingsPage, propsNotAdmin);
 
 	it('should display the correct title', () => {
 		render(ProjectSettingsPage, props);

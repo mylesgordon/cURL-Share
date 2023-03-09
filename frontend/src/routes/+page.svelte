@@ -1,10 +1,10 @@
 <script lang="ts">
+	import { isLoggedIn } from '$lib/stores';
 	import IconLink from '$lib/components/IconLink.svelte';
 	import Meta from '$lib/components/Meta.svelte';
 	import Plus from 'virtual:icons/fa/plus';
 	import ProjectListEntry from '$lib/components/ProjectListEntry.svelte';
 	import type { PageData } from './$types';
-	import { isLoggedIn } from '$lib/stores';
 
 	export let data: PageData;
 </script>

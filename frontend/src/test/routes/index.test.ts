@@ -7,6 +7,7 @@ describe('Index page', () => {
 	type IndexProps = ComponentProps<Index>;
 	const propsWithEntries: IndexProps = {
 		data: {
+			isLoggedIn: true,
 			data: [
 				{
 					description: 'this is a project',
@@ -25,7 +26,7 @@ describe('Index page', () => {
 			]
 		}
 	};
-	const propsWithNoEntries: IndexProps = { data: { data: [] } };
+	const propsWithNoEntries: IndexProps = { data: { isLoggedIn: false, data: [] } };
 
 	testMatchingSnapshot(Index, propsWithEntries);
 	testMatchingSnapshot(Index, propsWithNoEntries);
