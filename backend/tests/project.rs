@@ -1,7 +1,7 @@
 mod common;
 use crate::common::TestApplication;
 use backend::models::*;
-use backend::routes::project::types::Id;
+use backend::routes::project::types::*;
 use reqwest::StatusCode;
 
 #[cfg(test)]
@@ -218,32 +218,32 @@ mod delete_project {
 mod get_project {
     use super::*;
 
-    // #[tokio::test]
-    // async fn getting_non_existent_project_returns_404() {
-    //     let app = common::spawn_test_app().await;
+    #[tokio::test]
+    async fn getting_non_existent_project_returns_404() {
+        let app = common::spawn_test_app().await;
 
-    //     let mut fake_project = app.get_test_public_project();
-    //     fake_project.info.id = 5;
+        let mut fake_project = app.get_test_public_project();
+        fake_project.info.id = 5;
 
-    //     let response = app.get_project(&fake_project, None).await;
-    //     assert_eq!(response.status(), StatusCode::NOT_FOUND);
-    // }
+        let response = app.get_project(&fake_project, None).await;
+        assert_eq!(response.status(), StatusCode::NOT_FOUND);
+    }
 
-    // #[tokio::test]
-    // async fn getting_private_project_as_admin_returns_200() {
-    //     let app = common::spawn_test_app().await;
-    //     app.signup("integration-test").await;
-    //     let mut project = app.get_test_private_project();
-    //     project.info.id = 1;
-    //     app.create_project(&project.info).await;
+    #[tokio::test]
+    async fn getting_private_project_as_admin_returns_200() {
+        let app = common::spawn_test_app().await;
+        app.signup("integration-test").await;
+        let mut project = app.get_test_private_project();
+        project.info.id = 1;
+        app.create_project(&project.info).await;
 
-    //     let response = app.get_project(&project, Some(1)).await;
-    //     assert_eq!(response.status(), StatusCode::OK);
+        let response = app.get_project(&project, Some(1)).await;
+        assert_eq!(response.status(), StatusCode::OK);
 
-    //     let response_project: Project =
-    //         response.json().await.expect("Failed to serialise project.");
-    //     assert_eq!(response_project, project);
-    // }
+        let response_project: Project =
+            response.json().await.expect("Failed to serialise project.");
+        assert_eq!(response_project, project);
+    }
 
     #[tokio::test]
     async fn getting_private_project_as_collaborator_returns_200() {
@@ -311,6 +311,7 @@ mod get_project {
 
 #[cfg(test)]
 mod update_project {
+
     use super::*;
 
     #[tokio::test]
@@ -388,6 +389,61 @@ mod update_project {
             project_from_server.info.description,
             "A test public project".to_string()
         );
+    }
+}
+
+#[cfg(test)]
+mod is_user_admin {
+    use super::*;
+
+    #[tokio::test]
+    async fn returns_true_when_user_is_admin() {
+        let app = common::spawn_test_app().await;
+        app.signup("integration-test").await;
+
+        let project = app.get_test_public_project();
+        app.create_project(&project.info).await;
+
+        let response = app.is_user_admin_of_project(&project).await;
+        assert_eq!(response.status(), StatusCode::OK);
+
+        let user_admin_status: UserAdminStatus = response.json().await.unwrap();
+        assert_eq!(user_admin_status.is_user_admin, true);
+    }
+
+    #[tokio::test]
+    async fn returns_false_when_user_is_not_admin() {
+        let app = common::spawn_test_app().await;
+        app.signup("integration-test").await;
+
+        let project = app.get_test_public_project();
+        app.create_project(&project.info).await;
+
+        app.logout().await;
+        app.signup("integration-test-other-user").await;
+
+        let response = app.is_user_admin_of_project(&project).await;
+        assert_eq!(response.status(), StatusCode::OK);
+
+        let user_admin_status: UserAdminStatus = response.json().await.unwrap();
+        assert_eq!(user_admin_status.is_user_admin, false);
+    }
+
+    #[tokio::test]
+    async fn returns_false_when_user_is_not_logged_in() {
+        let app = common::spawn_test_app().await;
+        app.signup("integration-test").await;
+
+        let project = app.get_test_public_project();
+        app.create_project(&project.info).await;
+
+        app.logout().await;
+
+        let response = app.is_user_admin_of_project(&project).await;
+        assert_eq!(response.status(), StatusCode::OK);
+
+        let user_admin_status: UserAdminStatus = response.json().await.unwrap();
+        assert_eq!(user_admin_status.is_user_admin, false);
     }
 }
 

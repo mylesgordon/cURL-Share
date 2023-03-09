@@ -2,7 +2,7 @@ dev:
 	cargo watch -x run
 
 increaselimit:
-	ulimit -n 200000
+	ulimit -n 250000
 
 initdatabase:
 	sqlx database create && sqlx migrate run

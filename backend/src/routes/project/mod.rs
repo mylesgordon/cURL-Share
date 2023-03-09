@@ -9,6 +9,7 @@ pub fn project_routes(cfg: &mut web::ServiceConfig) {
         .service(delete_project)
         .service(get_project)
         .service(update_project)
+        .service(check_user_admin_permission_for_project)
         .service(create_curl_group)
         .service(get_curl_group)
         .service(update_curl_group);

@@ -157,6 +157,16 @@ impl TestApplication {
             .expect("Failed to send update project request")
     }
 
+    pub async fn is_user_admin_of_project(&self, project: &Project) -> reqwest::Response {
+        let url = self.generate_url(format!("project/{}/is-user-admin", project.info.id));
+
+        self.client
+            .get(url)
+            .send()
+            .await
+            .expect("Failed to send update project request")
+    }
+
     pub async fn create_curl_group(
         &self,
         project_id: i64,

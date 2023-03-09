@@ -8,7 +8,7 @@ use actix_session::Session;
 use actix_web::{delete, get, post, web, HttpResponse, Responder};
 use sqlx::SqlitePool;
 
-use super::types::ProjectError;
+use super::types::{ProjectError, UserAdminStatus};
 
 #[get("/project")]
 #[tracing::instrument(name = "Getting projects.", skip(pool, session))]
@@ -89,6 +89,22 @@ async fn create_curl_group(
         Ok(curl_group_id) => HttpResponse::Ok().json(Id { id: curl_group_id }),
         Err(e) => e.into(),
     }
+}
+
+#[get("/project/{project_id}/is-user-admin")]
+#[tracing::instrument(name = "Getting user admin status.", skip(pool, session))]
+async fn check_user_admin_permission_for_project(
+    params: web::Path<i64>,
+    pool: web::Data<SqlitePool>,
+    session: Session,
+) -> impl Responder {
+    let is_user_admin = match get_user_id(&session).await {
+        Ok(user_id) => check_user_has_project_admin_permission(user_id, *params, &pool)
+            .await
+            .is_ok(),
+        Err(_) => false,
+    };
+    HttpResponse::Ok().json(UserAdminStatus { is_user_admin })
 }
 
 #[get("/group/{group_id}")]

@@ -59,6 +59,12 @@ pub struct Id {
     pub id: i64,
 }
 
+#[derive(Deserialize, Serialize)]
+pub struct UserAdminStatus {
+    #[serde(rename = "isUserAdmin")]
+    pub is_user_admin: bool,
+}
+
 #[derive(Debug, Default, Deserialize)]
 pub struct ProjectParams {
     pub search: String,
