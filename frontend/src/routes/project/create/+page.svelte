@@ -24,7 +24,7 @@
 	function onSubmit(e: SubmitEvent) {
 		try {
 			sendCreateProjectRequest().then((response) => {
-				goto(`project/${response.id}`);
+				goto(`/project/${response.id}`);
 			});
 		} catch (e) {
 			console.error(e);
