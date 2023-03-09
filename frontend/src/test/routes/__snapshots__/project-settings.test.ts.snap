@@ -116,7 +116,7 @@ exports[`Project page > should match snapshot 1`] = `
           class="label s-JZthjkXlZrq3"
           for="admins"
         >
-          Administrators
+          Administrators (comma separated)
         </label>
          
         <input
@@ -135,7 +135,7 @@ exports[`Project page > should match snapshot 1`] = `
           class="label s-JZthjkXlZrq3"
           for="collaborators"
         >
-          Collaborators
+          Collaborators (comma separated)
         </label>
          
         <input
@@ -154,7 +154,7 @@ exports[`Project page > should match snapshot 1`] = `
           class="label s-JZthjkXlZrq3"
           for="environments"
         >
-          Environments
+          Environments (comma separated)
         </label>
          
         <input

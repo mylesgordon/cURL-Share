@@ -74,9 +74,19 @@
 		<Input isRounded id="name" label="Name" bind:value={name} />
 		<Input isRounded id="description" label="Description" bind:value={description} />
 		<VisibilityInput bind:visibility />
-		<Input isRounded id="admins" label="Administrators" bind:value={adminText} />
-		<Input isRounded id="collaborators" label="Collaborators" bind:value={collaboratorText} />
-		<Input isRounded id="environments" label="Environments" bind:value={environments} />
+		<Input isRounded id="admins" label="Administrators (comma separated)" bind:value={adminText} />
+		<Input
+			isRounded
+			id="collaborators"
+			label="Collaborators (comma separated)"
+			bind:value={collaboratorText}
+		/>
+		<Input
+			isRounded
+			id="environments"
+			label="Environments (comma separated)"
+			bind:value={environments}
+		/>
 
 		<div class="flex flex-row gap-2 justify-center">
 			<Button isBordered isRounded mode="primary" type="submit">Save</Button>
