@@ -4,6 +4,7 @@
 	import Plus from 'virtual:icons/fa/plus';
 	import ProjectListEntry from '$lib/components/ProjectListEntry.svelte';
 	import type { PageData } from './$types';
+	import { isLoggedIn } from '$lib/stores';
 
 	export let data: PageData;
 </script>
@@ -12,9 +13,11 @@
 
 <div class="flex flex-row gap-2">
 	<h2>Projects</h2>
-	<IconLink description="Create project" href="/project/create">
-		<Plus />
-	</IconLink>
+	{#if $isLoggedIn}
+		<IconLink description="Create project" href="/project/create">
+			<Plus />
+		</IconLink>
+	{/if}
 </div>
 
 {#if data.data.length}

@@ -7,16 +7,18 @@
 	import Settings from 'virtual:icons/fa/gear';
 
 	export let data: PageData;
-	const { project } = data;
+	const { adminStatus, project } = data;
 </script>
 
 {#if project}
 	<div class="flex flex-row justify-between">
 		<div class="flex flex-row gap-2">
 			<h1>{project.info.name}</h1>
-			<IconLink description="Project settings" href={`/project/${project.info.id}/settings`}>
-				<Settings />
-			</IconLink>
+			{#if adminStatus.isUserAdmin }
+				<IconLink description="Project settings" href={`/project/${project.info.id}/settings`}>
+					<Settings />
+				</IconLink>
+			{/if}
 		</div>
 	</div>
 
@@ -29,4 +31,6 @@
 	{:else}
 		<p>No groups available</p>
 	{/if}
+{:else}
+	<p>Something went wrong loading this project - please ensure you have permission and try again.</p>
 {/if}

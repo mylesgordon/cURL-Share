@@ -8,6 +8,10 @@ type CreateProjectResponse = {
 	id: number;
 };
 
+type ProjectAdminStatus = {
+	isUserAdmin: boolean;
+}
+
 type Fetch = typeof fetch;
 
 export async function fetchIsLoggedIn(fetch: Fetch): Promise<boolean> {
@@ -23,6 +27,17 @@ export async function fetchIsLoggedIn(fetch: Fetch): Promise<boolean> {
 
 export async function fetchProject(fetch: Fetch, projectId: string): Promise<Project> {
 	const projectResponse = await fetch(`${url}/api/v1/project/${projectId}`, {
+		method: 'GET',
+		mode: 'cors',
+		headers: { 'Access-Control-Allow-Origin': url },
+		credentials: 'include'
+	});
+
+	return await projectResponse.json();
+}
+
+export async function fetchProjectAdminStatus(fetch: Fetch, projectId: string): Promise<ProjectAdminStatus> {
+	const projectResponse = await fetch(`${url}/api/v1/project/${projectId}/is-user-admin`, {
 		method: 'GET',
 		mode: 'cors',
 		headers: { 'Access-Control-Allow-Origin': url },
