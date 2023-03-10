@@ -38,6 +38,11 @@ impl Application {
             ApplicationPoolSettings::Test => Self::get_sqlite_test_pool().await,
         };
 
+        sqlx::migrate!("./migrations")
+            .run(&db_pool)
+            .await
+            .expect("Failed to migrate database");
+
         let port = listener.local_addr()?.port();
         let server = run(db_pool, listener)?;
         Ok(Self { port, server })
@@ -59,10 +64,6 @@ impl Application {
             .connect("sqlite::memory:")
             .await
             .unwrap();
-        sqlx::migrate!("./migrations")
-            .run(&pool)
-            .await
-            .expect("Failed to migrate database");
 
         pool
     }

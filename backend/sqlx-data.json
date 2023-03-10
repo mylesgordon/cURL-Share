@@ -1,0 +1,513 @@
+{
+  "db": "SQLite",
+  "09a6d8c58d6afb13a702079d7ade7b5651e516d171757373eac0aa13d7d1280b": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id",
+          "ordinal": 0,
+          "type_info": "Int64"
+        },
+        {
+          "name": "curls",
+          "ordinal": 1,
+          "type_info": "Text"
+        },
+        {
+          "name": "description",
+          "ordinal": 2,
+          "type_info": "Text"
+        },
+        {
+          "name": "labels",
+          "ordinal": 3,
+          "type_info": "Text"
+        },
+        {
+          "name": "name",
+          "ordinal": 4,
+          "type_info": "Text"
+        },
+        {
+          "name": "project_id",
+          "ordinal": 5,
+          "type_info": "Int64"
+        }
+      ],
+      "nullable": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "parameters": {
+        "Right": 1
+      }
+    },
+    "query": "SELECT * FROM curl_group WHERE id = ?"
+  },
+  "100e4526114482b37d0487645cde06d0e0d12c84137d8f02e308e5b2fb6db80c": {
+    "describe": {
+      "columns": [
+        {
+          "name": "name",
+          "ordinal": 0,
+          "type_info": "Text"
+        }
+      ],
+      "nullable": [
+        false
+      ],
+      "parameters": {
+        "Right": 1
+      }
+    },
+    "query": "SELECT name FROM user \n        LEFT JOIN project_collaborator ON project_collaborator.user_id = user.id\n        WHERE project_collaborator.project_id = ?\n    "
+  },
+  "292cba73c46f250a4cde606d95f2de2b916e3530e71e08eeec0a181ad6d99284": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id",
+          "ordinal": 0,
+          "type_info": "Int64"
+        }
+      ],
+      "nullable": [
+        false
+      ],
+      "parameters": {
+        "Right": 1
+      }
+    },
+    "query": "SELECT id FROM project WHERE id = ?"
+  },
+  "384f667fc49b1579fd2d09bf537efd85694b76e7244256f5ebeb6fc93bfcad7c": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id",
+          "ordinal": 0,
+          "type_info": "Int64"
+        },
+        {
+          "name": "environments",
+          "ordinal": 1,
+          "type_info": "Text"
+        },
+        {
+          "name": "description",
+          "ordinal": 2,
+          "type_info": "Text"
+        },
+        {
+          "name": "name",
+          "ordinal": 3,
+          "type_info": "Text"
+        },
+        {
+          "name": "visibility",
+          "ordinal": 4,
+          "type_info": "Text"
+        }
+      ],
+      "nullable": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "parameters": {
+        "Right": 4
+      }
+    },
+    "query": "\n            SELECT id, environments, description, name, visibility FROM project\n            LEFT JOIN project_admin ON project_admin.project_id = project.id AND project_admin.user_id = ?\n            LEFT JOIN project_collaborator ON project_collaborator.project_id = project.id AND project_collaborator.user_id = ?\n            WHERE visibility = \"Public\" OR project_admin.user_id = ? OR project_collaborator.user_id = ?;"
+  },
+  "42843f6d8ba2a96c188994d2eda49c2d8223533814ce43ee42da1df270e15775": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id",
+          "ordinal": 0,
+          "type_info": "Int64"
+        }
+      ],
+      "nullable": [
+        false
+      ],
+      "parameters": {
+        "Right": 2
+      }
+    },
+    "query": "INSERT INTO user (name, password_hash) VALUES (?,?) RETURNING id"
+  },
+  "44e89edf29cdd72ae400c0d9939e5ca56430143cbde037170fae008b8e53e9f3": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id",
+          "ordinal": 0,
+          "type_info": "Int64"
+        }
+      ],
+      "nullable": [
+        false
+      ],
+      "parameters": {
+        "Right": 4
+      }
+    },
+    "query": "INSERT INTO project (environments, description, name, visibility) VALUES (?, ?, ?, ?) RETURNING id"
+  },
+  "4a7569925b37a9393dba5b04bd250d632bdef3fb456516e464e2a0a62e0d1e29": {
+    "describe": {
+      "columns": [
+        {
+          "name": "project_id",
+          "ordinal": 0,
+          "type_info": "Int64"
+        }
+      ],
+      "nullable": [
+        false
+      ],
+      "parameters": {
+        "Right": 1
+      }
+    },
+    "query": "SELECT project_id FROM curl_group WHERE id = ?"
+  },
+  "61afd28dde48513030319f7ea6dd96541678ebbf95cc2447acad062fc77dbc9d": {
+    "describe": {
+      "columns": [
+        {
+          "name": "project_id",
+          "ordinal": 0,
+          "type_info": "Int64"
+        },
+        {
+          "name": "user_id",
+          "ordinal": 1,
+          "type_info": "Int64"
+        }
+      ],
+      "nullable": [
+        false,
+        false
+      ],
+      "parameters": {
+        "Right": 2
+      }
+    },
+    "query": "SELECT * FROM project_collaborator WHERE project_id = ? AND user_id = ?"
+  },
+  "6ed2ff815623b698bb942135f0d8061766b44bbdba77e3b1fbe93d10012d4e5c": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Right": 2
+      }
+    },
+    "query": "INSERT INTO project_collaborator (project_id, user_id) VALUES (?, (SELECT id FROM user WHERE name = ?))"
+  },
+  "6ee89534611ef30341bf74e40118b6b950716e45085ecd97534e7e20b37bf534": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Right": 1
+      }
+    },
+    "query": "DELETE FROM project_collaborator WHERE user_id in (\n        SELECT user_id FROM project_collaborator\n        LEFT JOIN user ON user.id = project_collaborator.user_id\n        WHERE user.name NOT IN (?)\n    )"
+  },
+  "7bb92bcb1986426da461e104acb3393748231fcc6fc5482592c916ee20014f0d": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Right": 1
+      }
+    },
+    "query": "DELETE FROM project_admin WHERE user_id in (\n        SELECT user_id FROM project_admin\n        LEFT JOIN user ON user.id = project_admin.user_id\n        WHERE user.name NOT IN (?)\n    )"
+  },
+  "862601b92e6ff91ffdb7660ccc1c260c61829561e1af4326c33c935800713590": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Right": 2
+      }
+    },
+    "query": "INSERT INTO project_admin (project_id, user_id) VALUES (?, ?)"
+  },
+  "8f9c1765d260729222b172471ca2cd186d7a31ab57f0603926bc45c1bce9bae3": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Right": 1
+      }
+    },
+    "query": "DELETE FROM user WHERE id=?"
+  },
+  "9debf929ae6711bb225520ceb73177a2690ebf133ebf7014131412b36b743bf5": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Right": 5
+      }
+    },
+    "query": "UPDATE project SET environments = ?, description = ?, name = ?, visibility = ? WHERE id = ?"
+  },
+  "b356bea8e74bea601e9dc6b348ef24da24c5f502a12cbd5abd092a2f469f2705": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Right": 5
+      }
+    },
+    "query": "UPDATE curl_group SET curls = ?, description = ?, labels = ?, name = ? WHERE id = ?"
+  },
+  "b5ff3128ec9b96ead75b2a1ea567ec729fdd560e231d936a34ec2a52410821c5": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id",
+          "ordinal": 0,
+          "type_info": "Int64"
+        }
+      ],
+      "nullable": [
+        false
+      ],
+      "parameters": {
+        "Right": 5
+      }
+    },
+    "query": "INSERT INTO curl_group (curls, description, labels, name, project_id) VALUES (?, ?, ?, ?, ?) RETURNING id"
+  },
+  "b851faa5ba4c9b44a81dd4f518e90bd886bc60bc1ff10863920becc8c55c51aa": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id",
+          "ordinal": 0,
+          "type_info": "Int64"
+        },
+        {
+          "name": "environments",
+          "ordinal": 1,
+          "type_info": "Text"
+        },
+        {
+          "name": "description",
+          "ordinal": 2,
+          "type_info": "Text"
+        },
+        {
+          "name": "name",
+          "ordinal": 3,
+          "type_info": "Text"
+        },
+        {
+          "name": "visibility",
+          "ordinal": 4,
+          "type_info": "Text"
+        }
+      ],
+      "nullable": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "parameters": {
+        "Right": 0
+      }
+    },
+    "query": "SELECT * FROM project WHERE visibility = \"Public\""
+  },
+  "c854801d272cb65f5e2b8e85e10098a328d9d77323b0a574e2dc517385fd2dd7": {
+    "describe": {
+      "columns": [
+        {
+          "name": "name",
+          "ordinal": 0,
+          "type_info": "Text"
+        }
+      ],
+      "nullable": [
+        false
+      ],
+      "parameters": {
+        "Right": 1
+      }
+    },
+    "query": "SELECT name FROM user \n        LEFT JOIN project_admin ON project_admin.user_id = user.id\n        WHERE project_admin.project_id = ?\n    "
+  },
+  "cf51d2ddcf5cefbc025dba33f1ba788448f5dc8961abc59e4bc2329ce916a2ee": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id",
+          "ordinal": 0,
+          "type_info": "Int64"
+        },
+        {
+          "name": "password_hash",
+          "ordinal": 1,
+          "type_info": "Text"
+        }
+      ],
+      "nullable": [
+        false,
+        false
+      ],
+      "parameters": {
+        "Right": 1
+      }
+    },
+    "query": "SELECT id, password_hash FROM user WHERE name=?"
+  },
+  "d770be73665fc3b00baf1a02025240c93a38a9b8226deb0e8c279bc068b51a0d": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id",
+          "ordinal": 0,
+          "type_info": "Int64"
+        },
+        {
+          "name": "environments",
+          "ordinal": 1,
+          "type_info": "Text"
+        },
+        {
+          "name": "description",
+          "ordinal": 2,
+          "type_info": "Text"
+        },
+        {
+          "name": "name",
+          "ordinal": 3,
+          "type_info": "Text"
+        },
+        {
+          "name": "visibility",
+          "ordinal": 4,
+          "type_info": "Text"
+        }
+      ],
+      "nullable": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "parameters": {
+        "Right": 1
+      }
+    },
+    "query": "SELECT * FROM project WHERE id = ?"
+  },
+  "def15991db81d3e3e082b12c8e3f16329fb0135d5edb68cb10cda2c347a46183": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Right": 1
+      }
+    },
+    "query": "DELETE FROM project WHERE id = ?"
+  },
+  "e4aa430ff99009e5061d3ab6e089d482a7983363682b9342cc804d3d838cffa4": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id",
+          "ordinal": 0,
+          "type_info": "Int64"
+        },
+        {
+          "name": "curls",
+          "ordinal": 1,
+          "type_info": "Text"
+        },
+        {
+          "name": "description",
+          "ordinal": 2,
+          "type_info": "Text"
+        },
+        {
+          "name": "labels",
+          "ordinal": 3,
+          "type_info": "Text"
+        },
+        {
+          "name": "name",
+          "ordinal": 4,
+          "type_info": "Text"
+        },
+        {
+          "name": "project_id",
+          "ordinal": 5,
+          "type_info": "Int64"
+        }
+      ],
+      "nullable": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "parameters": {
+        "Right": 1
+      }
+    },
+    "query": "SELECT * FROM curl_group WHERE project_id = ?"
+  },
+  "e84432a21a795b8f95321e12897488d241646bddd1450015abbc8dd51f9b1433": {
+    "describe": {
+      "columns": [
+        {
+          "name": "project_id",
+          "ordinal": 0,
+          "type_info": "Int64"
+        },
+        {
+          "name": "user_id",
+          "ordinal": 1,
+          "type_info": "Int64"
+        }
+      ],
+      "nullable": [
+        false,
+        false
+      ],
+      "parameters": {
+        "Right": 2
+      }
+    },
+    "query": "SELECT * FROM project_admin WHERE project_id = ? AND user_id = ?"
+  },
+  "fd93fec3ad449f8038f95e554427bf2072a8f183aeff74ada18e6078bb847c94": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Right": 2
+      }
+    },
+    "query": "INSERT INTO project_admin (project_id, user_id) VALUES (?, (SELECT id FROM user WHERE name = ?))"
+  }
+}
