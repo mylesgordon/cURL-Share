@@ -1,4 +1,4 @@
-use std::net::TcpListener;
+use std::{net::TcpListener, env};
 
 use actix_cors::Cors;
 use actix_session::{config::PersistentSession, storage::CookieSessionStore, SessionMiddleware};
@@ -27,7 +27,8 @@ impl Application {
         port: u16,
         pool_settings: ApplicationPoolSettings,
     ) -> Result<Self, std::io::Error> {
-        let address = format!("localhost:{}", port);
+        let base_url = env::var("BASE_URL").unwrap_or_else(|_| "localhost".to_string());
+        let address = format!("{}:{}", base_url, port);
         let listener = TcpListener::bind(&address)?;
 
         let db_pool = match pool_settings {

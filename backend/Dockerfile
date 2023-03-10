@@ -1,4 +1,7 @@
 FROM rust:1-slim-buster
+WORKDIR /backend
+
 COPY ./ ./
 RUN cargo build --release
-CMD ["./target/release/backend"]
+
+CMD BASE_URL=0.0.0.0 ./target/release/backend
