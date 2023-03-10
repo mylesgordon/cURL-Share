@@ -9,41 +9,58 @@
 	let username: string;
 	let password: string;
 
-	async function onSubmit(e: SubmitEvent) {
-		let endpoint = '';
-		switch (e.submitter?.textContent) {
+	function getEndpointFromSubmitter(submitter: HTMLElement | null): string | null {
+		switch (submitter?.textContent) {
 			case 'Log In':
-				endpoint = 'log-in';
-				break;
+				return 'log-in';
 			case 'Sign Up':
-				endpoint = 'sign-up';
+				return 'sign-up';
+			default:
+				return null;
+		}
+	}
+
+	async function handleServerResponse(responseStatus: number) {
+		switch (responseStatus) {
+			case 200:
+			case 201:
+				isLoggedIn.set(true);
+				await goto('/');
+				break;
+			case 401:
+				errorText = 'Incorrect username and/or password - please try again.';
+				break;
+			case 409:
+				errorText = 'User with that username already exists - please try again.';
 				break;
 			default:
-				console.error('Submitter not identified.');
+				errorText = 'Unknown error - please try again.';
 				break;
+		}
+	}
+
+	async function onSubmit(e: SubmitEvent) {
+		username = username.trim();
+		password = password.trim();
+
+		if (!username || !password) {
+			errorText = 'Username or password fields empty - please try again.';
+			return;
+		}
+
+		const endpoint = getEndpointFromSubmitter(e.submitter);
+		if (!endpoint) {
+			console.error('Submitter not identified.');
+			return;
 		}
 
 		try {
 			const requestStatus = await logInRequest(fetch, endpoint, username, password);
-
-			switch (requestStatus) {
-				case 200:
-				case 201:
-					isLoggedIn.set(true);
-					await goto('/');
-					break;
-				case 401:
-					errorText = 'Incorrect username and/or password - please try again.';
-					break;
-				case 409:
-					errorText = 'User with that username already exists - please try again.';
-					break;
-				default:
-					errorText = 'Unknown error - please try again.';
-					break;
-			}
+			console.log(requestStatus);
+			handleServerResponse(requestStatus);
 		} catch (err) {
-			// FIXME
+			errorText = 'Unhandled error - please try again.';
+			console.error(err);
 		}
 	}
 </script>
