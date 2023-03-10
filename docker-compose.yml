@@ -1,0 +1,20 @@
+version: "3.9"
+services:
+  backend:
+    build: ./backend
+    networks:
+      - network
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build: ./frontend
+    depends_on:
+      - backend
+    networks:
+      - network
+    ports:
+      - "80:3000"
+
+networks:
+  network:
