@@ -80,6 +80,7 @@ fn run(db_pool: SqlitePool, listener: TcpListener) -> Result<Server, std::io::Er
             .wrap(
                 SessionMiddleware::builder(CookieSessionStore::default(), private_key.clone())
                     .cookie_same_site(actix_web::cookie::SameSite::Lax)
+                    .cookie_secure(false)
                     .session_lifecycle(
                         PersistentSession::default().session_ttl(time::Duration::days(5)),
                     )
