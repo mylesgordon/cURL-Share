@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Button, Input } from 'agnostic-svelte';
 	import { type ProjectInfo, Visibility } from '$lib/types';
-	import { createProjectRequest } from '$lib/api';
+	import { createProjectRequest } from '$lib/api.page';
 	import { goto } from '$app/navigation';
 	import Meta from '$lib/components/Meta.svelte';
 	import VisibilityInput from '$lib/components/VisibilityInput.svelte';

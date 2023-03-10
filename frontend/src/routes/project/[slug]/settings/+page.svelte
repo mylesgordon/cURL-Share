@@ -3,7 +3,7 @@
 	import Meta from '$lib/components/Meta.svelte';
 	import VisibilityInput from '$lib/components/VisibilityInput.svelte';
 
-	import { deleteProjectRequest, updateProjectRequest } from '$lib/api';
+	import { deleteProjectRequest, updateProjectRequest } from '$lib/api.page';
 	import { goto } from '$app/navigation';
 	import { splitAndTrim } from '$lib/common';
 	import type { PageData } from './$types';

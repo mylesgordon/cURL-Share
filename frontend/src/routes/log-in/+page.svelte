@@ -2,7 +2,7 @@
 	import { Button, ButtonGroup, Input } from 'agnostic-svelte';
 	import { goto } from '$app/navigation';
 	import { isLoggedIn } from '$lib/stores';
-	import { logInRequest } from '$lib/api';
+	import { logInRequest } from '$lib/api.page';
 	import Meta from '$lib/components/Meta.svelte';
 
 	let errorText: string;

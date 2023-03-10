@@ -1,4 +1,4 @@
-import { fetchIsLoggedIn } from '$lib/api';
+import { fetchIsLoggedIn } from '$lib/api.server';
 import type { LayoutServerLoad } from './$types';
 
 export const load = (async ({ fetch }) => {

@@ -1,4 +1,4 @@
-import { fetchProject, fetchProjectAdminStatus } from '$lib/api';
+import { fetchProject, fetchProjectAdminStatus } from '$lib/api.server';
 import type { PageServerLoad } from './$types';
 import type { Project } from '$lib/types';
 

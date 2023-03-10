@@ -1,3 +1,9 @@
+export type Fetch = typeof fetch;
+
+export type CreateProjectResponse = {
+	id: number;
+};
+
 export type CurlGroup = {
 	id: number;
 	curls: string;
