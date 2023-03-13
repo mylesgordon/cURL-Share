@@ -4,6 +4,7 @@
 	import type { PageData } from './$types';
 
 	import IconLink from '$lib/components/IconLink.svelte';
+	import Plus from 'virtual:icons/fa/plus';
 	import Settings from 'virtual:icons/fa/gear';
 
 	export let data: PageData;
@@ -15,6 +16,9 @@
 		<div class="flex flex-row gap-2">
 			<h1>{project.info.name}</h1>
 			{#if adminStatus.isUserAdmin}
+				<IconLink description="Create project" href={`/project/${project.info.id}/group/create`}>
+					<Plus />
+				</IconLink>
 				<IconLink description="Project settings" href={`/project/${project.info.id}/settings`}>
 					<Settings />
 				</IconLink>
