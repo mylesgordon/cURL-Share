@@ -1,3 +1,4 @@
-- properly unit test frontend
-- composite pk in project tables
-- int tests for get project including curl group
+- composite pk in project tables (unrealistic)
+- project settings unit test
+- all of the functional tests
+- viewing/creating/editing curl groups

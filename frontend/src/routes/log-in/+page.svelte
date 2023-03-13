@@ -56,7 +56,6 @@
 
 		try {
 			const requestStatus = await logInRequest(fetch, endpoint, username, password);
-			console.log(requestStatus);
 			handleServerResponse(requestStatus);
 		} catch (err) {
 			errorText = 'Unhandled error - please try again.';

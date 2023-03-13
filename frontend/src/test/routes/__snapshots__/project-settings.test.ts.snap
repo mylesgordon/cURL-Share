@@ -299,3 +299,19 @@ exports[`Project page > should match snapshot 2`] = `
   </div>
 </body>
 `;
+
+exports[`Project page > should match snapshot 3`] = `
+<body>
+  <div>
+    <p>
+      Failed to load project settings
+    </p>
+     
+    <div
+      id="dialog-root"
+    />
+    
+    <!--&lt;+page&gt;-->
+  </div>
+</body>
+`;
