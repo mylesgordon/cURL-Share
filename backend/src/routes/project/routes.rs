@@ -404,22 +404,24 @@ async fn update_project_admins_and_collaborators(
     let admin_list = generate_user_list(&project.admins).await;
     let collaborator_list = generate_user_list(&project.admins).await;
     sqlx::query!(
-        r#"DELETE FROM project_admin WHERE user_id in (
+        r#"DELETE FROM project_admin WHERE project_id = ? AND user_id in (
         SELECT user_id FROM project_admin
         LEFT JOIN user ON user.id = project_admin.user_id
         WHERE user.name NOT IN (?)
     )"#,
+        project.info.id,
         admin_list
     )
     .execute(pool)
     .await?;
 
     sqlx::query!(
-        r#"DELETE FROM project_collaborator WHERE user_id in (
+        r#"DELETE FROM project_collaborator WHERE project_id = ? AND user_id in (
         SELECT user_id FROM project_collaborator
         LEFT JOIN user ON user.id = project_collaborator.user_id
         WHERE user.name NOT IN (?)
     )"#,
+        project.info.id,
         collaborator_list
     )
     .execute(pool)

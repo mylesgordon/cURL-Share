@@ -214,25 +214,15 @@
     },
     "query": "INSERT INTO project_collaborator (project_id, user_id) VALUES (?, (SELECT id FROM user WHERE name = ?))"
   },
-  "6ee89534611ef30341bf74e40118b6b950716e45085ecd97534e7e20b37bf534": {
+  "848b6bc22e1462408b9ac753aed5ef222f5c35ebdc59dd69994740d765ed218d": {
     "describe": {
       "columns": [],
       "nullable": [],
       "parameters": {
-        "Right": 1
+        "Right": 2
       }
     },
-    "query": "DELETE FROM project_collaborator WHERE user_id in (\n        SELECT user_id FROM project_collaborator\n        LEFT JOIN user ON user.id = project_collaborator.user_id\n        WHERE user.name NOT IN (?)\n    )"
-  },
-  "7bb92bcb1986426da461e104acb3393748231fcc6fc5482592c916ee20014f0d": {
-    "describe": {
-      "columns": [],
-      "nullable": [],
-      "parameters": {
-        "Right": 1
-      }
-    },
-    "query": "DELETE FROM project_admin WHERE user_id in (\n        SELECT user_id FROM project_admin\n        LEFT JOIN user ON user.id = project_admin.user_id\n        WHERE user.name NOT IN (?)\n    )"
+    "query": "DELETE FROM project_collaborator WHERE project_id = ? AND user_id in (\n        SELECT user_id FROM project_collaborator\n        LEFT JOIN user ON user.id = project_collaborator.user_id\n        WHERE user.name NOT IN (?)\n    )"
   },
   "862601b92e6ff91ffdb7660ccc1c260c61829561e1af4326c33c935800713590": {
     "describe": {
@@ -253,6 +243,16 @@
       }
     },
     "query": "DELETE FROM user WHERE id=?"
+  },
+  "9142117c5ad11a091d8ae9a056fac17f26b3a6f61392811cc25c7446741c5e0e": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Right": 2
+      }
+    },
+    "query": "DELETE FROM project_admin WHERE project_id = ? AND user_id in (\n        SELECT user_id FROM project_admin\n        LEFT JOIN user ON user.id = project_admin.user_id\n        WHERE user.name NOT IN (?)\n    )"
   },
   "9debf929ae6711bb225520ceb73177a2690ebf133ebf7014131412b36b743bf5": {
     "describe": {
