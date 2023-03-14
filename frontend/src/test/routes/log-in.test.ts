@@ -1,3 +1,4 @@
+import '@testing-library/jest-dom';
 import { fireEvent, render } from '@testing-library/svelte';
 import { goto } from '$app/navigation';
 import { logInRequest } from '$lib/api.page';
@@ -13,10 +14,11 @@ describe('Log In page', () => {
 	function getPageElements() {
 		const usernameField = screen.getByLabelText('Username');
 		const passwordField = screen.getByLabelText('Password');
+		const cookiePolicyCheckbox = screen.getByTestId('cookie-checkbox');
 		const logInButton = screen.getByRole('button', { name: /Log In/i });
 		const signUpButton = screen.getByRole('button', { name: /Sign Up/i });
 
-		return { usernameField, passwordField, logInButton, signUpButton };
+		return { usernameField, passwordField, cookiePolicyCheckbox, logInButton, signUpButton };
 	}
 
 	testMatchingSnapshot(LogIn);
@@ -26,9 +28,23 @@ describe('Log In page', () => {
 		expect(document.title).toEqual('Log In | cURL Share');
 	});
 
+	it('disables the buttons until cookie policy accepted', async () => {
+		render(LogIn);
+		const { logInButton, signUpButton, cookiePolicyCheckbox } = getPageElements();
+
+		expect(logInButton).toBeDisabled();
+		expect(signUpButton).toBeDisabled();
+
+		await userEvent.click(cookiePolicyCheckbox);
+
+		expect(logInButton).not.toBeDisabled();
+		expect(signUpButton).not.toBeDisabled();
+	});
+
 	it('shows correct error message when username or password are empty', async () => {
 		render(LogIn);
-		const { logInButton, signUpButton, passwordField, usernameField } = getPageElements();
+		const { logInButton, signUpButton, cookiePolicyCheckbox, passwordField, usernameField } =
+			getPageElements();
 		const table = [
 			{ a: usernameField, b: passwordField },
 			{ a: passwordField, b: usernameField }
@@ -37,6 +53,7 @@ describe('Log In page', () => {
 		for (const { a, b } of table) {
 			await userEvent.clear(a);
 			await userEvent.type(b, 'notempty');
+			await fireEvent.click(cookiePolicyCheckbox);
 			await fireEvent.click(logInButton);
 			screen.getByText('Username or password fields empty - please try again.');
 			await fireEvent.click(signUpButton);
@@ -46,7 +63,8 @@ describe('Log In page', () => {
 
 	it('shows the correct error message depending on server response', async () => {
 		render(LogIn);
-		const { logInButton, signUpButton, passwordField, usernameField } = getPageElements();
+		const { logInButton, signUpButton, cookiePolicyCheckbox, passwordField, usernameField } =
+			getPageElements();
 		const table = [
 			{
 				statusCode: 401,
@@ -65,19 +83,22 @@ describe('Log In page', () => {
 			}
 		];
 
+		await userEvent.click(cookiePolicyCheckbox);
+
 		for (const { statusCode, expectedMessage, buttonElement } of table) {
 			logInRequest.mockReturnValue(statusCode);
 
 			await userEvent.type(usernameField, 'user');
 			await userEvent.type(passwordField, 'password');
-			await fireEvent.click(buttonElement);
+			await userEvent.click(buttonElement);
 			await screen.findByText(expectedMessage);
 		}
 	});
 
 	it('creates a correct API call', async () => {
 		render(LogIn);
-		const { logInButton, signUpButton, passwordField, usernameField } = getPageElements();
+		const { logInButton, signUpButton, cookiePolicyCheckbox, passwordField, usernameField } =
+			getPageElements();
 		const table = [
 			{
 				buttonElement: logInButton,
@@ -88,6 +109,8 @@ describe('Log In page', () => {
 				endpoint: 'sign-up'
 			}
 		];
+
+		await fireEvent.click(cookiePolicyCheckbox);
 
 		for (const { buttonElement, endpoint } of table) {
 			await userEvent.clear(usernameField);
@@ -103,7 +126,8 @@ describe('Log In page', () => {
 
 	it('redirects the user on succesful log in/sign up', async () => {
 		render(LogIn);
-		const { logInButton, signUpButton, passwordField, usernameField } = getPageElements();
+		const { logInButton, signUpButton, cookiePolicyCheckbox, passwordField, usernameField } =
+			getPageElements();
 		const table = [
 			{
 				buttonElement: logInButton,
@@ -114,6 +138,8 @@ describe('Log In page', () => {
 				statusCode: 201
 			}
 		];
+
+		await fireEvent.click(cookiePolicyCheckbox);
 
 		for (const { buttonElement, statusCode } of table) {
 			render(LogIn);

@@ -46,6 +46,53 @@ exports[`Log In page > should match snapshot 1`] = `
       </div>
       <!--&lt;Input&gt;-->
        
+      <p
+        class="text-center"
+      >
+        cURL Share uses cookies to store the user's current session. No information is stored within this
+		cookie apart from the user's unique ID.
+      </p>
+       
+      <div
+        class="m-auto"
+      >
+        <fieldset
+          class="checkbox-group checkbox-group-hidden s-K6jzjY3vjtlg"
+        >
+          <legend
+            class="checkbox-legend screenreader-only s-K6jzjY3vjtlg"
+          >
+            checkbox
+          </legend>
+           
+          <label
+            class="checkbox-label-wrap s-K6jzjY3vjtlg"
+          >
+            <input
+              class="checkbox s-K6jzjY3vjtlg"
+              data-testid="cookie-checkbox"
+              id="cookie-checkbox-cookie-agreed-0"
+              name="cookie-agreed"
+              type="checkbox"
+              value="agrees"
+            />
+             
+            <span
+              aria-hidden="true"
+              class="checkbox-label s-K6jzjY3vjtlg"
+            />
+             
+            <span
+              class="checkbox-label-copy s-K6jzjY3vjtlg"
+            >
+              I accept cURL Share's cookie policy
+            </span>
+             
+          </label>
+        </fieldset>
+        <!--&lt;ChoiceInput&gt;-->
+      </div>
+       
        
       <div
         aria-label="Form submission buttons"
@@ -53,7 +100,8 @@ exports[`Log In page > should match snapshot 1`] = `
         role="group"
       >
         <button
-          class="btn btn-primary btn-bordered btn-grouped s-NAQuwh5ehqbV"
+          class="btn btn-primary btn-bordered btn-grouped disabled s-NAQuwh5ehqbV"
+          disabled=""
           type="submit"
         >
           Log In
@@ -62,7 +110,8 @@ exports[`Log In page > should match snapshot 1`] = `
         <!--&lt;Button&gt;-->
          
         <button
-          class="btn btn-primary btn-bordered btn-grouped s-NAQuwh5ehqbV"
+          class="btn btn-primary btn-bordered btn-grouped disabled s-NAQuwh5ehqbV"
+          disabled=""
           type="submit"
         >
           Sign Up

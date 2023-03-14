@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button, ButtonGroup, Input } from 'agnostic-svelte';
+	import { Button, ButtonGroup, ChoiceInput, Input } from 'agnostic-svelte';
 	import { goto } from '$app/navigation';
 	import { isLoggedIn } from '$lib/stores';
 	import { logInRequest } from '$lib/api.page';
@@ -8,6 +8,15 @@
 	let errorText: string;
 	let username: string;
 	let password: string;
+
+	let checkedOption: any[] = [];
+	let cookieAgreed: boolean;
+
+	$: if (checkedOption[0] !== undefined) {
+		cookieAgreed = checkedOption[0] === 'agrees';
+	} else {
+		cookieAgreed = false;
+	}
 
 	function getEndpointFromSubmitter(submitter: HTMLElement | null): string | null {
 		switch (submitter?.textContent) {
@@ -70,12 +79,34 @@
 	<Input isRounded id="username" label="Username" bind:value={username} />
 	<Input isRounded id="password" type="password" label="Password" bind:value={password} />
 
+	<p class="text-center">
+		cURL Share uses cookies to store the user's current session. No information is stored within
+		this cookie apart from the user's unique ID.
+	</p>
+
+	<div class="m-auto">
+		<ChoiceInput
+			type="checkbox"
+			id="cookie-checkbox"
+			data-testid="cookie-checkbox"
+			options={[
+				{ name: 'cookie-agreed', value: 'agrees', label: "I accept cURL Share's cookie policy" }
+			]}
+			bind:checked={checkedOption}
+			isFieldset={false}
+		/>
+	</div>
+
 	{#if errorText}
-		<p id="error-text">{errorText}</p>
+		<p class="text-center" id="error-text">{errorText}</p>
 	{/if}
 
 	<ButtonGroup ariaLabel="Form submission buttons" css="self-center">
-		<Button isGrouped isBordered mode="primary" type="submit">Log In</Button>
-		<Button isGrouped isBordered mode="primary" type="submit">Sign Up</Button>
+		<Button isGrouped isBordered mode="primary" type="submit" isDisabled={!cookieAgreed}
+			>Log In</Button
+		>
+		<Button isGrouped isBordered mode="primary" type="submit" isDisabled={!cookieAgreed}
+			>Sign Up</Button
+		>
 	</ButtonGroup>
 </form>
