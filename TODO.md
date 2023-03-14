@@ -1,4 +1,6 @@
 - composite pk in project tables (unrealistic)
-- project settings unit test
 - all of the functional tests
-- viewing/creating/editing curl groups
+- aria live stuff on curl group create
+- screen reader test
+- project settings error handling
+- password requirements
