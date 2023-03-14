@@ -1,7 +1,19 @@
 export type Fetch = typeof fetch;
 
+export enum ButtonType {
+	Up = -1,
+	Down = 1
+}
+
 export type CreateProjectResponse = {
 	id: number;
+};
+
+export type Curl = {
+	id: number;
+	name: string;
+	description: string;
+	rawQuery: string;
 };
 
 export type CurlGroup = {

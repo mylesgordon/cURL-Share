@@ -1,80 +1,75 @@
 <script lang="ts">
 	import { Button } from 'agnostic-svelte';
+	import { createCurlGroupRequest } from '$lib/api.page';
 	import { flip } from 'svelte/animate';
-	import { splitAndTrim } from '$lib/common';
+	import { goto } from '$app/navigation';
 	import Arrows from 'virtual:icons/fa/arrows';
 	import Input from 'agnostic-svelte/components/Input/Input.svelte';
+	import type { Curl, CurlGroup } from '$lib/types';
 
 	enum ButtonType {
 		Up = -1,
 		Down = 1
 	}
-	type Test = {
-		id: number;
-		name: string;
-		description: string;
-		raw_query: string;
-	};
-	let testData: Array<Test> = [
-		{
-			id: 0,
-			name: 'Test123',
-			description: 'This query does something really cool - trust me.',
-			raw_query: 'abc123'
-		},
-		{
-			id: 1,
-			name: 'ASD',
-			description: 'This is something different. This query does something less cool.',
-			raw_query: 'abc123'
-		}
-	];
-	const flipDurationMs = 750;
 
-	let labels: Array<string> = [];
-	$: labels = splitAndTrim(labelsText);
+	export let projectId: number;
 
+	let curlList: Array<Curl> = [];
 	let description: string;
-	let labelsText: string = labels.join('/');
+	let labels: string;
 	let name: string;
 	let rawCurlInput: string;
+	let maxId = Math.max(...curlList.map((data) => data.id), 0);
 
-	let maxId = Math.max(...testData.map((data) => data.id), 0);
+	async function createCurlGroup(curlGroupObject: CurlGroup) {
+		try {
+			const { id } = await createCurlGroupRequest(window.fetch, curlGroupObject);
+			goto(`/project/${projectId}/group/${id}`);
+		} catch (e) {
+			console.log(e);
+		}
+	}
+
+	function onSubmit() {
+		const curlGroupObject: CurlGroup = {
+			id: -1,
+			description,
+			labels,
+			curls: JSON.stringify(curlList),
+			name,
+			project_id: projectId
+		};
+		createCurlGroup(curlGroupObject);
+	}
 
 	// cURLs
 	let hovering = -1;
 
-	$: console.log(testData);
-
 	function addCurl() {
 		maxId += 1;
-		testData = [
-			...testData,
+		curlList = [
+			...curlList,
 			{
 				id: maxId,
 				name: `cURL #${maxId}`,
 				description: 'Insert description here',
-				raw_query: rawCurlInput
+				rawQuery: rawCurlInput
 			}
 		];
 		rawCurlInput = '';
 	}
 
-	function onSubmit() {
-		console.log('TODO');
-	}
-
 	function buttonClick(index: number, buttonType: ButtonType) {
 		const itemDestination = (index + buttonType) as number;
-		if (testData[itemDestination] === undefined) {
+		if (curlList[itemDestination] === undefined) {
 			return;
 		}
 		swapItems(index, itemDestination);
 	}
 
 	function swapItems(a: number, b: number) {
-		[testData[a], testData[b]] = [testData[b], testData[a]];
-		testData = testData;
+		[curlList[a], curlList[b]] = [curlList[b], curlList[a]];
+		curlList = curlList;
 	}
 
 	function dragStart(event: DragEvent, itemIndex: number) {
@@ -96,17 +91,17 @@
 <form class="flex flex-col space-y-3 p-4" on:submit|preventDefault={onSubmit}>
 	<Input isRounded id="name" label="Name" bind:value={name} />
 	<Input isRounded id="description" label="Description" bind:value={description} />
-	<Input isRounded id="labels" label="Labels" bind:value={labelsText} />
+	<Input isRounded id="labels" label="Labels (comma separated)" bind:value={labels} />
 
 	<span>cURLs</span>
 	<!-- TODO: aria-describedby -->
 
 	<ol class="flex flex-col space-y-2">
-		{#each testData as data, index (data.id)}
+		{#each curlList as data, index (data.id)}
 			<li
 				class="flex flex-col space-y-2 border rounded-md p-2"
 				class:is-active={hovering === index}
-				animate:flip={{ duration: flipDurationMs }}
+				animate:flip={{ duration: 750 }}
 				on:dragover|preventDefault={() => {
 					hovering = index;
 				}}
@@ -136,7 +131,7 @@
 						<input id="description" class="input" bind:value={data.description} />
 
 						<label for="raw-query">Raw cURL query:</label>
-						<input id="raw-query" class="input" bind:value={data.raw_query} />
+						<input id="raw-query" class="input" bind:value={data.rawQuery} />
 
 						<div class="flex justify-end space-x-2">
 							<Button
@@ -152,7 +147,7 @@
 							<Button
 								isRounded
 								on:click={() => buttonClick(index, ButtonType.Down)}
-								isDisabled={index === testData.length - 1}
+								isDisabled={index === curlList.length - 1}
 							>
 								<span class="sr-only">Move {data.name} down</span>
 								<svg width="16" height="16" focusable="false" aria-hidden="true">

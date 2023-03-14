@@ -1,12 +1,23 @@
 import { get } from 'svelte/store';
 import { internalBackendUrl } from './stores';
-import type { Fetch, Project, ProjectInfo } from './types';
+import type { CurlGroup, Fetch, Project, ProjectInfo } from './types';
 
 const url = get(internalBackendUrl);
 
 type ProjectAdminStatus = {
 	isUserAdmin: boolean;
 };
+
+export async function fetchCurlGroup(fetch: Fetch, curlGroupId: number): Promise<CurlGroup> {
+	const response = await fetch(`${url}/api/v1/curl/${curlGroupId}`, {
+		method: 'GET',
+		mode: 'cors',
+		headers: { 'Access-Control-Allow-Origin': url },
+		credentials: 'include'
+	});
+
+	return await response.json();
+}
 
 export async function fetchIsLoggedIn(fetch: Fetch): Promise<boolean> {
 	const response = await fetch(`${url}/api/v1/user-status`, {

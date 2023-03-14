@@ -1,8 +1,23 @@
 import { externalBackendUrl } from './stores';
 import { get } from 'svelte/store';
-import type { CreateProjectResponse, Fetch, Project, ProjectInfo } from './types';
+import type { CreateProjectResponse, CurlGroup, Fetch, Project, ProjectInfo } from './types';
 
 const url = get(externalBackendUrl);
+
+export async function createCurlGroupRequest(
+	fetch: Fetch,
+	curlGroup: CurlGroup
+): Promise<CreateProjectResponse> {
+	const response = await fetch(`${url}/api/v1/project/${curlGroup.project_id}/group`, {
+		method: 'POST',
+		body: JSON.stringify(curlGroup),
+		mode: 'cors',
+		headers: { 'Access-Control-Allow-Origin': url, 'Content-Type': 'application/json' },
+		credentials: 'include'
+	});
+
+	return await response.json();
+}
 
 export async function createProjectRequest(
 	fetch: Fetch,
