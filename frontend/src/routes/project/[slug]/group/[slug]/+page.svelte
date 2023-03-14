@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button, Disclose, Input } from 'agnostic-svelte';
+	import { Button, Disclose } from 'agnostic-svelte';
 	import AgnosticInput from '$lib/components/AgnosticInput.svelte';
 	import Copy from 'virtual:icons/fa/copy';
 	import type { Curl } from '$lib/types';
@@ -41,9 +41,3 @@
 {:else}
 	<p>Failed to load cURL group. Please try again.</p>
 {/if}
-
-<style>
-	.a {
-		height: 2.375rem;
-	}
-</style>
