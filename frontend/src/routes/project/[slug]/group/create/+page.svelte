@@ -22,7 +22,7 @@
 {#if projectId != -1 && isLoggedIn}
 	<h1>Create new cURL group</h1>
 
-	<CurlGroupForm {projectId} curlGroup={newCurlGroup} />
+	<CurlGroupForm {projectId} curlGroup={newCurlGroup} editing={false} />
 {:else}
-	<p>Unable to load page. Please sign in or try again.</p>
+	<p>Unable to load page. Please refresh and try again.</p>
 {/if}

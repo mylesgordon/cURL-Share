@@ -10,7 +10,7 @@
 <Meta title="Editing a cURL group" />
 
 {#if success}
-	<h2>Editing cURL Group '{curlGroup.name}'</h2>
+	<h2>Editing '{curlGroup.name}'</h2>
 
 	<CurlGroupForm projectId={curlGroup.project_id} {curlGroup} editing />
 {:else}
