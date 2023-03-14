@@ -2,6 +2,8 @@
 	import { Button, Disclose } from 'agnostic-svelte';
 	import AgnosticInput from '$lib/components/AgnosticInput.svelte';
 	import Copy from 'virtual:icons/fa/copy';
+	import Edit from 'virtual:icons/fa/edit';
+	import IconLink from '$lib/components/IconLink.svelte';
 	import type { Curl } from '$lib/types';
 	import type { PageData } from './$types';
 
@@ -15,7 +17,15 @@
 </script>
 
 {#if success}
-	<h2>{curlGroup.name}</h2>
+	<div class="flex space-x-2">
+		<h2>{curlGroup.name}</h2>
+		<IconLink
+			description={`Edit ${curlGroup.name}`}
+			href={`/project/${curlGroup.project_id}/group/${curlGroup.id}/edit`}
+		>
+			<Edit />
+		</IconLink>
+	</div>
 	<h3 class="mt-2 mb-4">{curlGroup.description}</h3>
 
 	{#each curls as curl}

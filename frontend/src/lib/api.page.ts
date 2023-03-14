@@ -43,6 +43,16 @@ export async function deleteProjectRequest(fetch: Fetch, project_id: number): Pr
 	});
 }
 
+export async function updateCurlGroupRequest(fetch: Fetch, curlGroup: CurlGroup): Promise<void> {
+	await fetch(`${url}/api/v1/group/${curlGroup.id}`, {
+		method: 'POST',
+		body: JSON.stringify(curlGroup),
+		mode: 'cors',
+		headers: { 'Access-Control-Allow-Origin': url, 'Content-Type': 'application/json' },
+		credentials: 'include'
+	});
+}
+
 export async function updateProjectRequest(fetch: Fetch, project: Project): Promise<void> {
 	await fetch(`${url}/api/v1/project/${project.info.id}`, {
 		method: 'POST',

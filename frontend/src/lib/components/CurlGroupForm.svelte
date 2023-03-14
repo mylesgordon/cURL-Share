@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Button } from 'agnostic-svelte';
-	import { createCurlGroupRequest } from '$lib/api.page';
+	import { createCurlGroupRequest, updateCurlGroupRequest } from '$lib/api.page';
 	import { flip } from 'svelte/animate';
 	import { goto } from '$app/navigation';
 	import AgnosticInput from './AgnosticInput.svelte';
@@ -13,19 +13,23 @@
 		Down = 1
 	}
 
+	export let curlGroup: CurlGroup;
+	export let editing: boolean | undefined;
 	export let projectId: number;
 
-	let curlList: Array<Curl> = [];
-	let description: string;
-	let labels: string;
-	let name: string;
+	let curlList: Array<Curl> = JSON.parse(curlGroup.curls);
 	let rawCurlInput: string;
 	let maxId = Math.max(...curlList.map((data) => data.id), 0);
 
-	async function createCurlGroup(curlGroupObject: CurlGroup) {
+	async function createOrUpdateCurlGroup(curlGroupObject: CurlGroup) {
 		try {
-			const { id } = await createCurlGroupRequest(window.fetch, curlGroupObject);
-			goto(`/project/${projectId}/group/${id}`);
+			if (editing) {
+				await updateCurlGroupRequest(window.fetch, curlGroupObject);
+				goto(`/project/${projectId}/group/${curlGroupObject.id}`);
+			} else {
+				const { id } = await createCurlGroupRequest(window.fetch, curlGroupObject);
+				goto(`/project/${projectId}/group/${id}`);
+			}
 		} catch (e) {
 			console.log(e);
 		}
@@ -33,14 +37,10 @@
 
 	function onSubmit() {
 		const curlGroupObject: CurlGroup = {
-			id: -1,
-			description,
-			labels,
-			curls: JSON.stringify(curlList),
-			name,
-			project_id: projectId
+			...curlGroup,
+			curls: JSON.stringify(curlList)
 		};
-		createCurlGroup(curlGroupObject);
+		createOrUpdateCurlGroup(curlGroupObject);
 	}
 
 	// cURLs
@@ -90,9 +90,9 @@
 </script>
 
 <form class="flex flex-col space-y-3 p-4" on:submit|preventDefault={onSubmit}>
-	<Input isRounded id="name" label="Name" bind:value={name} />
-	<Input isRounded id="description" label="Description" bind:value={description} />
-	<Input isRounded id="labels" label="Labels (comma separated)" bind:value={labels} />
+	<Input isRounded id="name" label="Name" bind:value={curlGroup.name} />
+	<Input isRounded id="description" label="Description" bind:value={curlGroup.description} />
+	<Input isRounded id="labels" label="Labels (comma separated)" bind:value={curlGroup.labels} />
 
 	<span>cURLs</span>
 	<!-- TODO: aria-describedby -->
@@ -162,7 +162,13 @@
 		<Button isRounded on:click={addCurl} css="ml-2 self-end add-button">Add</Button>
 	</div>
 
-	<Button isBordered isRounded mode="primary" type="submit">Create</Button>
+	<Button isBordered isRounded mode="primary" type="submit">
+		{#if editing}
+			Finish
+		{:else}
+			Create
+		{/if}
+	</Button>
 </form>
 
 <svg xmlns="http://www.w3.org/2000/svg" class="visuallyHidden" focusable="false" aria-hidden="true">
