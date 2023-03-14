@@ -8,8 +8,8 @@ type ProjectAdminStatus = {
 	isUserAdmin: boolean;
 };
 
-export async function fetchCurlGroup(fetch: Fetch, curlGroupId: number): Promise<CurlGroup> {
-	const response = await fetch(`${url}/api/v1/curl/${curlGroupId}`, {
+export async function fetchCurlGroup(fetch: Fetch, curlGroupId: string): Promise<CurlGroup> {
+	const response = await fetch(`${url}/api/v1/group/${curlGroupId}`, {
 		method: 'GET',
 		mode: 'cors',
 		headers: { 'Access-Control-Allow-Origin': url },

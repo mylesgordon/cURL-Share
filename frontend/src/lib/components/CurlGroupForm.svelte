@@ -3,6 +3,7 @@
 	import { createCurlGroupRequest } from '$lib/api.page';
 	import { flip } from 'svelte/animate';
 	import { goto } from '$app/navigation';
+	import AgnosticInput from './AgnosticInput.svelte';
 	import Arrows from 'virtual:icons/fa/arrows';
 	import Input from 'agnostic-svelte/components/Input/Input.svelte';
 	import type { Curl, CurlGroup } from '$lib/types';
@@ -123,15 +124,10 @@
 						<Arrows />
 					</div>
 
-					<div class="pt-2 pb-2 pr-2">
-						<label for="name">Name:</label>
-						<input id="name" class="input" bind:value={data.name} />
-
-						<label for="description">Description:</label>
-						<input id="description" class="input" bind:value={data.description} />
-
-						<label for="raw-query">Raw cURL query:</label>
-						<input id="raw-query" class="input" bind:value={data.rawQuery} />
+					<div class="pt-2 pb-2 pr-2 w-full flex flex-col space-y-2">
+						<AgnosticInput id="name" label="Name:" bind:value={data.name} />
+						<AgnosticInput id="description" label="Description:" bind:value={data.description} />
+						<AgnosticInput id="raw-query" label="Raw cURL Query:" bind:value={data.rawQuery} />
 
 						<div class="flex justify-end space-x-2">
 							<Button
@@ -183,34 +179,6 @@
 <style>
 	.add-button {
 		height: 2.375rem;
-	}
-
-	/* There is an issue with undefined bindings with agnostic ui's svelte implementation.
-	This is just a direct copy of the input, input-rounded and label css styles */
-	.input {
-		color: var(--agnostic-font-color, var(--agnostic-dark));
-		font-family: var(--agnostic-font-family-body);
-		font-weight: var(--agnostic-font-weight, 300);
-		font-size: var(--agnostic-font-size, 1rem);
-		line-height: var(--agnostic-line-height, var(--fluid-20, 1.25rem));
-		width: 100%;
-		max-width: 100%;
-		border-style: solid;
-		border-width: var(--agnostic-input-border-size, 1px);
-		border-color: var(--agnostic-input-border-color, var(--agnostic-gray-light));
-		padding-block-start: var(--agnostic-input-vertical-pad, 0.5rem);
-		padding-block-end: var(--agnostic-input-vertical-pad, 0.5rem);
-		padding-inline-start: var(--agnostic-input-side-padding, 0.75rem);
-		padding-inline-end: var(--agnostic-input-side-padding, 0.75rem);
-		transition-property: box-shadow;
-		transition-duration: var(--agnostic-input-timing, var(--agnostic-timing-medium));
-		display: inline-block;
-		margin-block-start: 0;
-		margin-inline-start: 0;
-		margin-inline-end: 0;
-		margin-block-end: var(--agnostic-input-label-pad, 0.375rem);
-		vertical-align: initial;
-		border-radius: var(--agnostic-radius, 0.25rem);
 	}
 
 	.is-active {
