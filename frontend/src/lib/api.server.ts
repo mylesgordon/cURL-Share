@@ -27,7 +27,7 @@ export async function fetchIsLoggedIn(fetch: Fetch): Promise<boolean> {
 		credentials: 'include'
 	});
 	const responseJson = await response.json();
-	return responseJson.is_logged_in ? responseJson.is_logged_in : false;
+	return responseJson.is_logged_in ?? false;
 }
 
 export async function fetchProject(fetch: Fetch, projectId: string): Promise<Project> {

@@ -4,10 +4,10 @@ exports[`Project page > should match snapshot 1`] = `
 <body>
   <div>
     <div
-      class="flex flex-row justify-between"
+      class="flex flex-row gap-2 justify-between items-center"
     >
       <div
-        class="flex flex-row gap-2"
+        class="flex gap-2 items-center"
       >
         <h1>
           Cool project
@@ -49,6 +49,62 @@ exports[`Project page > should match snapshot 1`] = `
         </a>
         <!--&lt;IconLink&gt;-->
       </div>
+       
+      <div
+        class="flex s-MMN3rRE-BmEv"
+      >
+        <div
+          class="w-100 s-JZthjkXlZrq3"
+        >
+          <label
+            class="label screenreader-only s-JZthjkXlZrq3"
+            for=""
+          >
+            
+          </label>
+           
+          <input
+            class="input s-JZthjkXlZrq3"
+            id=""
+            placeholder="Search..."
+            type="text"
+          />
+           
+        </div>
+        <!--&lt;Input&gt;-->
+         
+        <select
+          class="s-MMN3rRE-BmEv"
+          id="labels"
+          name="labels"
+        >
+          <option
+            class="s-MMN3rRE-BmEv"
+            value=""
+          >
+            Choose a label
+          </option>
+          <option
+            class="s-MMN3rRE-BmEv"
+            value="Feature"
+          >
+            Feature
+          </option>
+          <option
+            class="s-MMN3rRE-BmEv"
+            value="User Journey"
+          >
+            User Journey
+          </option>
+          <option
+            class="s-MMN3rRE-BmEv"
+            value="IPB-xxxx"
+          >
+            IPB-xxxx
+          </option>
+        </select>
+      </div>
+      <!--&lt;Search&gt;-->
     </div>
      
     <!--&lt;Meta&gt;-->
@@ -179,16 +235,42 @@ exports[`Project page > should match snapshot 2`] = `
 <body>
   <div>
     <div
-      class="flex flex-row justify-between"
+      class="flex flex-row gap-2 justify-between items-center"
     >
       <div
-        class="flex flex-row gap-2"
+        class="flex gap-2 items-center"
       >
         <h1>
           Cool project
         </h1>
          
       </div>
+       
+      <div
+        class="flex s-MMN3rRE-BmEv"
+      >
+        <div
+          class="w-100 s-JZthjkXlZrq3"
+        >
+          <label
+            class="label screenreader-only s-JZthjkXlZrq3"
+            for=""
+          >
+            
+          </label>
+           
+          <input
+            class="input s-JZthjkXlZrq3"
+            id=""
+            placeholder="Search..."
+            type="text"
+          />
+           
+        </div>
+        <!--&lt;Input&gt;-->
+         
+      </div>
+      <!--&lt;Search&gt;-->
     </div>
      
     <!--&lt;Meta&gt;-->

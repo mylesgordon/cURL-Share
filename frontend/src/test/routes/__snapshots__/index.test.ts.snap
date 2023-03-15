@@ -6,12 +6,42 @@ exports[`Index page > should match snapshot 1`] = `
     <!--&lt;Meta&gt;-->
      
     <div
-      class="flex flex-row gap-2"
+      class="flex flex-row gap-2 justify-between items-center"
     >
-      <h2>
-        Projects
-      </h2>
+      <div
+        class="flex gap-2 items-center"
+      >
+        <h2>
+          Projects
+        </h2>
+         
+      </div>
        
+      <div
+        class="flex s-MMN3rRE-BmEv"
+      >
+        <div
+          class="w-100 s-JZthjkXlZrq3"
+        >
+          <label
+            class="label screenreader-only s-JZthjkXlZrq3"
+            for=""
+          >
+            
+          </label>
+           
+          <input
+            class="input s-JZthjkXlZrq3"
+            id=""
+            placeholder="Search..."
+            type="text"
+          />
+           
+        </div>
+        <!--&lt;Input&gt;-->
+         
+      </div>
+      <!--&lt;Search&gt;-->
     </div>
      
     
@@ -69,12 +99,42 @@ exports[`Index page > should match snapshot 2`] = `
     <!--&lt;Meta&gt;-->
      
     <div
-      class="flex flex-row gap-2"
+      class="flex flex-row gap-2 justify-between items-center"
     >
-      <h2>
-        Projects
-      </h2>
+      <div
+        class="flex gap-2 items-center"
+      >
+        <h2>
+          Projects
+        </h2>
+         
+      </div>
        
+      <div
+        class="flex s-MMN3rRE-BmEv"
+      >
+        <div
+          class="w-100 s-JZthjkXlZrq3"
+        >
+          <label
+            class="label screenreader-only s-JZthjkXlZrq3"
+            for=""
+          >
+            
+          </label>
+           
+          <input
+            class="input s-JZthjkXlZrq3"
+            id=""
+            placeholder="Search..."
+            type="text"
+          />
+           
+        </div>
+        <!--&lt;Input&gt;-->
+         
+      </div>
+      <!--&lt;Search&gt;-->
     </div>
      
     <p>
