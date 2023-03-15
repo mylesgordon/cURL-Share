@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { Card, Tag } from 'agnostic-svelte';
 
+	export let index: number;
+	export let length: number;
+
 	export let description: string;
 	export let id: number;
 	export let labels: string;
@@ -17,10 +20,15 @@
 		href={link}
 		class="p-4 flex-grow full truncate text-center project-title"
 		data-testid={dataTestIdPrefix + '-title'}
+		aria-label={`cURL group ${name}, ${index} of ${length}`}
 	>
 		{name}
 	</a>
-	<p class="p-4 flex-grow project-description" data-testid={dataTestIdPrefix + '-description'}>
+	<p
+		class="p-4 flex-grow project-description"
+		data-testid={dataTestIdPrefix + '-description'}
+		aria-label={`Description`}
+	>
 		{description}
 	</p>
 	<div

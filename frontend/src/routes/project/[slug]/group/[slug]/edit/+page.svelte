@@ -7,9 +7,9 @@
 	const { success, curlGroup } = data;
 </script>
 
-<Meta title="Editing a cURL group" />
-
 {#if success}
+	<Meta title={`Editing ${curlGroup.name}`} />
+
 	<h2>Editing '{curlGroup.name}'</h2>
 
 	<CurlGroupForm projectId={curlGroup.project_id} {curlGroup} editing />

@@ -7,6 +7,7 @@ exports[`ProjectListEntry component > should match snapshot 1`] = `
       class="card card-shadow card-rounded card-border mt-4 s-CTyDWs24qi3Z"
     >
       <a
+        aria-label="cURL group Login Journey, undefined of undefined"
         class="p-4 flex-grow full truncate text-center project-title s-kSbj4w364X09"
         data-testid="curl-group-list-entry-1-title"
         href="/project/1/group/1"
@@ -15,6 +16,7 @@ exports[`ProjectListEntry component > should match snapshot 1`] = `
       </a>
        
       <p
+        aria-label="Description"
         class="p-4 flex-grow project-description s-kSbj4w364X09"
         data-testid="curl-group-list-entry-1-description"
       >

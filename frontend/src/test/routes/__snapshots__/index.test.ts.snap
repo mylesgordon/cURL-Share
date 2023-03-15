@@ -49,6 +49,7 @@ exports[`Index page > should match snapshot 1`] = `
       class="card card-shadow card-rounded card-border mt-4 s-CTyDWs24qi3Z"
     >
       <a
+        aria-label="Project name the cool project, 1 of 2"
         class="p-4 w-48 truncate"
         data-testid="project-list-entry-1-title"
         href="/project/1"
@@ -57,6 +58,7 @@ exports[`Index page > should match snapshot 1`] = `
       </a>
        
       <p
+        aria-label="Description"
         class="p-4 flex-grow flex-shrink"
         data-testid="project-list-entry-1-description"
       >
@@ -70,6 +72,7 @@ exports[`Index page > should match snapshot 1`] = `
       class="card card-shadow card-rounded card-border mt-4 s-CTyDWs24qi3Z"
     >
       <a
+        aria-label="Project name the other project, 2 of 2"
         class="p-4 w-48 truncate"
         data-testid="project-list-entry-0-title"
         href="/project/0"
@@ -78,6 +81,7 @@ exports[`Index page > should match snapshot 1`] = `
       </a>
        
       <p
+        aria-label="Description"
         class="p-4 flex-grow flex-shrink"
         data-testid="project-list-entry-0-description"
       >

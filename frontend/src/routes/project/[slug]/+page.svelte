@@ -34,8 +34,8 @@
 	<Meta title={project.info.name} />
 
 	{#if project.groups}
-		{#each filteredGroups as group (group.id)}
-			<CurlGroupListEntry {...group} />
+		{#each filteredGroups as group, index (group.id)}
+			<CurlGroupListEntry {...group} index={index + 1} length={filteredGroups.length} />
 		{/each}
 	{:else}
 		<p>No groups available</p>

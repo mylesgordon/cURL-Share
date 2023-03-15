@@ -4,6 +4,7 @@
 	import Copy from 'virtual:icons/fa/copy';
 	import Edit from 'virtual:icons/fa/edit';
 	import IconLink from '$lib/components/IconLink.svelte';
+	import Meta from '$lib/components/Meta.svelte';
 	import type { Curl } from '$lib/types';
 	import type { PageData } from './$types';
 
@@ -17,6 +18,8 @@
 </script>
 
 {#if success}
+	<Meta title={`Edit ${curlGroup.name}`} />
+
 	<div class="flex space-x-2">
 		<h2>{curlGroup.name}</h2>
 		<IconLink
@@ -31,7 +34,13 @@
 	{#each curls as curl}
 		<Disclose isBackground isBordered title={curl.name}>
 			<section class="flex items-end mb-4">
-				<AgnosticInput id="raw-query" label="Raw cURL query:" value={curl.rawQuery} readonly />
+				<AgnosticInput
+					id="raw-query"
+					label="Raw cURL query:"
+					value={curl.rawQuery}
+					readonly
+					aria-readonly="true"
+				/>
 				<Button
 					isRounded
 					style="height: 2.375rem"

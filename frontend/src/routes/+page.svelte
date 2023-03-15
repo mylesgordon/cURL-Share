@@ -26,8 +26,8 @@
 </div>
 
 {#if filteredProjects.length}
-	{#each filteredProjects as entry (entry.id)}
-		<ProjectListEntry {...entry} />
+	{#each filteredProjects as entry, index (entry.id)}
+		<ProjectListEntry {...entry} index={index + 1} length={filteredProjects.length} />
 	{/each}
 {:else}
 	<p>No projects available</p>
