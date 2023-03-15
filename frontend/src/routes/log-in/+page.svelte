@@ -5,6 +5,8 @@
 	import { logInRequest } from '$lib/api.page';
 	import Meta from '$lib/components/Meta.svelte';
 
+	const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+
 	let errorText: string;
 	let username: string;
 	let password: string;
@@ -60,6 +62,11 @@
 		const endpoint = getEndpointFromSubmitter(e.submitter);
 		if (!endpoint) {
 			console.error('Submitter not identified.');
+			return;
+		}
+
+		if (endpoint == 'sign-up' && !passwordPattern.test(password)) {
+			errorText = 'Password needs to have at least 8 characters, 1 letter and one number.';
 			return;
 		}
 

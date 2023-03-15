@@ -61,6 +61,36 @@ describe('Log In page', () => {
 		}
 	});
 
+	it('shows correct error message when password is insufficient', async () => {
+		render(LogIn);
+		const { signUpButton, cookiePolicyCheckbox, passwordField, usernameField } = getPageElements();
+
+		logInRequest.mockReturnValue(201);
+		await userEvent.type(usernameField, 'username');
+		await fireEvent.click(cookiePolicyCheckbox);
+
+		const table = [
+			{ password: 'pass', expectFailure: true },
+			{ password: 'password', expectFailure: true },
+			{ password: 'password123123', expectFailure: false }
+		];
+
+		for (const { password, expectFailure } of table) {
+			await userEvent.clear(passwordField);
+			await userEvent.type(passwordField, password);
+
+			await fireEvent.click(signUpButton);
+
+			if (expectFailure) {
+				await screen.findByText(
+					'Password needs to have at least 8 characters, 1 letter and one number.'
+				);
+			} else {
+				expect(goto).toHaveBeenCalled();
+			}
+		}
+	});
+
 	it('shows the correct error message depending on server response', async () => {
 		render(LogIn);
 		const { logInButton, signUpButton, cookiePolicyCheckbox, passwordField, usernameField } =
@@ -89,7 +119,7 @@ describe('Log In page', () => {
 			logInRequest.mockReturnValue(statusCode);
 
 			await userEvent.type(usernameField, 'user');
-			await userEvent.type(passwordField, 'password');
+			await userEvent.type(passwordField, 'password123123');
 			await userEvent.click(buttonElement);
 			await screen.findByText(expectedMessage);
 		}
@@ -117,10 +147,10 @@ describe('Log In page', () => {
 			await userEvent.clear(passwordField);
 
 			await userEvent.type(usernameField, 'user');
-			await userEvent.type(passwordField, 'password');
-			await fireEvent.click(buttonElement);
+			await userEvent.type(passwordField, 'password123123');
+			await userEvent.click(buttonElement);
 
-			expect(logInRequest).toHaveBeenCalledWith(window.fetch, endpoint, 'user', 'password');
+			expect(logInRequest).toHaveBeenCalledWith(window.fetch, endpoint, 'user', 'password123123');
 		}
 	});
 
@@ -142,7 +172,6 @@ describe('Log In page', () => {
 		await fireEvent.click(cookiePolicyCheckbox);
 
 		for (const { buttonElement, statusCode } of table) {
-			render(LogIn);
 			logInRequest.mockReturnValue(statusCode);
 
 			await userEvent.type(usernameField, 'user');
