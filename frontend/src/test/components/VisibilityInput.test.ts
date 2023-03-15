@@ -1,7 +1,8 @@
 import { Visibility } from '$lib/types';
-import { fireEvent, render, screen } from '@testing-library/svelte';
+import { render, screen } from '@testing-library/svelte';
 import { testMatchingSnapshot } from '../common';
 import VisibilityInput from '$lib/components/VisibilityInput.svelte';
+import userEvent from '@testing-library/user-event';
 import type { ComponentProps } from 'svelte';
 
 describe('VisibilityInput component', () => {
@@ -24,16 +25,16 @@ describe('VisibilityInput component', () => {
 		}
 	);
 
-	it('should be able to switch between public and private', () => {
+	it('should be able to switch between public and private', async () => {
 		render(VisibilityInput, props);
 		const publicButton: HTMLInputElement = screen.getByLabelText('Public');
 		const privateButton: HTMLInputElement = screen.getByLabelText('Private');
 
-		fireEvent.click(privateButton);
+		await userEvent.click(privateButton);
 		expect(publicButton.checked).toEqual(false);
 		expect(privateButton.checked).toEqual(true);
 
-		fireEvent.click(publicButton);
+		await userEvent.click(publicButton);
 		expect(publicButton.checked).toEqual(true);
 		expect(privateButton.checked).toEqual(false);
 	});

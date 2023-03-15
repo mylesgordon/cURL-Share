@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom';
-import { fireEvent, render } from '@testing-library/svelte';
 import { goto } from '$app/navigation';
 import { logInRequest } from '$lib/api.page';
+import { render } from '@testing-library/svelte';
 import { screen } from '@testing-library/dom';
 import { testMatchingSnapshot } from '../common';
 import LogIn from '../../routes/log-in/+page.svelte';
@@ -53,10 +53,10 @@ describe('Log In page', () => {
 		for (const { a, b } of table) {
 			await userEvent.clear(a);
 			await userEvent.type(b, 'notempty');
-			await fireEvent.click(cookiePolicyCheckbox);
-			await fireEvent.click(logInButton);
+			await userEvent.click(cookiePolicyCheckbox);
+			await userEvent.click(logInButton);
 			screen.getByText('Username or password fields empty - please try again.');
-			await fireEvent.click(signUpButton);
+			await userEvent.click(signUpButton);
 			screen.getByText('Username or password fields empty - please try again.');
 		}
 	});
@@ -67,7 +67,7 @@ describe('Log In page', () => {
 
 		logInRequest.mockReturnValue(201);
 		await userEvent.type(usernameField, 'username');
-		await fireEvent.click(cookiePolicyCheckbox);
+		await userEvent.click(cookiePolicyCheckbox);
 
 		const table = [
 			{ password: 'pass', expectFailure: true },
@@ -79,7 +79,7 @@ describe('Log In page', () => {
 			await userEvent.clear(passwordField);
 			await userEvent.type(passwordField, password);
 
-			await fireEvent.click(signUpButton);
+			await userEvent.click(signUpButton);
 
 			if (expectFailure) {
 				await screen.findByText(
@@ -140,7 +140,7 @@ describe('Log In page', () => {
 			}
 		];
 
-		await fireEvent.click(cookiePolicyCheckbox);
+		await userEvent.click(cookiePolicyCheckbox);
 
 		for (const { buttonElement, endpoint } of table) {
 			await userEvent.clear(usernameField);
@@ -169,14 +169,14 @@ describe('Log In page', () => {
 			}
 		];
 
-		await fireEvent.click(cookiePolicyCheckbox);
+		await userEvent.click(cookiePolicyCheckbox);
 
 		for (const { buttonElement, statusCode } of table) {
 			logInRequest.mockReturnValue(statusCode);
 
 			await userEvent.type(usernameField, 'user');
 			await userEvent.type(passwordField, 'password');
-			await fireEvent.click(buttonElement);
+			await userEvent.click(buttonElement);
 
 			expect(goto).toHaveBeenCalledWith('/');
 		}

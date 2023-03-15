@@ -1,8 +1,8 @@
 import '@testing-library/jest-dom';
 import { type Project, Visibility } from '$lib/types';
 import { deleteProjectRequest, updateProjectRequest } from '$lib/api.page';
-import { fireEvent, render, screen } from '@testing-library/svelte';
 import { goto } from '$app/navigation';
+import { render, screen } from '@testing-library/svelte';
 import { testMatchingSnapshot } from '../common';
 import ProjectSettingsPage from '../../routes/project/[slug]/settings/+page.svelte';
 import userEvent from '@testing-library/user-event';
@@ -54,20 +54,20 @@ describe('Project page', () => {
 		expect(dialog).toHaveAttribute('aria-hidden', 'true');
 
 		const deleteButton: HTMLInputElement = screen.getByText('Delete');
-		await fireEvent.click(deleteButton);
+		await userEvent.click(deleteButton);
 
 		const noButton = screen.getByText('No');
-		await fireEvent.click(noButton);
+		await userEvent.click(noButton);
 		expect(dialog).toHaveAttribute('aria-hidden', 'true');
 	});
 
 	it("should send a delete request and redirect the user when 'yes' is clicked on the delete dialog", async () => {
 		render(ProjectSettingsPage, props);
 		const deleteButton: HTMLInputElement = screen.getByText('Delete');
-		await fireEvent.click(deleteButton);
+		await userEvent.click(deleteButton);
 
 		const yesButton = screen.getByText('Yes');
-		await fireEvent.click(yesButton);
+		await userEvent.click(yesButton);
 
 		expect(deleteProjectRequest).toHaveBeenCalledWith(window.fetch, 1);
 		expect(deleteProjectRequest).toHaveBeenCalledTimes(1);
