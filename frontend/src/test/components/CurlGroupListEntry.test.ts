@@ -11,7 +11,9 @@ describe('ProjectListEntry component', () => {
 		project_id: 1,
 		name: 'Login Journey',
 		description: 'cURL group defining a user journey!',
-		labels: 'label 1,label 2'
+		labels: 'label 1,label 2',
+		index: 0,
+		length: 1
 	};
 
 	testMatchingSnapshot(CurlGroupListEntry, props);

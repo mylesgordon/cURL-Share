@@ -9,7 +9,9 @@ describe('ProjectListEntry component', () => {
 	const props: ComponentProps<ProjectListEntry> = {
 		description: 'Test description',
 		id: 1,
-		name: 'Project title'
+		name: 'Project title',
+		index: 0,
+		length: 1
 	};
 	testMatchingSnapshot(ProjectListEntry, props);
 
