@@ -6,7 +6,10 @@ export const load = (async ({ fetch, params }) => {
 	try {
 		const curlGroup = await fetchCurlGroup(fetch, params.slug);
 		const project = await fetchProject(fetch, curlGroup.project_id.toString());
-		const projectAdminStatus = await fetchProjectAdminStatus(fetch, curlGroup.project_id.toString());
+		const projectAdminStatus = await fetchProjectAdminStatus(
+			fetch,
+			curlGroup.project_id.toString()
+		);
 		return { success: true, curlGroup, projectAdminStatus, project };
 	} catch (e) {
 		console.error(e);
@@ -19,6 +22,6 @@ export const load = (async ({ fetch, params }) => {
 			labels: '',
 			project_id: -1
 		};
-		return { success: false, projectAdminStatus , curlGroup: failedCurlGroup };
+		return { success: false, projectAdminStatus, curlGroup: failedCurlGroup };
 	}
 }) satisfies PageServerLoad;

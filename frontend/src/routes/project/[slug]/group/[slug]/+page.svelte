@@ -28,7 +28,7 @@
 		}
 
 		for (let i = 0; i < curls.length; i++) {
-			for(const environment of environments) {
+			for (const environment of environments) {
 				if (originalCurls[i].rawQuery.split(' ').includes(environment)) {
 					curls[i].rawQuery = originalCurls[i].rawQuery.replaceAll(environment, chosenEnvironment);
 					break;
