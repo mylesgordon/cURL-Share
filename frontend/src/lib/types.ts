@@ -40,6 +40,10 @@ export type ProjectInfo = {
 	visibility: string;
 };
 
+export type ProjectAdminStatus = {
+	isUserAdmin: boolean;
+};
+
 export enum Visibility {
 	Public = 'Public',
 	Private = 'Private'

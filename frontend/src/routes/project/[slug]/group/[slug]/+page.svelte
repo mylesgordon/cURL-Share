@@ -9,27 +9,60 @@
 	import type { PageData } from './$types';
 
 	export let data: PageData;
-	const { curlGroup, success } = data;
-	const curls: Array<Curl> = JSON.parse(curlGroup.curls);
+	const { curlGroup, project, projectAdminStatus, success } = data;
+	const originalCurls: Array<Curl> = JSON.parse(curlGroup.curls);
+	let curls = [...originalCurls];
+
+	let chosenEnvironment: string;
+	const environments = project?.info.environments ? project.info.environments.split(',') : [];
+
+	$: chosenEnvironment, replaceCurlsWithEnvironment();
 
 	function copyToClipboard(query: string) {
 		navigator.clipboard.writeText(query).catch((e) => console.log);
+	}
+
+	function replaceCurlsWithEnvironment() {
+		if (!chosenEnvironment) {
+			return;
+		}
+
+		for (let i = 0; i < curls.length; i++) {
+			for(const environment of environments) {
+				if (originalCurls[i].rawQuery.split(' ').includes(environment)) {
+					curls[i].rawQuery = originalCurls[i].rawQuery.replaceAll(environment, chosenEnvironment);
+					break;
+				}
+			}
+		}
 	}
 </script>
 
 {#if success}
 	<Meta title={`Edit ${curlGroup.name}`} />
 
-	<div class="flex space-x-2">
+	<div class="flex space-x-2 items-center">
 		<h2>{curlGroup.name}</h2>
-		<IconLink
-			description={`Edit ${curlGroup.name}`}
-			href={`/project/${curlGroup.project_id}/group/${curlGroup.id}/edit`}
-		>
-			<Edit />
-		</IconLink>
+		{#if projectAdminStatus.isUserAdmin}
+			<IconLink
+				description={`Edit ${curlGroup.name}`}
+				href={`/project/${curlGroup.project_id}/group/${curlGroup.id}/edit`}
+			>
+				<Edit />
+			</IconLink>
+		{/if}
 	</div>
 	<h3 class="mt-2 mb-4">{curlGroup.description}</h3>
+
+	{#if environments.length}
+		<label for="environments">Environments:</label>
+		<select name="environments" id="environments" bind:value={chosenEnvironment}>
+			<option value="">Choose an environment</option>
+			{#each environments as environment}
+				<option value={environment}>{environment}</option>
+			{/each}
+		</select>
+	{/if}
 
 	{#each curls as curl}
 		<Disclose isBackground isBordered title={curl.name}>

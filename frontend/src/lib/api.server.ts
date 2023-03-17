@@ -4,10 +4,6 @@ import type { CurlGroup, Fetch, Project, ProjectInfo } from './types';
 
 const url = get(internalBackendUrl);
 
-type ProjectAdminStatus = {
-	isUserAdmin: boolean;
-};
-
 export async function fetchCurlGroup(fetch: Fetch, curlGroupId: string): Promise<CurlGroup> {
 	const response = await fetch(`${url}/api/v1/group/${curlGroupId}`, {
 		method: 'GET',
