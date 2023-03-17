@@ -1,0 +1,608 @@
+// Vitest Snapshot v1
+
+exports[`CurlGroupForm component > should match snapshot 1`] = `
+<body>
+  <div>
+    <form
+      class="flex flex-col space-y-3 p-4 s-07XP8E40ha51"
+    >
+      <div
+        class="w-100 s-JZthjkXlZrq3"
+      >
+        <label
+          class="label s-JZthjkXlZrq3"
+          for="name"
+        >
+          Name
+        </label>
+         
+        <input
+          class="input input-rounded s-JZthjkXlZrq3"
+          id="name"
+          type="text"
+        />
+         
+      </div>
+      <!--&lt;Input&gt;-->
+       
+      <div
+        class="w-100 s-JZthjkXlZrq3"
+      >
+        <label
+          class="label s-JZthjkXlZrq3"
+          for="description"
+        >
+          Description
+        </label>
+         
+        <input
+          class="input input-rounded s-JZthjkXlZrq3"
+          id="description"
+          type="text"
+        />
+         
+      </div>
+      <!--&lt;Input&gt;-->
+       
+      <div
+        class="w-100 s-JZthjkXlZrq3"
+      >
+        <label
+          class="label s-JZthjkXlZrq3"
+          for="labels"
+        >
+          Labels (comma separated)
+        </label>
+         
+        <input
+          class="input input-rounded s-JZthjkXlZrq3"
+          id="labels"
+          type="text"
+        />
+         
+      </div>
+      <!--&lt;Input&gt;-->
+       
+      <span
+        class="s-07XP8E40ha51"
+      >
+        cURLs
+      </span>
+       
+      <ol
+        class="flex flex-col space-y-2 s-07XP8E40ha51"
+      />
+       
+      <div
+        class="flex flex-row s-07XP8E40ha51"
+      >
+        <div
+          class="w-100 s-JZthjkXlZrq3"
+        >
+          <label
+            class="label s-JZthjkXlZrq3"
+            for="raw-curl"
+          >
+            Add cURL query
+          </label>
+           
+          <input
+            class="input input-rounded s-JZthjkXlZrq3"
+            id="raw-curl"
+            type="text"
+          />
+           
+        </div>
+        <!--&lt;Input&gt;-->
+         
+        <button
+          class="btn btn-rounded ml-2 self-end add-button s-NAQuwh5ehqbV"
+          type="button"
+        >
+          Add
+        </button>
+        
+        <!--&lt;Button&gt;-->
+      </div>
+       
+      <button
+        class="btn btn-primary btn-bordered btn-rounded s-NAQuwh5ehqbV"
+        type="submit"
+      >
+        Create
+        
+      </button>
+      
+      <!--&lt;Button&gt;-->
+    </form>
+     
+    <svg
+      aria-hidden="true"
+      class="visuallyHidden s-07XP8E40ha51"
+      focusable="false"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs
+        class="s-07XP8E40ha51"
+      >
+        <symbol
+          class="s-07XP8E40ha51"
+          id="icon--up"
+          viewBox="0 0 14 14"
+        >
+          <path
+            class="s-07XP8E40ha51"
+            d="M.7 10.1L7 3.8l6.3 6.3"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+        </symbol>
+        <symbol
+          class="s-07XP8E40ha51"
+          id="icon--down"
+          viewBox="0 0 14 14"
+        >
+          <path
+            class="s-07XP8E40ha51"
+            d="M.7 3.8L7 10.1l6.3-6.3"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+        </symbol>
+      </defs>
+    </svg>
+    <!--&lt;CurlGroupForm&gt;-->
+  </div>
+</body>
+`;
+
+exports[`CurlGroupForm component > should match snapshot 2`] = `
+<body>
+  <div>
+    <form
+      class="flex flex-col space-y-3 p-4 s-07XP8E40ha51"
+    >
+      <div
+        class="w-100 s-JZthjkXlZrq3"
+      >
+        <label
+          class="label s-JZthjkXlZrq3"
+          for="name"
+        >
+          Name
+        </label>
+         
+        <input
+          class="input input-rounded s-JZthjkXlZrq3"
+          id="name"
+          type="text"
+        />
+         
+      </div>
+      <!--&lt;Input&gt;-->
+       
+      <div
+        class="w-100 s-JZthjkXlZrq3"
+      >
+        <label
+          class="label s-JZthjkXlZrq3"
+          for="description"
+        >
+          Description
+        </label>
+         
+        <input
+          class="input input-rounded s-JZthjkXlZrq3"
+          id="description"
+          type="text"
+        />
+         
+      </div>
+      <!--&lt;Input&gt;-->
+       
+      <div
+        class="w-100 s-JZthjkXlZrq3"
+      >
+        <label
+          class="label s-JZthjkXlZrq3"
+          for="labels"
+        >
+          Labels (comma separated)
+        </label>
+         
+        <input
+          class="input input-rounded s-JZthjkXlZrq3"
+          id="labels"
+          type="text"
+        />
+         
+      </div>
+      <!--&lt;Input&gt;-->
+       
+      <span
+        class="s-07XP8E40ha51"
+      >
+        cURLs
+      </span>
+       
+      <ol
+        class="flex flex-col space-y-2 s-07XP8E40ha51"
+      >
+        <li
+          class="flex flex-col space-y-2 border rounded-md p-2 s-07XP8E40ha51"
+        >
+          <div
+            class="flex flex-row s-07XP8E40ha51"
+          >
+            <div
+              aria-hidden="true"
+              class="flex items-center pr-2 cursor-grab s-07XP8E40ha51"
+              draggable="true"
+            >
+              <svg
+                height="1.2em"
+                viewBox="0 0 1792 1792"
+                width="1.2em"
+              >
+                <path
+                  d="M1792 896q0 26-19 45l-256 256q-19 19-45 19t-45-19t-19-45v-128h-384v384h128q26 0 45 19t19 45t-19 45l-256 256q-19 19-45 19t-45-19l-256-256q-19-19-19-45t19-45t45-19h128v-384H384v128q0 26-19 45t-45 19t-45-19L19 941Q0 922 0 896t19-45l256-256q19-19 45-19t45 19t19 45v128h384V384H640q-26 0-45-19t-19-45t19-45L851 19q19-19 45-19t45 19l256 256q19 19 19 45t-19 45t-45 19h-128v384h384V640q0-26 19-45t45-19t45 19l256 256q19 19 19 45z"
+                  fill="currentColor"
+                />
+              </svg>
+              <!--&lt;Arrows&gt;-->
+            </div>
+             
+            <div
+              class="pt-2 pb-2 pr-2 w-full flex flex-col space-y-2 s-07XP8E40ha51"
+            >
+              <div
+                class="flex flex-col flex-grow overflow-hidden s-Et3LeF16QMsX"
+              >
+                <label
+                  class="s-Et3LeF16QMsX"
+                  for="name"
+                >
+                  Name:
+                </label>
+                 
+                <input
+                  class="input s-Et3LeF16QMsX"
+                  id="name"
+                  label="Name:"
+                />
+              </div>
+              <!--&lt;AgnosticInput&gt;-->
+               
+              <div
+                class="flex flex-col flex-grow overflow-hidden s-Et3LeF16QMsX"
+              >
+                <label
+                  class="s-Et3LeF16QMsX"
+                  for="description"
+                >
+                  Description:
+                </label>
+                 
+                <input
+                  class="input s-Et3LeF16QMsX"
+                  id="description"
+                  label="Description:"
+                />
+              </div>
+              <!--&lt;AgnosticInput&gt;-->
+               
+              <div
+                class="flex flex-col flex-grow overflow-hidden s-Et3LeF16QMsX"
+              >
+                <label
+                  class="s-Et3LeF16QMsX"
+                  for="raw-query"
+                >
+                  Raw cURL Query:
+                </label>
+                 
+                <input
+                  class="input s-Et3LeF16QMsX"
+                  id="raw-query"
+                  label="Raw cURL Query:"
+                />
+              </div>
+              <!--&lt;AgnosticInput&gt;-->
+               
+              <div
+                class="flex justify-end space-x-2 s-07XP8E40ha51"
+              >
+                <button
+                  class="btn btn-rounded disabled s-NAQuwh5ehqbV"
+                  disabled=""
+                  type="button"
+                >
+                  <span
+                    class="sr-only s-07XP8E40ha51"
+                  >
+                    Move 
+                    cURL #1
+                     up
+                  </span>
+                   
+                  <svg
+                    aria-hidden="true"
+                    class="s-07XP8E40ha51"
+                    focusable="false"
+                    height="16"
+                    width="16"
+                  >
+                    <use
+                      class="s-07XP8E40ha51"
+                      xlink:href="#icon--up"
+                    />
+                  </svg>
+                </button>
+                
+                <!--&lt;Button&gt;-->
+                 
+                <button
+                  class="btn btn-rounded s-NAQuwh5ehqbV"
+                  type="button"
+                >
+                  <span
+                    class="sr-only s-07XP8E40ha51"
+                  >
+                    Move 
+                    cURL #1
+                     down
+                  </span>
+                   
+                  <svg
+                    aria-hidden="true"
+                    class="s-07XP8E40ha51"
+                    focusable="false"
+                    height="16"
+                    width="16"
+                  >
+                    <use
+                      class="s-07XP8E40ha51"
+                      xlink:href="#icon--down"
+                    />
+                  </svg>
+                </button>
+                
+                <!--&lt;Button&gt;-->
+              </div>
+            </div>
+          </div>
+           
+        </li>
+        <li
+          class="flex flex-col space-y-2 border rounded-md p-2 s-07XP8E40ha51"
+        >
+          <div
+            class="flex flex-row s-07XP8E40ha51"
+          >
+            <div
+              aria-hidden="true"
+              class="flex items-center pr-2 cursor-grab s-07XP8E40ha51"
+              draggable="true"
+            >
+              <svg
+                height="1.2em"
+                viewBox="0 0 1792 1792"
+                width="1.2em"
+              >
+                <path
+                  d="M1792 896q0 26-19 45l-256 256q-19 19-45 19t-45-19t-19-45v-128h-384v384h128q26 0 45 19t19 45t-19 45l-256 256q-19 19-45 19t-45-19l-256-256q-19-19-19-45t19-45t45-19h128v-384H384v128q0 26-19 45t-45 19t-45-19L19 941Q0 922 0 896t19-45l256-256q19-19 45-19t45 19t19 45v128h384V384H640q-26 0-45-19t-19-45t19-45L851 19q19-19 45-19t45 19l256 256q19 19 19 45t-19 45t-45 19h-128v384h384V640q0-26 19-45t45-19t45 19l256 256q19 19 19 45z"
+                  fill="currentColor"
+                />
+              </svg>
+              <!--&lt;Arrows&gt;-->
+            </div>
+             
+            <div
+              class="pt-2 pb-2 pr-2 w-full flex flex-col space-y-2 s-07XP8E40ha51"
+            >
+              <div
+                class="flex flex-col flex-grow overflow-hidden s-Et3LeF16QMsX"
+              >
+                <label
+                  class="s-Et3LeF16QMsX"
+                  for="name"
+                >
+                  Name:
+                </label>
+                 
+                <input
+                  class="input s-Et3LeF16QMsX"
+                  id="name"
+                  label="Name:"
+                />
+              </div>
+              <!--&lt;AgnosticInput&gt;-->
+               
+              <div
+                class="flex flex-col flex-grow overflow-hidden s-Et3LeF16QMsX"
+              >
+                <label
+                  class="s-Et3LeF16QMsX"
+                  for="description"
+                >
+                  Description:
+                </label>
+                 
+                <input
+                  class="input s-Et3LeF16QMsX"
+                  id="description"
+                  label="Description:"
+                />
+              </div>
+              <!--&lt;AgnosticInput&gt;-->
+               
+              <div
+                class="flex flex-col flex-grow overflow-hidden s-Et3LeF16QMsX"
+              >
+                <label
+                  class="s-Et3LeF16QMsX"
+                  for="raw-query"
+                >
+                  Raw cURL Query:
+                </label>
+                 
+                <input
+                  class="input s-Et3LeF16QMsX"
+                  id="raw-query"
+                  label="Raw cURL Query:"
+                />
+              </div>
+              <!--&lt;AgnosticInput&gt;-->
+               
+              <div
+                class="flex justify-end space-x-2 s-07XP8E40ha51"
+              >
+                <button
+                  class="btn btn-rounded s-NAQuwh5ehqbV"
+                  type="button"
+                >
+                  <span
+                    class="sr-only s-07XP8E40ha51"
+                  >
+                    Move 
+                    cURL #2
+                     up
+                  </span>
+                   
+                  <svg
+                    aria-hidden="true"
+                    class="s-07XP8E40ha51"
+                    focusable="false"
+                    height="16"
+                    width="16"
+                  >
+                    <use
+                      class="s-07XP8E40ha51"
+                      xlink:href="#icon--up"
+                    />
+                  </svg>
+                </button>
+                
+                <!--&lt;Button&gt;-->
+                 
+                <button
+                  class="btn btn-rounded disabled s-NAQuwh5ehqbV"
+                  disabled=""
+                  type="button"
+                >
+                  <span
+                    class="sr-only s-07XP8E40ha51"
+                  >
+                    Move 
+                    cURL #2
+                     down
+                  </span>
+                   
+                  <svg
+                    aria-hidden="true"
+                    class="s-07XP8E40ha51"
+                    focusable="false"
+                    height="16"
+                    width="16"
+                  >
+                    <use
+                      class="s-07XP8E40ha51"
+                      xlink:href="#icon--down"
+                    />
+                  </svg>
+                </button>
+                
+                <!--&lt;Button&gt;-->
+              </div>
+            </div>
+          </div>
+           
+        </li>
+      </ol>
+       
+      <div
+        class="flex flex-row s-07XP8E40ha51"
+      >
+        <div
+          class="w-100 s-JZthjkXlZrq3"
+        >
+          <label
+            class="label s-JZthjkXlZrq3"
+            for="raw-curl"
+          >
+            Add cURL query
+          </label>
+           
+          <input
+            class="input input-rounded s-JZthjkXlZrq3"
+            id="raw-curl"
+            type="text"
+          />
+           
+        </div>
+        <!--&lt;Input&gt;-->
+         
+        <button
+          class="btn btn-rounded ml-2 self-end add-button s-NAQuwh5ehqbV"
+          type="button"
+        >
+          Add
+        </button>
+        
+        <!--&lt;Button&gt;-->
+      </div>
+       
+      <button
+        class="btn btn-primary btn-bordered btn-rounded s-NAQuwh5ehqbV"
+        type="submit"
+      >
+        Finish
+        
+      </button>
+      
+      <!--&lt;Button&gt;-->
+    </form>
+     
+    <svg
+      aria-hidden="true"
+      class="visuallyHidden s-07XP8E40ha51"
+      focusable="false"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs
+        class="s-07XP8E40ha51"
+      >
+        <symbol
+          class="s-07XP8E40ha51"
+          id="icon--up"
+          viewBox="0 0 14 14"
+        >
+          <path
+            class="s-07XP8E40ha51"
+            d="M.7 10.1L7 3.8l6.3 6.3"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+        </symbol>
+        <symbol
+          class="s-07XP8E40ha51"
+          id="icon--down"
+          viewBox="0 0 14 14"
+        >
+          <path
+            class="s-07XP8E40ha51"
+            d="M.7 3.8L7 10.1l6.3-6.3"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+        </symbol>
+      </defs>
+    </svg>
+    <!--&lt;CurlGroupForm&gt;-->
+  </div>
+</body>
+`;

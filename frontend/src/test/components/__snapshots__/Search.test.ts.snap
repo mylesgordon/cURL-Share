@@ -1,0 +1,104 @@
+// Vitest Snapshot v1
+
+exports[`Search component > should match snapshot 1`] = `
+<body>
+  <div>
+    <div
+      class="flex s-MMN3rRE-BmEv"
+    >
+      <div
+        class="w-100 s-JZthjkXlZrq3"
+      >
+        <label
+          class="label screenreader-only s-JZthjkXlZrq3"
+          for=""
+        >
+          
+        </label>
+         
+        <input
+          class="input s-JZthjkXlZrq3"
+          data-testid="search-input"
+          id=""
+          placeholder="Search..."
+          type="text"
+        />
+         
+      </div>
+      <!--&lt;Input&gt;-->
+       
+      <select
+        class="s-MMN3rRE-BmEv"
+        data-testid="labels-select"
+        id="labels"
+        name="labels"
+      >
+        <option
+          class="s-MMN3rRE-BmEv"
+          value=""
+        >
+          Choose a label
+        </option>
+        <option
+          class="s-MMN3rRE-BmEv"
+          value="label 1"
+        >
+          label 1
+        </option>
+        <option
+          class="s-MMN3rRE-BmEv"
+          value="label 2"
+        >
+          label 2
+        </option>
+        <option
+          class="s-MMN3rRE-BmEv"
+          value="label 3"
+        >
+          label 3
+        </option>
+        <option
+          class="s-MMN3rRE-BmEv"
+          value="label 4"
+        >
+          label 4
+        </option>
+      </select>
+    </div>
+    <!--&lt;Search&gt;-->
+  </div>
+</body>
+`;
+
+exports[`Search component > should match snapshot 2`] = `
+<body>
+  <div>
+    <div
+      class="flex s-MMN3rRE-BmEv"
+    >
+      <div
+        class="w-100 s-JZthjkXlZrq3"
+      >
+        <label
+          class="label screenreader-only s-JZthjkXlZrq3"
+          for=""
+        >
+          
+        </label>
+         
+        <input
+          class="input s-JZthjkXlZrq3"
+          data-testid="search-input"
+          id=""
+          placeholder="Search..."
+          type="text"
+        />
+         
+      </div>
+      <!--&lt;Input&gt;-->
+       
+    </div>
+    <!--&lt;Search&gt;-->
+  </div>
+</body>
+`;

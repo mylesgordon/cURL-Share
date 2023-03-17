@@ -65,6 +65,7 @@ exports[`Project page > should match snapshot 1`] = `
            
           <input
             class="input s-JZthjkXlZrq3"
+            data-testid="search-input"
             id=""
             placeholder="Search..."
             type="text"
@@ -75,6 +76,7 @@ exports[`Project page > should match snapshot 1`] = `
          
         <select
           class="s-MMN3rRE-BmEv"
+          data-testid="labels-select"
           id="labels"
           name="labels"
         >
@@ -265,6 +267,7 @@ exports[`Project page > should match snapshot 2`] = `
            
           <input
             class="input s-JZthjkXlZrq3"
+            data-testid="search-input"
             id=""
             placeholder="Search..."
             type="text"

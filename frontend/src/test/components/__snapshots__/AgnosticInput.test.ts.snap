@@ -1,0 +1,25 @@
+// Vitest Snapshot v1
+
+exports[`AgnosticInput component > should match snapshot 1`] = `
+<body>
+  <div>
+    <div
+      class="flex flex-col flex-grow overflow-hidden s-Et3LeF16QMsX"
+    >
+      <label
+        class="s-Et3LeF16QMsX"
+        for="unit-test"
+      >
+        Unit Test
+      </label>
+       
+      <input
+        class="input s-Et3LeF16QMsX"
+        id="unit-test"
+        label="Unit Test"
+      />
+    </div>
+    <!--&lt;AgnosticInput&gt;-->
+  </div>
+</body>
+`;

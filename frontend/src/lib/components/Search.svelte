@@ -26,10 +26,15 @@
 </script>
 
 <div class="flex">
-	<Input bind:value={inputValue} placeholder="Search..." isLabelHidden={true} />
+	<Input
+		bind:value={inputValue}
+		placeholder="Search..."
+		isLabelHidden={true}
+		data-testid="search-input"
+	/>
 
 	{#if initialCurlGroupArray.length}
-		<select name="labels" id="labels" bind:value={selectedLabel}>
+		<select name="labels" id="labels" data-testid="labels-select" bind:value={selectedLabel}>
 			<option value="">Choose a label</option>
 			{#each labels as label}
 				<option value={label}>{label}</option>
